@@ -1,0 +1,59 @@
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  canvas {
+    position: absolute;
+    inset: 0;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 8vh;
+    pointer-events: none;
+  }
+
+  &__title-wrap {
+    text-align: center;
+    opacity: 0;
+  }
+
+  &__title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.5rem, 4vw, 3.5rem);
+    font-weight: 900;
+    color: var(--color-gold);
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 40px rgba(229, 193, 0, 0.4);
+  }
+
+  &__sub {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.6rem, 1.2vw, 0.9rem);
+    font-weight: 300;
+    color: var(--color-snow);
+    letter-spacing: 0.5em;
+    margin-top: 0.75rem;
+    opacity: 0.6;
+  }
+
+  &__scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    );
+    pointer-events: none;
+  }
+}

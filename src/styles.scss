@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap');
+
+:root {
+  --color-gold: #E5C100;
+  --color-blue: #00BFFF;
+  --color-gray: #212121;
+  --color-orange: #FF8800;
+  --color-snow: #F5F5F5;
+  --bg-dark: #0A0A0A;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-dark);
+  color: var(--color-snow);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+canvas {
+  display: block;
+}
