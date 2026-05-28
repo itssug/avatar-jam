@@ -62,7 +62,7 @@ export class Model3dComponent implements OnInit, OnDestroy, AfterViewInit {
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef,
     private scrollService: ScrollService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.historySub = this.scrollService.historyState$.subscribe(state => {
@@ -163,9 +163,9 @@ export class Model3dComponent implements OnInit, OnDestroy, AfterViewInit {
   private loadModel() {
     const loader = new STLLoader();
     const modelsToLoad = [
-      { path: '/Unnamed Character.stl', group: this.group0 },
-      { path: '/Unnamed Character (4).stl', group: this.group1 },
-      { path: '/Unnamed Character (2).stl', group: this.group2 }
+      { path: 'assets/models/Unnamed Character.stl', group: this.group0 },
+      { path: 'assets/models/Unnamed Character (4).stl', group: this.group1 },
+      { path: 'assets/models/Unnamed Character (2).stl', group: this.group2 }
     ];
 
     let loadedCount = 0;
@@ -215,7 +215,7 @@ export class Model3dComponent implements OnInit, OnDestroy, AfterViewInit {
           const maxDim = Math.max(size.x, size.y, size.z);
           const targetScale = 16 / maxDim;
           model.group.scale.set(targetScale, targetScale, targetScale);
-          
+
           if (box) {
             const heightOffset = (size.y / 2) * targetScale;
             model.group.position.y = -6 + heightOffset;
@@ -237,7 +237,7 @@ export class Model3dComponent implements OnInit, OnDestroy, AfterViewInit {
         (xhr: any) => {
           if (xhr.total) {
             progressMap.set(model.path, xhr.loaded / xhr.total);
-            
+
             // Calcular progreso acumulado promedio
             let sumProgress = 0;
             progressMap.forEach((val) => sumProgress += val);
@@ -337,12 +337,27 @@ export class Model3dComponent implements OnInit, OnDestroy, AfterViewInit {
     // Esperar a que Angular dibuje el DOM de la nueva pestaña
     setTimeout(() => {
       if (this.activeTab === 'bio') {
-        this.createMiniViewer('placeholder-avatar', '/Unnamed Character.stl');
+        this.createMiniViewer(
+          'placeholder-avatar',
+          'assets/models/Unnamed Character.stl'
+        );
+
       } else if (this.activeTab === 'tribuna') {
-        this.createMiniViewer('placeholder-torre', '/Unnamed Character (3).stl');
+        this.createMiniViewer(
+          'placeholder-torre',
+          'assets/models/Unnamed Character (3).stl'
+        );
+
       } else if (this.activeTab === 'caminantes') {
-        this.createMiniViewer('placeholder-leyenda', '/Unnamed Character (4).stl');
-        this.createMiniViewer('placeholder-charango', '/Unnamed Character (5).stl');
+        this.createMiniViewer(
+          'placeholder-leyenda',
+          'assets/models/Unnamed Character (4).stl'
+        );
+
+        this.createMiniViewer(
+          'placeholder-charango',
+          'assets/models/Unnamed Character (5).stl'
+        );
       }
     }, 50);
   }
