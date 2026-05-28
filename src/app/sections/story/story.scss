@@ -1,8 +1,8 @@
 .story-wrapper {
   position: relative;
-  height: 100vh;
+  height: 500vh; // era 100vh — necesitas espacio para hacer scroll
   background: #05070d;
-  overflow: hidden;
+  overflow: hidden; // ← también puede bloquear el scroll del padre, considera quitar esto o moverlo
 }
 
 /* =========================
