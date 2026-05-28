@@ -131,7 +131,7 @@ export class FrasesComponent implements AfterViewInit, OnInit, OnDestroy {
     {
       id: 1,
       quote: 'ALGUNA VEZ HAN AMADO',
-      subtitle: 'En esta entrevista, Palanque habla desde el corazón sobre el amor como fuerza política y humana. Una voz que no teme la vulnerabilidad frente a su pueblo.',
+      subtitle: 'En esta entrevista, Palanque habla desde el corazón sobre el amor de su vida.',
       tag: 'PROTOCOLO // S-03 // CAJA 01',
       audioLabel: 'ENTREVISTA — PALANQUE',
       audioPath: 'assets/audios/amado.mp3'
