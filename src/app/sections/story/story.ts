@@ -16,35 +16,99 @@ export class StoryComponent implements AfterViewInit {
   @ViewChild('bgYear') bgYear!: ElementRef;
 
   ngAfterViewInit() {
-    const texts = this.storySection.nativeElement.querySelectorAll('.story-text');
 
-    // 1. Animación del año gigante (Efecto parallax sobre el fondo 3D)
-    gsap.to(this.bgYear.nativeElement, {
+  const texts =
+    this.storySection.nativeElement.querySelectorAll(
+      '.story-text, .story-name'
+    );
+
+  const compadre =
+    this.storySection.nativeElement.querySelector('.compadre-title');
+
+  const divider =
+    this.storySection.nativeElement.querySelector('.story-divider');
+
+  const futureYear =
+    this.storySection.nativeElement.querySelector('.future-year');
+
+  // PARALLAX DEL AÑO GIGANTE
+  gsap.to(this.bgYear.nativeElement, {
+    scrollTrigger: {
+      trigger: this.storySection.nativeElement,
+      start: "top bottom",
+      end: "bottom top",
+      scrub: true
+    },
+    y: -200,
+    rotate: -8,
+    opacity: 0.4
+  });
+
+  // REVEAL DE TEXTOS
+  texts.forEach((text: HTMLElement, index: number) => {
+
+    gsap.to(text, {
       scrollTrigger: {
-        trigger: this.storySection.nativeElement,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true
+        trigger: text,
+        start: "top 85%",
+        toggleActions: "play none none reverse",
       },
-      y: -120,
-      opacity: 0.5
+
+      opacity: 1,
+      y: 0,
+
+      duration: 1.4,
+      ease: "power3.out",
+
+      delay: index * 0.15
     });
 
-    // 2. Revelado rápido y fluido de los textos
-    texts.forEach((text: HTMLElement, index: number) => {
-      gsap.to(text, {
-        scrollTrigger: {
-          trigger: text,
-          // Al poner "top 85%", la animación inicia apenas el texto asome un 15% en pantalla
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: "power2.out",
-        delay: index * 0.1
-      });
-    });
-  }
+  });
+
+  // DIVIDER
+  gsap.to(divider, {
+    scrollTrigger: {
+      trigger: divider,
+      start: "top 85%",
+      toggleActions: "play none none reverse",
+    },
+
+    opacity: 1,
+    height: 120,
+
+    duration: 1.5,
+    ease: "power2.out"
+  });
+
+  // EL COMPADRE
+  gsap.to(compadre, {
+    scrollTrigger: {
+      trigger: compadre,
+      start: "top 75%",
+      toggleActions: "play none none reverse",
+    },
+
+    opacity: 1,
+    scale: 1,
+
+    duration: 2,
+    ease: "expo.out"
+  });
+
+  // 2095
+  gsap.to(futureYear, {
+    scrollTrigger: {
+      trigger: futureYear,
+      start: "top 80%",
+      toggleActions: "play none none reverse",
+    },
+
+    opacity: 1,
+    scale: 1,
+
+    duration: 1.8,
+    ease: "power4.out"
+  });
+
+}
 }
