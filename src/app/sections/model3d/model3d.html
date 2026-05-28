@@ -1,0 +1,18 @@
+@if (isLoading) {
+  <div class="loading-badge" id="3d-loading-hud">
+    <span class="hud-scanner-dot"></span>
+    <span class="hud-scanner-text">SISTEMA CORE 3D: CARGANDO ARMADURA... {{ loadingProgress }}%</span>
+  </div>
+}
+
+@if (isError) {
+  <div class="error-badge" id="3d-error-hud">
+    <span class="error-icon">⚠️</span>
+    <span class="error-text">ERROR CORE 3D: ARCHIVO INACCESIBLE</span>
+  </div>
+}
+
+<div class="model3d-fixed-background" id="fixed-model-container">
+  <!-- El Canvas de ThreeJS -->
+  <div #rendererContainer class="renderer-container"></div>
+</div>
