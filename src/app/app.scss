@@ -3,7 +3,27 @@
   width: 100%;
   background-color: #0A0A0A;
 }
+// global-scroll.scss
+// Agrega esto a tu styles.scss o styles.css raíz.
+//
+// REGLA DE ORO: el scroll debe vivir en html/body.
+// Cualquier overflow: hidden en un ancestro rompe ScrollTrigger.
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  // SIN overflow: hidden
+  // SIN height: 100%
+  background: #1A1C20; // evita flash blanco entre secciones
+}
+
+// Si tu app-root o shell tiene overflow de algún tipo, quítalo:
+app-root {
+  display: block;
+  // SIN overflow
+  // SIN position: fixed
+}
 /* El Hero ya no es fixed por CSS, vuelve a su posición relativa */
 app-hero {
   position: relative;
@@ -28,9 +48,9 @@ app-frases {
   display: block;
   width: 100%;
   /* app-story is absolute with 500vh and starts at top:0.
-     app-hero takes 100vh in the flow. So we need 400vh more margin 
+     app-hero takes 100vh in the flow. So we need 400vh more margin
      to push app-frases exactly below app-story. */
-  margin-top: 400vh; 
+  margin-top: 400vh;
   z-index: 3;
 }
 

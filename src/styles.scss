@@ -6,19 +6,19 @@
   --bg-main: #E5E0D8;
   /* Fondo Secundario (Gris cálido/Cuero oscuro para contraste) */
   --bg-dark: #5A5550;
-  
+
   /* Primario (Texto/Títulos) - Acero forjado */
   --color-primary: #4A4F58;
-  
+
   /* Armadura - Plata brillante */
   --color-silver: #A8B2C1;
-  
+
   /* Detalles/Bordes - Latón / Bronce */
   --color-brass: #C5A059;
-  
+
   /* Instrumentos - Madera cálida */
   --color-wood: #A67B5B;
-  
+
   /* Destellos/Hover/Energía - Celeste andino */
   --color-accent: #88C0D0;
 
@@ -35,7 +35,27 @@
   padding: 0;
   box-sizing: border-box;
 }
+// global-scroll.scss
+// Agrega esto a tu styles.scss o styles.css raíz.
+//
+// REGLA DE ORO: el scroll debe vivir en html/body.
+// Cualquier overflow: hidden en un ancestro rompe ScrollTrigger.
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  // SIN overflow: hidden
+  // SIN height: 100%
+  background: #1A1C20; // evita flash blanco entre secciones
+}
+
+// Si tu app-root o shell tiene overflow de algún tipo, quítalo:
+app-root {
+  display: block;
+  // SIN overflow
+  // SIN position: fixed
+}
 html, body {
   width: 100%;
   height: 100%;

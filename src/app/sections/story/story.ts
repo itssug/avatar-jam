@@ -1,6 +1,7 @@
 import {
   Component,
   AfterViewInit,
+  OnDestroy,
   ElementRef,
   ViewChild,
   ChangeDetectionStrategy
@@ -18,62 +19,84 @@ gsap.registerPlugin(ScrollTrigger);
   styleUrl: './story.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StoryComponent implements AfterViewInit {
+export class StoryComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild('storySection') storySection!: ElementRef;
   @ViewChild('bgYear') bgYear!: ElementRef;
 
-ngAfterViewInit(): void {
-  const section = this.storySection.nativeElement;
+  private scrollTriggers: ScrollTrigger[] = [];
 
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: section,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 1,
-      pin: false  // el pin lo maneja el height del contenedor
-    }
-  });
+  ngAfterViewInit(): void {
+    // Wait for Angular's CD + layout to settle before GSAP reads DOM metrics
+    setTimeout(() => this.initScrollAnimations(), 100);
+  }
 
-  // Panel 1
-  tl.to('.panel-1', { opacity: 1, duration: 1 });
-  tl.to('.image-1', { y: -80, rotate: -12, duration: 2 }, 0);
-  tl.to('.panel-1', { opacity: 0, y: -100, duration: 1 });
+  private initScrollAnimations(): void {
+    const section = this.storySection.nativeElement;
+    const panels = gsap.utils.toArray<HTMLElement>('.panel', section);
+    const totalPanels = panels.length;
 
-  // Panel 2
-  tl.to('.panel-2', { opacity: 1, duration: 1 });
-  tl.to('.giant-year', { scale: 1.1, duration: 1 }, '<');
-  tl.to('.image-2', { y: 100, rotate: 12, duration: 2 }, '<');
-  tl.to('.panel-2', { opacity: 0, scale: 1.1, duration: 1 });
+    // ─── PANEL PINNED TIMELINE ───────────────────────────────────────────────
+    // pin: true locks the section in the viewport while GSAP scrubs through
+    // all panels. end is calculated so each panel gets ~100vh of scroll space.
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: () => `+=${window.innerHeight * (totalPanels + 0.5)}`,
+        scrub: 1.2,
+        pin: true,           // ← KEY FIX: pin keeps section in viewport
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          // Keep bgYear parallax in sync with the pinned timeline
+          gsap.set(this.bgYear.nativeElement, {
+            y: self.progress * -200,
+            rotate: self.progress * -10,
+          });
+        }
+      }
+    });
 
-  // Panel 3
-  tl.to('.panel-3', { opacity: 1, duration: 1 });
-  tl.fromTo('.compadre-title',
-    { scale: 0.7, opacity: 0 },
-    { scale: 1, opacity: 1, duration: 1.5 }, '<'
-  );
-  tl.to('.image-3', { y: -120, duration: 2 }, '<');
-  tl.to('.image-4', { y: 80, rotate: -20, duration: 2 }, '<');
-  tl.to('.panel-3', { opacity: 0, duration: 1 });
+    // ─── PANEL 1 ─────────────────────────────────────────────────────────────
+    tl
+      .set('.panel-1', { opacity: 0, y: 40 })
+      .to('.panel-1', { opacity: 1, y: 0, duration: 1, ease: 'power2.out' })
+      .to('.image-1', { y: -80, rotate: -12, scale: 1.05, duration: 2 }, '<0.2')
+      .to('.panel-1', { opacity: 0, y: -60, duration: 0.8, ease: 'power2.in' }, '+=0.5')
 
-  // Panel 4
-  tl.to('.giant-year', { opacity: 0.08, scale: 1.3, duration: 1 });
-  tl.to('.panel-4', { opacity: 1, duration: 1.5 });
+    // ─── PANEL 2 ─────────────────────────────────────────────────────────────
+      .set('.panel-2', { opacity: 0, scale: 0.95 })
+      .to('.panel-2', { opacity: 1, scale: 1, duration: 1, ease: 'power2.out' })
+      .to('.giant-year', { scale: 1.1, opacity: 0.2, duration: 1.5 }, '<')
+      .to('.image-2', { y: 100, rotate: 12, duration: 2 }, '<')
+      .to('.panel-2', { opacity: 0, scale: 1.05, duration: 0.8, ease: 'power2.in' }, '+=0.5')
 
-  // Parallax bgYear — SIN pin, dentro del mismo contexto
-  gsap.to(this.bgYear.nativeElement, {
-    y: -180,
-    rotate: -8,
-    scrollTrigger: {
-      trigger: section,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 1
-      // ← pin: true ELIMINADO
-    }
-  });
+    // ─── PANEL 3 ─────────────────────────────────────────────────────────────
+      .set('.panel-3', { opacity: 0 })
+      .to('.panel-3', { opacity: 1, duration: 0.6 })
+      .fromTo('.compadre-title',
+        { scale: 0.65, opacity: 0, filter: 'blur(12px)' },
+        { scale: 1, opacity: 1, filter: 'blur(0px)', duration: 1.8, ease: 'expo.out' },
+        '<'
+      )
+      .to('.image-3', { y: -120, scale: 1.1, duration: 2 }, '<')
+      .to('.image-4', { y: 80, rotate: -20, duration: 2 }, '<')
+      .to('.panel-3', { opacity: 0, duration: 0.8 }, '+=0.5')
 
-  ScrollTrigger.refresh();
-}
+    // ─── PANEL 4 ─────────────────────────────────────────────────────────────
+      .set('.panel-4', { opacity: 0, x: 60 })
+      .to('.giant-year', { opacity: 0.04, scale: 1.4, duration: 1 })
+      .to('.panel-4', { opacity: 1, x: 0, duration: 1.5, ease: 'power3.out' }, '<0.3');
+
+    // Store for cleanup
+    this.scrollTriggers = ScrollTrigger.getAll();
+
+    ScrollTrigger.refresh();
+  }
+
+  ngOnDestroy(): void {
+    // Clean up to avoid memory leaks on route changes
+    this.scrollTriggers.forEach(st => st.kill());
+    ScrollTrigger.refresh();
+  }
 }
