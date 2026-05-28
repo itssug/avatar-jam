@@ -80,122 +80,122 @@ export class FrasesComponent implements AfterViewInit {
     // Panel 1 — fade in, hold, fade out
     tl.fromTo('.frase-panel-1',
       { opacity: 0 },
-      { opacity: 1, duration: 1 }
+      { opacity: 1, duration: 0.5 }
     );
     tl.fromTo('.frase-panel-1 .frase-quote',
       { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1 }, '<'
+      { y: 0, opacity: 1, duration: 0.5 }, '<'
     );
     tl.fromTo('.frase-panel-1 .frase-number',
       { scale: 0.6, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 1 }, '<'
+      { scale: 1, opacity: 1, duration: 0.5 }, '<'
     );
     tl.fromTo('.frase-panel-1 .frase-tag',
       { x: -20, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.8 }, '<0.2'
+      { x: 0, opacity: 1, duration: 0.4 }, '<0.2'
     );
     tl.fromTo('.frase-panel-1 .frase-line-h',
       { scaleX: 0 },
-      { scaleX: 1, duration: 0.8, transformOrigin: 'left center' }, '<'
+      { scaleX: 1, duration: 0.4, transformOrigin: 'left center' }, '<'
     );
-    tl.to(section, { duration: 0.6 }); // hold
-    tl.to('.frase-panel-1', { opacity: 0, duration: 0.8 });
+    tl.to(section, { duration: 2.0 }); // hold
+    tl.to('.frase-panel-1', { opacity: 0, duration: 0.5 });
 
     // Panel 2
     tl.fromTo('.frase-panel-2',
       { opacity: 0 },
-      { opacity: 1, duration: 1 }
+      { opacity: 1, duration: 0.5 }
     );
     tl.fromTo('.frase-panel-2 .frase-quote',
       { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1 }, '<'
+      { y: 0, opacity: 1, duration: 0.5 }, '<'
     );
     tl.fromTo('.frase-panel-2 .frase-number',
       { scale: 0.6, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 1 }, '<'
+      { scale: 1, opacity: 1, duration: 0.5 }, '<'
     );
     tl.fromTo('.frase-panel-2 .frase-tag',
       { x: -20, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.8 }, '<0.2'
+      { x: 0, opacity: 1, duration: 0.4 }, '<0.2'
     );
     tl.fromTo('.frase-panel-2 .frase-line-h',
       { scaleX: 0 },
-      { scaleX: 1, duration: 0.8, transformOrigin: 'left center' }, '<'
+      { scaleX: 1, duration: 0.4, transformOrigin: 'left center' }, '<'
     );
-    tl.to(section, { duration: 0.6 });
-    tl.to('.frase-panel-2', { opacity: 0, duration: 0.8 });
+    tl.to(section, { duration: 2.0 });
+    tl.to('.frase-panel-2', { opacity: 0, duration: 0.5 });
 
     // Panel 3
     tl.fromTo('.frase-panel-3',
       { opacity: 0 },
-      { opacity: 1, duration: 1 }
+      { opacity: 1, duration: 0.5 }
     );
     tl.fromTo('.frase-panel-3 .frase-quote',
       { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1 }, '<'
+      { y: 0, opacity: 1, duration: 0.5 }, '<'
     );
     tl.fromTo('.frase-panel-3 .frase-number',
       { scale: 0.6, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 1 }, '<'
+      { scale: 1, opacity: 1, duration: 0.5 }, '<'
     );
     tl.fromTo('.frase-panel-3 .frase-tag',
       { x: -20, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.8 }, '<0.2'
+      { x: 0, opacity: 1, duration: 0.4 }, '<0.2'
     );
     tl.fromTo('.frase-panel-3 .frase-line-h',
       { scaleX: 0 },
-      { scaleX: 1, duration: 0.8, transformOrigin: 'left center' }, '<'
+      { scaleX: 1, duration: 0.4, transformOrigin: 'left center' }, '<'
     );
-    tl.to(section, { duration: 0.6 });
-    tl.to('.frase-panel-3', { opacity: 0, duration: 0.8 });
+    tl.to(section, { duration: 2.0 });
+    tl.to('.frase-panel-3', { opacity: 0, duration: 0.5 });
 
     // Panel 4
     tl.fromTo('.frase-panel-4',
       { opacity: 0 },
-      { opacity: 1, duration: 1 }
+      { opacity: 1, duration: 0.5 }
     );
     tl.fromTo('.frase-panel-4 .frase-quote',
       { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1 }, '<'
+      { y: 0, opacity: 1, duration: 0.5 }, '<'
     );
     tl.fromTo('.frase-panel-4 .frase-number',
       { scale: 0.6, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 1 }, '<'
+      { scale: 1, opacity: 1, duration: 0.5 }, '<'
     );
     tl.fromTo('.frase-panel-4 .frase-tag',
       { x: -20, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.8 }, '<0.2'
+      { x: 0, opacity: 1, duration: 0.4 }, '<0.2'
     );
     tl.fromTo('.frase-panel-4 .frase-line-h',
       { scaleX: 0 },
-      { scaleX: 1, duration: 0.8, transformOrigin: 'left center' }, '<'
+      { scaleX: 1, duration: 0.4, transformOrigin: 'left center' }, '<'
     );
-    tl.to(section, { duration: 0.6 });
-    tl.to('.frase-panel-4', { opacity: 0, duration: 0.8 });
+    tl.to(section, { duration: 2.0 });
+    tl.to('.frase-panel-4', { opacity: 0, duration: 0.5 });
 
-    // Panel 5 — last panel, fade in and hold (no fade out)
+    // Panel 5 — last panel, fade in and hold
     tl.fromTo('.frase-panel-5',
       { opacity: 0 },
-      { opacity: 1, duration: 1 }
+      { opacity: 1, duration: 0.5 }
     );
     tl.fromTo('.frase-panel-5 .frase-quote',
       { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1 }, '<'
+      { y: 0, opacity: 1, duration: 0.5 }, '<'
     );
     tl.fromTo('.frase-panel-5 .frase-number',
       { scale: 0.6, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 1 }, '<'
+      { scale: 1, opacity: 1, duration: 0.5 }, '<'
     );
     tl.fromTo('.frase-panel-5 .frase-tag',
       { x: -20, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.8 }, '<0.2'
+      { x: 0, opacity: 1, duration: 0.4 }, '<0.2'
     );
     tl.fromTo('.frase-panel-5 .frase-line-h',
       { scaleX: 0 },
-      { scaleX: 1, duration: 0.8, transformOrigin: 'left center' }, '<'
+      { scaleX: 1, duration: 0.4, transformOrigin: 'left center' }, '<'
     );
-    tl.to(section, { duration: 0.6 });
-    tl.to('.frase-panel-5', { opacity: 0, duration: 0.8 });
+    tl.to(section, { duration: 2.0 });
+    tl.to('.frase-panel-5', { opacity: 0, duration: 0.5 });
 
     // Pulsing cyan line animation (continuous)
     gsap.to('.frase-pulse-line', {

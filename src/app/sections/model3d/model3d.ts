@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import * as THREE from 'three';
 // @ts-ignore
-import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
+import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -200,9 +200,9 @@ export class Model3dComponent implements OnInit, OnDestroy, AfterViewInit {
           {
             opacity: 0.95,
             scrollTrigger: {
-              trigger: 'body',
-              start: '400vh top', // empieza cuando finaliza "La voz de los sin voz" (Panel 3)
-              end: '435vh top',   // totalmente visible 35vh después
+              trigger: '.story-wrapper',
+              start: '380vh top', // empieza cuando finaliza "La voz de los sin voz" (Panel 3)
+              end: '420vh top',   // totalmente visible después
               scrub: true
             }
           }

@@ -1,8 +1,15 @@
 .story-wrapper {
   position: relative;
-  height: 500vh; // era 100vh — necesitas espacio para hacer scroll
+  height: 500vh;
   background: var(--bg-main);
-  overflow: hidden; // ← también puede bloquear el scroll del padre, considera quitar esto o moverlo
+}
+
+.story-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* =========================
@@ -286,6 +293,7 @@
     0 0 40px rgba(0,0,0,0.5);
 
   z-index: 3;
+  opacity: 0;
 
   img {
     width: 100%;
@@ -306,8 +314,6 @@
   right: 8%;
 
   transform: rotate(-6deg);
-
-  opacity: 0.14;
 }
 
 .image-2 {
@@ -318,8 +324,6 @@
   left: 8%;
 
   transform: rotate(8deg);
-
-  opacity: 0.12;
 }
 
 .image-3 {
@@ -328,8 +332,6 @@
 
   top: 10%;
   right: 15%;
-
-  opacity: 0.15;
 }
 
 .image-4 {
@@ -340,8 +342,6 @@
   right: 18%;
 
   transform: rotate(-10deg);
-
-  opacity: 0.12;
 }
 
 /* =========================
