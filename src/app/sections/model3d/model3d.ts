@@ -9,6 +9,8 @@ import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import { ScrollService } from '../../services/scroll.service';
+import { Subscription } from 'rxjs';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,6 +30,11 @@ export class Model3dComponent implements OnInit, OnDestroy, AfterViewInit {
   public isError: boolean = false;
   public errorMessage: string = '';
 
+  // Controladores de estado para el expediente holográfico
+  public isHistoryOpen: boolean = false;
+  public activeTab: string = 'bio';
+  private historySub?: Subscription;
+
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
@@ -38,9 +45,21 @@ export class Model3dComponent implements OnInit, OnDestroy, AfterViewInit {
   private animationFrameId?: number;
   private lenis?: Lenis;
 
-  constructor(private ngZone: NgZone, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef,
+    private scrollService: ScrollService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.historySub = this.scrollService.historyState$.subscribe(state => {
+      this.isHistoryOpen = state.isOpen;
+      if (state.activeTab) {
+        this.activeTab = state.activeTab;
+      }
+      this.cdr.detectChanges();
+    });
+  }
 
   ngAfterViewInit() {
     this.initThree();
@@ -95,6 +114,9 @@ export class Model3dComponent implements OnInit, OnDestroy, AfterViewInit {
       duration: 1.2,
       smoothWheel: true,
     });
+
+    // Registrar lenis en nuestro ScrollService compartido
+    this.scrollService.setLenis(this.lenis);
 
     this.lenis.on('scroll', () => {
       ScrollTrigger.update();
@@ -178,7 +200,7 @@ export class Model3dComponent implements OnInit, OnDestroy, AfterViewInit {
           {
             opacity: 0.95,
             scrollTrigger: {
-              trigger: document.documentElement,
+              trigger: 'body',
               start: '400vh top', // empieza cuando finaliza "La voz de los sin voz" (Panel 3)
               end: '435vh top',   // totalmente visible 35vh después
               scrub: true
@@ -191,7 +213,7 @@ export class Model3dComponent implements OnInit, OnDestroy, AfterViewInit {
           y: Math.PI * 40.0, // 20 vueltas completas distribuidas a lo largo de toda la página
           ease: 'none',
           scrollTrigger: {
-            trigger: document.documentElement,
+            trigger: 'body',
             start: 'top top',
             end: 'bottom bottom',
             scrub: 1.2
@@ -215,6 +237,18 @@ export class Model3dComponent implements OnInit, OnDestroy, AfterViewInit {
         this.cdr.detectChanges();
       }
     );
+  }
+
+  public scrollTo(targetId: string) {
+    this.scrollService.scrollTo(targetId);
+  }
+
+  public openHistoryModal(tabId: string) {
+    this.scrollService.openHistory(tabId);
+  }
+
+  public closeHistoryModal() {
+    this.scrollService.closeHistory();
   }
 
   private renderScene() {
@@ -244,6 +278,10 @@ export class Model3dComponent implements OnInit, OnDestroy, AfterViewInit {
       cancelAnimationFrame(this.animationFrameId);
     }
     window.removeEventListener('resize', this.onWindowResize);
+
+    if (this.historySub) {
+      this.historySub.unsubscribe();
+    }
 
     if (this.lenis) {
       this.lenis.destroy();

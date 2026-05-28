@@ -9,6 +9,8 @@ import {
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { ScrollService } from '../../services/scroll.service';
+
 gsap.registerPlugin(ScrollTrigger);
 
 @Component({
@@ -22,6 +24,12 @@ export class StoryComponent implements AfterViewInit {
 
   @ViewChild('storySection') storySection!: ElementRef;
   @ViewChild('bgYear') bgYear!: ElementRef;
+
+  constructor(private scrollService: ScrollService) {}
+
+  openHistory(tabId: string) {
+    this.scrollService.openHistory(tabId);
+  }
 
 ngAfterViewInit(): void {
   const section = this.storySection.nativeElement;
