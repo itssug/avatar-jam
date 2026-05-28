@@ -1,67 +1,39 @@
-.story {
+.story-container {
   position: relative;
-  width: 100vw;
-  min-height: 100vh;
+  width: 100%;
+  min-height: 140vh; /* Controla la cantidad de scroll de esta sección */
+  background: transparent !important; /* ¡Adiós al bloque negro cortado! */
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  padding: 10vh 5vw;
-  background: #0A0A0A;
+  align-items: center;
   overflow: hidden;
-
-  &__year {
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(5rem, 18vw, 16rem);
-    font-weight: 900;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(229, 193, 0, 0.15);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    user-select: none;
-    white-space: nowrap;
-  }
-
-  &__content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    max-width: 700px;
-  }
-
-  &__line {
-    font-family: 'Inter', sans-serif;
-    font-size: clamp(1.1rem, 2.5vw, 1.8rem);
-    font-weight: 300;
-    color: var(--color-snow);
-    line-height: 1.6;
-    margin: 1.5rem 0;
-    opacity: 0;
-
-    &--accent {
-      color: var(--color-gold);
-      font-weight: 500;
-    }
-  }
-
-  &__signal {
-    position: absolute;
-    bottom: 4vh;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.65rem;
-    color: var(--color-blue);
-    letter-spacing: 0.4em;
-    opacity: 0.5;
-    animation: pulse 2s ease-in-out infinite;
-  }
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.3; }
-  50%       { opacity: 0.8; }
+.giant-year {
+  position: absolute;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 30vw;
+  font-weight: 900;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(229, 193, 0, 0.12); /* Dorado hiper sutil */
+  pointer-events: none;
+  z-index: 1;
+}
+
+.story-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  padding: 0 2rem;
+  text-align: center;
+}
+
+.story-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.5rem;
+  color: #F5F5F5;
+  margin-bottom: 3.5rem;
+  opacity: 0; /* Empiezan invisibles para que GSAP los controle */
+  transform: translateY(40px);
+  text-shadow: 0 0 20px rgba(0, 191, 255, 0.3); /* Brillo azul neón sutil */
 }

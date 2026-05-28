@@ -12,46 +12,39 @@ gsap.registerPlugin(ScrollTrigger);
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StoryComponent implements AfterViewInit {
-  @ViewChild('line1', { static: true }) line1Ref!: ElementRef;
-  @ViewChild('line2', { static: true }) line2Ref!: ElementRef;
-  @ViewChild('line3', { static: true }) line3Ref!: ElementRef;
-  @ViewChild('year',  { static: true }) yearRef!:  ElementRef;
+  @ViewChild('storySection') storySection!: ElementRef;
+  @ViewChild('bgYear') bgYear!: ElementRef;
 
   ngAfterViewInit() {
-    const lines = [
-      this.line1Ref.nativeElement,
-      this.line2Ref.nativeElement,
-      this.line3Ref.nativeElement,
-    ];
+    const texts = this.storySection.nativeElement.querySelectorAll('.story-text');
 
-    lines.forEach((line) => {
-      gsap.set(line, { opacity: 0, y: 50 });
-
-      ScrollTrigger.create({
-        trigger: line,
-        start: 'top 90%',
-        onEnter: () => {
-          gsap.to(line, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' });
-        },
-        onLeaveBack: () => {
-          gsap.to(line, { opacity: 0, y: 50, duration: 0.5 });
-        }
-      });
+    // 1. Animación del año gigante (Efecto parallax sobre el fondo 3D)
+    gsap.to(this.bgYear.nativeElement, {
+      scrollTrigger: {
+        trigger: this.storySection.nativeElement,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true
+      },
+      y: -120,
+      opacity: 0.5
     });
 
-    gsap.set(this.yearRef.nativeElement, { opacity: 0 });
-
-    ScrollTrigger.create({
-      trigger: this.yearRef.nativeElement,
-      start: 'top 90%',
-      onEnter: () => {
-        gsap.to(this.yearRef.nativeElement, {
-          opacity: 1, duration: 1.5, ease: 'power4.out'
-        });
-      },
-      onLeaveBack: () => {
-        gsap.to(this.yearRef.nativeElement, { opacity: 0, duration: 0.5 });
-      }
+    // 2. Revelado rápido y fluido de los textos
+    texts.forEach((text: HTMLElement, index: number) => {
+      gsap.to(text, {
+        scrollTrigger: {
+          trigger: text,
+          // Al poner "top 85%", la animación inicia apenas el texto asome un 15% en pantalla
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power2.out",
+        delay: index * 0.1
+      });
     });
   }
 }
