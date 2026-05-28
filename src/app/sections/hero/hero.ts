@@ -69,26 +69,24 @@ export class HeroComponent implements OnInit, OnDestroy {
   // ═══════════════════════════════════════════════════════════════════════════
 
   private setupScene() {
-    this.scene.background = new THREE.Color(0x030610);
-    this.scene.fog = new THREE.FogExp2(0x040812, 0.013);
+    this.scene.background = new THREE.Color(0xE5E0D8); // Pergamino/Piedra
+    this.scene.fog = new THREE.FogExp2(0xE5E0D8, 0.012);
 
-    this.scene.add(new THREE.AmbientLight(0x0a1020, 8));
+    this.scene.add(new THREE.AmbientLight(0x717580, 2.5)); // Luz de día suave
 
-    // Luna fria desde el sur iluminando el Illimani
-    // Luna fria con tinte plateado — refleja la armadura
-    const moonLight = new THREE.DirectionalLight(0x9ab8d0, 3.0);
-    moonLight.position.set(2, 20, -50);
-    this.scene.add(moonLight);
+    // Sol (Luz direccional cálida)
+    const sunLight = new THREE.DirectionalLight(0xFFF5E1, 3.5);
+    sunLight.position.set(10, 40, 20);
+    this.scene.add(sunLight);
 
-    // Resplandor calido que asciende desde el cuenco
-    // Resplandor de ciudad — mantiene tonos sodio pero atenuados
-    const cityGlow1 = new THREE.PointLight(0xCC8844, 2.5, 70);
-    cityGlow1.position.set(0, -5, -2);
-    this.scene.add(cityGlow1);
+    // Resplandor cálido desde el cuenco simulando el rebote del sol
+    const bowlBounce1 = new THREE.PointLight(0xF5E6D3, 1.5, 70);
+    bowlBounce1.position.set(0, -5, -2);
+    this.scene.add(bowlBounce1);
 
-    const cityGlow2 = new THREE.PointLight(0xBB9955, 1.8, 45);
-    cityGlow2.position.set(6, -7, 3);
-    this.scene.add(cityGlow2);
+    const bowlBounce2 = new THREE.PointLight(0xE5D0B5, 1.0, 45);
+    bowlBounce2.position.set(6, -7, 3);
+    this.scene.add(bowlBounce2);
 
     // Luz dorada RTP desde El Alto
     // Luz bronce RTP desde El Alto
@@ -179,12 +177,11 @@ export class HeroComponent implements OnInit, OnDestroy {
       return root;
     };
 
-    // ── Las 4 cumbres del Illimani ────────────────────────────────────────────
-    // Vistas desde el norte, el Pico Sur es el mas alto y esta ligeramente a la derecha
-    buildCumbre(2, -48, 7, 28, 0x0c1a32, 0.56); // Pico Sur — el mas alto
-    buildCumbre(-1, -46, 6, 24, 0x091528, 0.54); // Pico Central
-    buildCumbre(-5, -44, 5, 20, 0x08121f, 0.52); // Pico Norte
-    buildCumbre(6, -45, 5, 18, 0x0a1826, 0.50); // Cumbre secundaria
+    // ── Las 4 cumbres del Illimani (Piedra y Nieve de día) ─────────────────
+    buildCumbre(2, -48, 7, 28, 0x8D94A0, 0.56); // Pico Sur
+    buildCumbre(-1, -46, 6, 24, 0x7A8290, 0.54); // Pico Central
+    buildCumbre(-5, -44, 5, 20, 0x68707F, 0.52); // Pico Norte
+    buildCumbre(6, -45, 5, 18, 0x727988, 0.50); // Cumbre secundaria
 
     // ── Cordillera de fondo: masa montanosa que enmarca el Illimani ───────────
     [
@@ -196,7 +193,7 @@ export class HeroComponent implements OnInit, OnDestroy {
       const geo = new THREE.ConeGeometry(d.r, d.h, 8);
       this.jitterGeo(geo, d.r * 0.14, 0.5);
       const mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({
-        color: 0x060e1c, flatShading: true
+        color: 0x5A5E68, flatShading: true
       }));
       mesh.position.set(d.x, -2, d.z);
       this.scene.add(mesh);
@@ -212,7 +209,7 @@ export class HeroComponent implements OnInit, OnDestroy {
     }
     slopeGeo.computeVertexNormals();
     const slopeMesh = new THREE.Mesh(slopeGeo, new THREE.MeshPhongMaterial({
-      color: 0x07101d, flatShading: true, side: THREE.DoubleSide
+      color: 0x6E737D, flatShading: true, side: THREE.DoubleSide
     }));
     slopeMesh.rotation.x = -Math.PI / 2;
     slopeMesh.position.set(0, -2, -22);
@@ -266,7 +263,7 @@ export class HeroComponent implements OnInit, OnDestroy {
     geo.computeVertexNormals();
 
     const mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({
-      color: 0x070c18, flatShading: true, side: THREE.DoubleSide
+      color: 0x717580, flatShading: true, side: THREE.DoubleSide
     }));
     mesh.rotation.x = -Math.PI / 2;
     // y=-2: el borde del cuenco esta al mismo nivel que El Alto
@@ -373,7 +370,7 @@ export class HeroComponent implements OnInit, OnDestroy {
     geo.computeVertexNormals();
 
     const mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({
-      color: 0x050a13, flatShading: true, side: THREE.DoubleSide
+      color: 0x828896, flatShading: true, side: THREE.DoubleSide
     }));
     mesh.rotation.x = -Math.PI / 2;
     mesh.position.set(0, -2.1, 11);
@@ -437,7 +434,7 @@ export class HeroComponent implements OnInit, OnDestroy {
       const pts = curve.getPoints(40);
       const cGeo = new THREE.BufferGeometry().setFromPoints(pts);
       this.scene.add(new THREE.Line(cGeo, new THREE.LineBasicMaterial({
-        color: 0x2a3a55, opacity: 0.65, transparent: true
+        color: 0x3A4050, opacity: 0.85, transparent: true
       })));
 
       for (let g = 0; g < l.n; g++) {
@@ -492,34 +489,32 @@ export class HeroComponent implements OnInit, OnDestroy {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ESTRELLAS del altiplano
+  // PARTÍCULAS / CENIZA (en vez de estrellas)
   // ═══════════════════════════════════════════════════════════════════════════
 
   private buildStars() {
-    const N = 5500;
+    const N = 3500;
     const pos = new Float32Array(N * 3);
     const col = new Float32Array(N * 3);
 
     for (let i = 0; i < N; i++) {
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.random() * Math.PI * 0.46;
-      const r = 190;
-      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      pos[i * 3 + 1] = r * Math.cos(phi) + 10;
-      pos[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+      // Distribuidas por todo el espacio cercano
+      pos[i * 3] = (Math.random() - 0.5) * 60;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 40;
+      pos[i * 3 + 2] = 20 - Math.random() * 60;
 
-      const warm = Math.random() < 0.12;
-      col[i * 3] = warm ? 1.0 : 0.85 + Math.random() * 0.15;
-      col[i * 3 + 1] = warm ? 0.8 : 0.9 + Math.random() * 0.1;
-      col[i * 3 + 2] = warm ? 0.4 : 1.0;
+      // Color ceniza/oro
+      col[i * 3] = 0.9;
+      col[i * 3 + 1] = 0.85 + Math.random() * 0.1;
+      col[i * 3 + 2] = 0.7 + Math.random() * 0.2;
     }
 
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
     this.scene.add(new THREE.Points(geo, new THREE.PointsMaterial({
-      size: 0.13, vertexColors: true, transparent: true,
-      opacity: 0.92, sizeAttenuation: false
+      size: 0.18, vertexColors: true, transparent: true,
+      opacity: 0.6, sizeAttenuation: true
     })));
   }
 
@@ -528,23 +523,14 @@ export class HeroComponent implements OnInit, OnDestroy {
   // ═══════════════════════════════════════════════════════════════════════════
 
   private buildAtmosphere() {
-    // Glow naranja-ambar que sube del cuenco — efecto real de La Paz de noche
+    // Brillo claro diurno en la base
     const glowGeo = new THREE.SphereGeometry(22, 16, 8, 0, Math.PI * 2, 0, Math.PI * 0.42);
     const glowMat = new THREE.MeshBasicMaterial({
-      color: 0x7AD7E8, transparent: true, opacity: 0.015, side: THREE.BackSide
+      color: 0xFFFFFF, transparent: true, opacity: 0.2, side: THREE.BackSide
     });
     const glow = new THREE.Mesh(glowGeo, glowMat);
     glow.position.set(0, -7, -5);
     this.scene.add(glow);
-
-    // Linea de horizonte tenue
-    const hGeo = new THREE.PlaneGeometry(200, 2);
-    const hMat = new THREE.MeshBasicMaterial({
-      color: 0x7AD7E8, transparent: true, opacity: 0.012, side: THREE.DoubleSide
-    });
-    const h = new THREE.Mesh(hGeo, hMat);
-    h.position.set(0, 3, -32);
-    this.scene.add(h);
   }
 
   // ═══════════════════════════════════════════════════════════════════════════

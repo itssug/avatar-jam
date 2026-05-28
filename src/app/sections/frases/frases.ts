@@ -98,7 +98,7 @@ export class FrasesComponent implements AfterViewInit {
       { scaleX: 0 },
       { scaleX: 1, duration: 0.8, transformOrigin: 'left center' }, '<'
     );
-    tl.to({}, { duration: 0.6 }); // hold
+    tl.to(section, { duration: 0.6 }); // hold
     tl.to('.frase-panel-1', { opacity: 0, duration: 0.8 });
 
     // Panel 2
@@ -122,7 +122,7 @@ export class FrasesComponent implements AfterViewInit {
       { scaleX: 0 },
       { scaleX: 1, duration: 0.8, transformOrigin: 'left center' }, '<'
     );
-    tl.to({}, { duration: 0.6 });
+    tl.to(section, { duration: 0.6 });
     tl.to('.frase-panel-2', { opacity: 0, duration: 0.8 });
 
     // Panel 3
@@ -146,7 +146,7 @@ export class FrasesComponent implements AfterViewInit {
       { scaleX: 0 },
       { scaleX: 1, duration: 0.8, transformOrigin: 'left center' }, '<'
     );
-    tl.to({}, { duration: 0.6 });
+    tl.to(section, { duration: 0.6 });
     tl.to('.frase-panel-3', { opacity: 0, duration: 0.8 });
 
     // Panel 4
@@ -170,7 +170,7 @@ export class FrasesComponent implements AfterViewInit {
       { scaleX: 0 },
       { scaleX: 1, duration: 0.8, transformOrigin: 'left center' }, '<'
     );
-    tl.to({}, { duration: 0.6 });
+    tl.to(section, { duration: 0.6 });
     tl.to('.frase-panel-4', { opacity: 0, duration: 0.8 });
 
     // Panel 5 — last panel, fade in and hold (no fade out)
@@ -194,7 +194,7 @@ export class FrasesComponent implements AfterViewInit {
       { scaleX: 0 },
       { scaleX: 1, duration: 0.8, transformOrigin: 'left center' }, '<'
     );
-    tl.to({}, { duration: 0.6 });
+    tl.to(section, { duration: 0.6 });
     tl.to('.frase-panel-5', { opacity: 0, duration: 0.8 });
 
     // Pulsing cyan line animation (continuous)

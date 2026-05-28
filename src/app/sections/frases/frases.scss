@@ -1,12 +1,12 @@
 // ─── Color Palette ───
-$bg-dark: #080B10;
-$steel-primary: #C0C8D4;
-$cyan-ice: #7AD7E8;
-$bronze: #B8935A;
-$warm-gold: #D4A853;
-$snow: #E8ECF0;
-$steel-dark: #3A4050;
-$steel-mid: #6B7280;
+$bg-dark: #E5E0D8;
+$steel-primary: #4A4F58;
+$cyan-ice: #88C0D0;
+$bronze: #C5A059;
+$warm-gold: #A67B5B;
+$snow: #2A2C31;
+$steel-dark: #717580;
+$steel-mid: #5A5550;
 $energy: #4FE0C8;
 
 // ─── Section Wrapper ───
@@ -49,8 +49,8 @@ $energy: #4FE0C8;
     to bottom,
     transparent 0px,
     transparent 2px,
-    rgba($cyan-ice, 0.015) 2px,
-    rgba($cyan-ice, 0.015) 4px
+    rgba($bronze, 0.05) 2px,
+    rgba($bronze, 0.05) 4px
   );
 }
 
@@ -164,7 +164,7 @@ $energy: #4FE0C8;
   line-height: 1;
   letter-spacing: 4px;
   user-select: none;
-  text-shadow: 0 0 40px rgba($bronze, 0.15);
+  text-shadow: 0 0 40px rgba($bronze, 0.3);
 }
 
 .frase-line-h {
@@ -189,9 +189,8 @@ $energy: #4FE0C8;
   letter-spacing: 2px;
   margin: 0 0 20px 0;
   text-shadow:
-    0 0 20px rgba($cyan-ice, 0.3),
-    0 0 40px rgba($cyan-ice, 0.12),
-    0 0 80px rgba($cyan-ice, 0.06);
+    0 0 20px rgba($cyan-ice, 0.4),
+    0 0 40px rgba($cyan-ice, 0.2);
   position: relative;
 
   // Glitch decoration line
@@ -226,7 +225,8 @@ $energy: #4FE0C8;
   gap: 10px;
   margin-top: 48px;
   padding-top: 24px;
-  border-top: 1px solid rgba($steel-dark, 0.4);
+  border-top: 1px solid rgba($steel-dark, 0.2);
+  justify-content: space-between;
 }
 
 .frase-signal-icon {

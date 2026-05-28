@@ -1,12 +1,13 @@
 // ─── Variables (new character-based palette) ─────────────────────────────────
-$steel:    #C0C8D4;  // Plateado acero — armadura
-$cyan:     #7AD7E8;  // Cyan hielo — energía/cristal
-$bronze:   #B8935A;  // Bronce — acentos dorados
-$warm:     #D4A853;  // Oro envejecido
-$snow:     #E8ECF0;  // Blanco platinado
-$dark:     #080B10;  // Negro azulado profundo
-$steel-dk: #3A4050;  // Acero oscuro
-$steel-md: #6B7280;  // Acero medio
+$steel:    #4A4F58;  // Acero forjado
+$cyan:     #88C0D0;  // Celeste andino
+$bronze:   #C5A059;  // Latón / Bronce
+$warm:     #A67B5B;  // Madera
+$snow:     #F5F3ED;  // Texto claro
+$dark:     #5A5550;  // Gris cálido/Cuero
+$bg-main:  #E5E0D8;  // Pergamino/Piedra clara
+$steel-dk: #2A2C31;  // Texto oscuro
+$steel-md: #717580;  // Texto secundario
 $energy:   #4FE0C8;  // Turquesa energía
 
 // ─── Hero container ───────────────────────────────────────────────────────────
@@ -15,7 +16,7 @@ $energy:   #4FE0C8;  // Turquesa energía
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: #040810;
+  background: $bg-main;
 
   canvas {
     position: absolute;
@@ -86,7 +87,7 @@ $energy:   #4FE0C8;  // Turquesa energía
     display: block;
     font-family: 'Orbitron', sans-serif;
     font-size: clamp(0.5rem, 1.5vw, 0.9rem);
-    color: $snow;
+    color: $steel-dk;
     letter-spacing: 0.5em;
     opacity: 0.6;
     margin-top: 0.5rem;
@@ -165,12 +166,12 @@ $energy:   #4FE0C8;  // Turquesa energía
   font-family: 'Orbitron', sans-serif;
   font-size: clamp(2rem, 6vw, 5.5rem);
   font-weight: 900;
-  color: $steel;
+  color: $steel-dk;
   line-height: 1.05;
   letter-spacing: 0.12em;
   text-shadow:
-    0 0 30px rgba($steel, 0.3),
-    0 0 80px rgba($cyan, 0.15);
+    0 0 30px rgba($snow, 0.8),
+    0 0 80px rgba($cyan, 0.5);
   position: relative;
 
   &--num {
@@ -222,7 +223,7 @@ $energy:   #4FE0C8;  // Turquesa energía
   font-family: 'Inter', sans-serif;
   font-size: clamp(0.65rem, 1.3vw, 1rem);
   font-weight: 300;
-  color: $snow;
+  color: $steel-dk;
   letter-spacing: 0.55em;
   margin-top: 1rem;
   opacity: 0; // GSAP controlled
@@ -256,7 +257,7 @@ $energy:   #4FE0C8;  // Turquesa energía
   background: radial-gradient(
     ellipse at center,
     transparent 40%,
-    rgba(4, 7, 15, 0.7) 100%
+    rgba(90, 85, 80, 0.4) 100%
   );
   pointer-events: none;
   z-index: 4;

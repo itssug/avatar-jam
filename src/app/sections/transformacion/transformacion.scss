@@ -1,12 +1,12 @@
 // ─── Palette ─────────────────────────────────────────────────────────────────
-$steel:       #C0C8D4;
-$cyan-ice:    #7AD7E8;
-$gold-bronze: #B8935A;
-$warm-gold:   #D4A853;
-$snow:        #E8ECF0;
-$bg-dark:     #080B10;
-$steel-dark:  #3A4050;
-$steel-mid:   #6B7280;
+$steel:       #4A4F58;
+$cyan-ice:    #88C0D0;
+$gold-bronze: #C5A059;
+$warm-gold:   #A67B5B;
+$snow:        #2A2C31;
+$bg-dark:     #E5E0D8;
+$steel-dark:  #717580;
+$steel-mid:   #5A5550;
 $energy:      #4FE0C8;
 
 // ─── Wrapper ─────────────────────────────────────────────────────────────────
@@ -14,6 +14,16 @@ $energy:      #4FE0C8;
   position: relative;
   height: 400vh;
   background: $bg-dark;
+  background: $bg-dark;
+  overflow: hidden;
+}
+
+// ─── Sticky Container ─────────────────────────────────────────────────────────
+.transform-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -115,8 +125,8 @@ $energy:      #4FE0C8;
   letter-spacing: 0.06em;
   color: $snow;
   text-shadow:
-    0 0 40px rgba($snow, 0.15),
-    0 0 100px rgba($warm-gold, 0.08);
+    0 0 40px rgba($snow, 0.5),
+    0 0 100px rgba($warm-gold, 0.2);
   margin-bottom: 1.5rem;
 }
 
@@ -441,8 +451,8 @@ $energy:      #4FE0C8;
   .hero-name {
     color: $steel;
     text-shadow:
-      0 0 30px rgba($steel, 0.2),
-      0 0 80px rgba($steel, 0.08);
+      0 0 30px rgba($steel, 0.4),
+      0 0 80px rgba($steel, 0.15);
   }
 
   .hero-number {

@@ -37,21 +37,21 @@ export class TransformacionComponent implements AfterViewInit {
 
     // Phase 1: EL HOMBRE
     tl.fromTo('.phase-1', { opacity: 0 }, { opacity: 1, duration: 1 });
-    tl.fromTo('.phase-1 .title', { y: 20 }, { y: 0, duration: 1 }, '<');
-    tl.to({}, { duration: 1 }); // hold
+    tl.fromTo('.phase-1 .phase-title--man', { y: 20 }, { y: 0, duration: 1 }, '<');
+    tl.to(section, { duration: 1 }); // hold
     tl.to('.phase-1', { opacity: 0, duration: 1 });
 
     // Phase 2: LA TRANSFORMACION
     tl.fromTo('.phase-2', { opacity: 0 }, { opacity: 1, duration: 1 });
     tl.fromTo('.hud-ring', { scale: 0.5 }, { scale: 1, duration: 1 }, '<');
     tl.fromTo('.hud-ring-inner', { scale: 0.5 }, { scale: 1, duration: 1 }, '<');
-    tl.to({}, { duration: 1 }); // hold
+    tl.to(section, { duration: 1 }); // hold
     tl.to('.phase-2', { opacity: 0, duration: 1 });
 
     // Phase 3: EL HEROE
     tl.fromTo('.phase-3', { opacity: 0 }, { opacity: 1, duration: 1 });
-    tl.fromTo('.phase-3 .title-wrapper', { scale: 0.8 }, { scale: 1, duration: 1 }, '<');
-    tl.to({}, { duration: 1 }); // hold
+    tl.fromTo('.phase-3 .phase-title--hero', { scale: 0.8 }, { scale: 1, duration: 1 }, '<');
+    tl.to(section, { duration: 1 }); // hold
     tl.to('.phase-3', { opacity: 0, duration: 1 });
 
     ScrollTrigger.refresh();
