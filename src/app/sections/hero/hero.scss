@@ -1,9 +1,13 @@
-// ─── Variables (same as project palette) ─────────────────────────────────────
-$gold:   #E5C100;
-$blue:   #00BFFF;
-$orange: #FF8800;
-$snow:   #F5F5F5;
-$dark:   #0A0A0A;
+// ─── Variables (new character-based palette) ─────────────────────────────────
+$steel:    #C0C8D4;  // Plateado acero — armadura
+$cyan:     #7AD7E8;  // Cyan hielo — energía/cristal
+$bronze:   #B8935A;  // Bronce — acentos dorados
+$warm:     #D4A853;  // Oro envejecido
+$snow:     #E8ECF0;  // Blanco platinado
+$dark:     #080B10;  // Negro azulado profundo
+$steel-dk: #3A4050;  // Acero oscuro
+$steel-md: #6B7280;  // Acero medio
+$energy:   #4FE0C8;  // Turquesa energía
 
 // ─── Hero container ───────────────────────────────────────────────────────────
 .hero {
@@ -11,7 +15,7 @@ $dark:   #0A0A0A;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: #04070f;
+  background: #040810;
 
   canvas {
     position: absolute;
@@ -73,9 +77,9 @@ $dark:   #0A0A0A;
     font-family: 'Orbitron', sans-serif;
     font-size: clamp(2rem, 8vw, 7rem);
     font-weight: 900;
-    color: $gold;
+    color: $bronze;
     letter-spacing: 0.3em;
-    text-shadow: 0 0 60px rgba(229, 193, 0, 0.8);
+    text-shadow: 0 0 60px rgba($bronze, 0.8);
   }
 
   &-city {
@@ -153,7 +157,7 @@ $dark:   #0A0A0A;
   font-family: 'Orbitron', sans-serif;
   font-size: clamp(0.4rem, 0.9vw, 0.65rem);
   letter-spacing: 0.45em;
-  color: rgba($blue, 0.6);
+  color: rgba($cyan, 0.6);
   margin-bottom: 1.2rem;
 }
 
@@ -161,21 +165,21 @@ $dark:   #0A0A0A;
   font-family: 'Orbitron', sans-serif;
   font-size: clamp(2rem, 6vw, 5.5rem);
   font-weight: 900;
-  color: $gold;
+  color: $steel;
   line-height: 1.05;
   letter-spacing: 0.12em;
   text-shadow:
-    0 0 30px rgba(229, 193, 0, 0.5),
-    0 0 80px rgba(229, 193, 0, 0.2);
+    0 0 30px rgba($steel, 0.3),
+    0 0 80px rgba($cyan, 0.15);
   position: relative;
 
   &--num {
     // The "3000" gets the glitch treatment
     display: inline-block;
-    color: $snow;
+    color: $cyan;
     text-shadow:
-      0 0 20px rgba(0, 191, 255, 0.4),
-      0 0 60px rgba(0, 191, 255, 0.15);
+      0 0 20px rgba($cyan, 0.5),
+      0 0 60px rgba($energy, 0.2);
   }
 }
 
@@ -191,14 +195,14 @@ $dark:   #0A0A0A;
   }
 
   &::before {
-    color: $blue;
+    color: $cyan;
     clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
     transform: translateX(-3px);
     opacity: 0.8;
   }
 
   &::after {
-    color: #FF3300;
+    color: $energy;
     clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
     transform: translateX(3px);
     opacity: 0.8;
@@ -240,7 +244,7 @@ $dark:   #0A0A0A;
     font-family: 'Orbitron', sans-serif;
     font-size: 0.5rem;
     letter-spacing: 0.25em;
-    color: rgba($blue, 0.45);
+    color: rgba($cyan, 0.45);
     line-height: 2;
   }
 }

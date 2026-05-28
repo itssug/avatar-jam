@@ -2,12 +2,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap');
 
 :root {
-  --color-gold: #E5C100;
-  --color-blue: #00BFFF;
-  --color-gray: #212121;
-  --color-orange: #FF8800;
-  --color-snow: #F5F5F5;
-  --bg-dark: #0A0A0A;
+  --color-primary: #C0C8D4;    /* Plateado acero — armadura */
+  --color-accent: #7AD7E8;     /* Cyan hielo — energía/cristal */
+  --color-gold: #B8935A;       /* Bronce — acentos dorados */
+  --color-warm: #D4A853;       /* Oro envejecido — highlights */
+  --color-snow: #E8ECF0;       /* Blanco platinado */
+  --color-steel-dark: #3A4050; /* Acero oscuro — bordes */
+  --color-steel-mid: #6B7280;  /* Acero medio — texto secundario */
+  --color-energy: #4FE0C8;     /* Turquesa energía — glow */
+  --bg-dark: #080B10;          /* Negro azulado profundo */
 }
 
 * {

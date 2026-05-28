@@ -1,7 +1,7 @@
 .story-wrapper {
   position: relative;
   height: 500vh; // era 100vh — necesitas espacio para hacer scroll
-  background: #05070d;
+  background: #060910;
   overflow: hidden; // ← también puede bloquear el scroll del padre, considera quitar esto o moverlo
 }
 
@@ -15,11 +15,11 @@
 
   background:
     radial-gradient(circle at center,
-      rgba(229,193,0,0.08),
+      rgba(184,147,90,0.06),
       transparent 60%),
 
     radial-gradient(circle at top,
-      rgba(0,191,255,0.08),
+      rgba(122,215,232,0.06),
       transparent 50%);
 
   z-index: 1;
@@ -30,8 +30,8 @@
   inset: 0;
 
   background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(192,200,212,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(192,200,212,0.025) 1px, transparent 1px);
 
   background-size: 80px 80px;
 
@@ -70,7 +70,7 @@
 
   color: transparent;
 
-  -webkit-text-stroke: 2px rgba(229,193,0,0.12);
+  -webkit-text-stroke: 2px rgba(184,147,90,0.10);
 
   opacity: 0.18;
 
@@ -95,7 +95,7 @@
   background: linear-gradient(
     to bottom,
     transparent,
-    rgba(0,191,255,0.5),
+    rgba(122,215,232,0.4),
     transparent
   );
 
@@ -145,24 +145,24 @@
 
   padding: 0.5rem 1rem;
 
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(192,200,212,0.1);
 
-  background: rgba(255,255,255,0.03);
+  background: rgba(192,200,212,0.03);
 
   backdrop-filter: blur(10px);
 
   font-family: 'Orbitron';
   font-size: 0.8rem;
 
-  color: rgba(255,255,255,0.7);
+  color: rgba(232,236,240,0.7);
 
   letter-spacing: 0.3em;
 }
 
 .panel-tag.blue {
-  border-color: rgba(0,191,255,0.2);
+  border-color: rgba(122,215,232,0.25);
 
-  color: #00BFFF;
+  color: #7AD7E8;
 }
 
 .story-line {
@@ -172,12 +172,12 @@
 
   line-height: 1.1;
 
-  color: white;
+  color: #E8ECF0;
 
   letter-spacing: 0.04em;
 
   text-shadow:
-    0 0 30px rgba(0,191,255,0.25);
+    0 0 30px rgba(122,215,232,0.2);
 
   margin-bottom: 2rem;
 }
@@ -185,7 +185,7 @@
 .story-description {
   max-width: 500px;
 
-  color: rgba(255,255,255,0.6);
+  color: rgba(232,236,240,0.6);
 
   font-family: 'Inter';
 
@@ -202,18 +202,18 @@
 
   line-height: 0.95;
 
-  color: #E5C100;
+  color: #C0C8D4;
 
   letter-spacing: 0.08em;
 
   text-shadow:
-    0 0 40px rgba(229,193,0,0.4);
+    0 0 40px rgba(122,215,232,0.3);
 }
 
 .quote {
   margin-top: 2rem;
 
-  color: rgba(255,255,255,0.7);
+  color: rgba(232,236,240,0.7);
 
   letter-spacing: 0.2em;
 
@@ -221,7 +221,7 @@
 }
 
 .small-text {
-  color: rgba(255,255,255,0.5);
+  color: rgba(232,236,240,0.5);
 
   letter-spacing: 0.5em;
 
@@ -240,14 +240,14 @@
   color: white;
 
   text-shadow:
-    0 0 50px rgba(229,193,0,0.7),
-    0 0 120px rgba(229,193,0,0.25);
+    0 0 50px rgba(122,215,232,0.5),
+    0 0 120px rgba(79,224,200,0.2);
 
   margin-bottom: 2rem;
 }
 
 .voice-text {
-  color: #00BFFF;
+  color: #7AD7E8;
 
   letter-spacing: 0.35em;
 
@@ -261,7 +261,7 @@
 
   color: transparent;
 
-  -webkit-text-stroke: 2px rgba(0,191,255,0.4);
+  -webkit-text-stroke: 2px rgba(122,215,232,0.35);
 
   margin-bottom: 2rem;
 }
@@ -273,7 +273,7 @@
 
   line-height: 1.1;
 
-  color: #E5C100;
+  color: #B8935A;
 
   letter-spacing: 0.08em;
 }
@@ -287,9 +287,9 @@
 
   overflow: hidden;
 
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(192,200,212,0.06);
 
-  background: rgba(255,255,255,0.02);
+  background: rgba(192,200,212,0.02);
 
   backdrop-filter: blur(12px);
 

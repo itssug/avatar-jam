@@ -22,3 +22,21 @@ app-story {
   z-index: 2;
   pointer-events: none; /* Permite interactuar con el fondo si es necesario */
 }
+
+app-frases {
+  position: relative;
+  display: block;
+  width: 100%;
+  /* app-story is absolute with 500vh and starts at top:0.
+     app-hero takes 100vh in the flow. So we need 400vh more margin 
+     to push app-frases exactly below app-story. */
+  margin-top: 400vh; 
+  z-index: 3;
+}
+
+app-transformacion {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 4;
+}

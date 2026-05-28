@@ -69,27 +69,30 @@ export class HeroComponent implements OnInit, OnDestroy {
   // ═══════════════════════════════════════════════════════════════════════════
 
   private setupScene() {
-    this.scene.background = new THREE.Color(0x02050d);
-    this.scene.fog = new THREE.FogExp2(0x050a18, 0.013);
+    this.scene.background = new THREE.Color(0x030610);
+    this.scene.fog = new THREE.FogExp2(0x040812, 0.013);
 
-    this.scene.add(new THREE.AmbientLight(0x060d25, 8));
+    this.scene.add(new THREE.AmbientLight(0x0a1020, 8));
 
     // Luna fria desde el sur iluminando el Illimani
-    const moonLight = new THREE.DirectionalLight(0x8ab0d0, 2.5);
+    // Luna fria con tinte plateado — refleja la armadura
+    const moonLight = new THREE.DirectionalLight(0x9ab8d0, 3.0);
     moonLight.position.set(2, 20, -50);
     this.scene.add(moonLight);
 
     // Resplandor calido que asciende desde el cuenco
-    const cityGlow1 = new THREE.PointLight(0xFF9933, 3, 70);
+    // Resplandor de ciudad — mantiene tonos sodio pero atenuados
+    const cityGlow1 = new THREE.PointLight(0xCC8844, 2.5, 70);
     cityGlow1.position.set(0, -5, -2);
     this.scene.add(cityGlow1);
 
-    const cityGlow2 = new THREE.PointLight(0xFFCC55, 2, 45);
+    const cityGlow2 = new THREE.PointLight(0xBB9955, 1.8, 45);
     cityGlow2.position.set(6, -7, 3);
     this.scene.add(cityGlow2);
 
     // Luz dorada RTP desde El Alto
-    const light = new THREE.PointLight(0xE5C100, 2, 35);
+    // Luz bronce RTP desde El Alto
+    const light = new THREE.PointLight(0xB8935A, 2, 35);
 
     light.position.set(-6, 3, -2);
 
@@ -528,7 +531,7 @@ export class HeroComponent implements OnInit, OnDestroy {
     // Glow naranja-ambar que sube del cuenco — efecto real de La Paz de noche
     const glowGeo = new THREE.SphereGeometry(22, 16, 8, 0, Math.PI * 2, 0, Math.PI * 0.42);
     const glowMat = new THREE.MeshBasicMaterial({
-      color: 0xFF5500, transparent: true, opacity: 0.022, side: THREE.BackSide
+      color: 0x7AD7E8, transparent: true, opacity: 0.015, side: THREE.BackSide
     });
     const glow = new THREE.Mesh(glowGeo, glowMat);
     glow.position.set(0, -7, -5);
@@ -537,7 +540,7 @@ export class HeroComponent implements OnInit, OnDestroy {
     // Linea de horizonte tenue
     const hGeo = new THREE.PlaneGeometry(200, 2);
     const hMat = new THREE.MeshBasicMaterial({
-      color: 0xFF7733, transparent: true, opacity: 0.015, side: THREE.DoubleSide
+      color: 0x7AD7E8, transparent: true, opacity: 0.012, side: THREE.DoubleSide
     });
     const h = new THREE.Mesh(hGeo, hMat);
     h.position.set(0, 3, -32);
