@@ -1,390 +1,352 @@
-// ─── Color Palette (Ajustada para Transparencias Tácticas) ───
-$bg-dark: #E5E0D8;
-$steel-primary: #4A4F58;
-$cyan-ice: #52B3A9;
-$bronze: #C5A059;
-$warm-gold: #A67B5B;
-$snow: #2A2C31;
-$steel-dark: #717580;
-$steel-mid: #5A5550;
-$energy: #4FE0C8;
+/* ─── Color Palette (Industrial/Cyberpunk Retro) ─── */
+$bg-terminal: #0D0F12;
+$panel-bg: #111318;
+$border-glow: #2A4B6B;
+$cyan-scan: #3B8B9A;
+$amber-warning: #D6A345;
+$text-primary: #C5D0DE;
+$text-dim: #7A8494;
+$accent-line: #2E5A6B;
+$glitch-red: #9A3B3B;
 
-// Redefinición a bordes y fondos semi-transparentes limpios
-$player-bg: transparent;
-$player-bg-active: transparent;
-$player-border: rgba(#4A4F58, 0.15);
-$player-border-active: rgba(#4A4F58, 0.4);
-
-// ─── Section Wrapper ───
+/* ─── Section Wrapper ─── */
 .frases-section {
   position: relative;
   width: 100%;
-  height: auto;
-  min-height: 100vh;
-  background: $bg-dark; // Aquí puedes añadir tu imagen de fondo con background-image si lo requieres
-  overflow: visible;
-  padding: 8vh 0;
-  font-family: 'Orbitron', -apple-system, sans-serif;
+  background: $bg-terminal;
+  overflow-x: hidden;
 }
 
-// ─── Section Header ───
-.frases-header {
-  text-align: left;
-  max-width: 960px;
-  margin: 0 auto 5rem auto;
-  position: relative;
-  z-index: 10;
-  padding: 0 5vw;
-}
-
-.frases-header-tag {
-  font-size: 0.75rem;
-  color: rgba($steel-primary, 0.6);
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: 0.75rem;
-}
-
-.frases-header-title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  color: $steel-primary;
-  margin: 0;
-  letter-spacing: 0.05em;
-}
-
-.frases-header-line {
-  width: 120px;
-  height: 3px;
-  background: $steel-primary;
-  margin: 1rem 0 0 0;
-}
-
-// ─── Sticky Container ───
-.frases-sticky {
-  position: relative;
-  width: 100%;
-  height: auto;
-  overflow: visible;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 5vw 10vh;
-}
-
-// ─── Textures Semi-transparentes ───
-.frases-bg-noise {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  opacity: 0.015;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://w3.org id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-.frases-scanlines {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: repeating-linear-gradient(to bottom,
-      transparent 0px,
-      transparent 4px,
-      rgba($steel-primary, 0.01) 4px,
-      rgba($steel-primary, 0.01) 6px);
-}
-
-// ─── Pulsing Vertical Line ───
-.frase-pulse-line {
-  position: absolute;
-  left: calc(5vw + 20px);
-  top: 5%;
-  bottom: 5%;
-  width: 1px;
-  background: linear-gradient(to bottom,
-      transparent 0%,
-      rgba($steel-primary, 0.15) 15%,
-      rgba($steel-primary, 0.15) 85%,
-      transparent 100%);
-  z-index: 2;
-}
-
-// ─── Card Box (Sin recuadro ni transiciones de color de fondo al hacer hover) ───
-.scroll-fade-box {
-  display: block;
-  position: relative;
-  padding: 2.5rem 0 2.5rem 3.5rem;
-  margin-bottom: 4vh;
-  z-index: 10;
-  border-left: 2px solid transparent;
-  background: transparent; // Completamente transparente para ver el personaje detrás
-  transition: border-color 0.3s ease;
-
-  &:hover {
-    border-left-color: rgba($steel-primary, 0.4); // Solo se activa sutilmente la línea guía izquierda
-  }
-
-  &:not(:last-child)::after {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(to right, rgba($steel-primary, 0.1) 0%, transparent 100%);
-    margin-top: 3.5rem;
-  }
-}
-
-// ─── Elements ───
-.frase-tag {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  color: rgba($cyan-ice, 0.8);
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
-}
-
-.frase-tag-dot {
-  width: 4px;
-  height: 4px;
-  background: $cyan-ice;
-  box-shadow: 0 0 6px $cyan-ice;
-}
-
-.frase-number-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.frase-number {
-  font-size: clamp(3rem, 6vw, 4.5rem);
-  font-weight: 700;
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba($steel-primary, 0.2);
-  letter-spacing: -0.05em;
-}
-
-.frase-line-h {
-  flex: 1;
-  height: 1px;
-  background: rgba($steel-primary, 0.1);
-}
-
-.frase-quote {
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  font-weight: 900;
-  color: $steel-primary;
-  text-transform: uppercase;
-  margin: 0.5rem 0;
-  letter-spacing: -0.02em;
-}
-
-.frase-subtitle {
-  font-size: 0.85rem;
-  color: rgba($steel-primary, 0.6);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  margin-bottom: 2.5rem;
-  padding-left: 2px;
-
-  &::before {
-    content: '— ';
-    color: rgba($steel-primary, 0.5);
-  }
-}
-
-// ─── REPRODUCTOR INTEGRADO SEMI-TRANSPARENTE ───
-.frase-audio-player {
-  position: relative;
-  background: $player-bg;
-  border-bottom: 1px solid $player-border; // Línea base sutil en lugar de un recuadro cerrado
-  padding: 1rem 0;
-  margin-bottom: 1.5rem;
-  max-width: 550px;
-  transition: border-color 0.25s ease;
-
-  &.frase-audio-active {
-    border-bottom-color: $player-border-active;
-  }
-}
-
-.frase-audio-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-// Botón "ESCUCHAR ARCHIVO" con ligera opacidad para integrarse al fondo
-.frase-play-btn {
-  order: 0;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(#3B3F46, 0.85); // Semi-transparente para que pase el color del personaje
-  backdrop-filter: blur(4px); // Sutil efecto de desenfoque de fondo tipo HUD
-  color: #E5E0D8;
-  border: 1px solid transparent;
-  padding: 0.85rem 2rem;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  cursor: pointer;
-  clip-path: polygon(0 0, 95% 0, 100% 30%, 100% 100%, 5% 100%, 0 70%);
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: rgba($steel-primary, 0.95);
-    transform: translateY(-1px);
-  }
-
-  &:active {
-    transform: translateY(1px);
-  }
-}
-
-.frase-play-icon {
+/* ─── Section Divider (estilo consola) ─── */
+.section-divider {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 4rem 2rem 2rem;
+  gap: 1rem;
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: repeating-linear-gradient(90deg,
+        $accent-line,
+        $accent-line 4px,
+        transparent 4px,
+        transparent 12px);
+  }
+
+  .divider-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: $cyan-scan;
+    font-family: 'Share Tech Mono', 'Courier New', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    .divider-dot {
+      width: 5px;
+      height: 5px;
+      background: $cyan-scan;
+      box-shadow: 0 0 5px $cyan-scan;
+    }
+  }
 }
 
-.frase-audio-meta {
-  flex: 1;
-  min-width: 140px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+/* ─── Sticky Container ─── */
+.frases-sticky {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
 }
 
-.frase-audio-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: rgba($steel-primary, 0.8);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+/* ─── Panel Container (cada frase es independiente, no sticky) ─── */
+.frase-panel {
+  position: relative;
+  width: 100%;
+  padding: 4rem 2rem;
+  border-bottom: 1px solid rgba($accent-line, 0.3);
+  background: $panel-bg;
+  backdrop-filter: blur(1px);
 }
 
-.frase-audio-time {
-  font-family: monospace;
-  font-size: 0.75rem;
-  color: rgba($steel-primary, 0.5);
+/* ─── Panel Content ─── */
+.frase-content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  padding: 2rem;
+  border-left: 3px solid $cyan-scan;
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow:
+    -5px 0 15px rgba($cyan-scan, 0.1),
+    inset 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-// Barra de progreso superior integrada
-.frase-progress-track {
-  position: absolute;
-  bottom: -1px; // Alineada con la línea inferior del reproductor
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: transparent;
-}
-
-.frase-progress-fill {
-  height: 100%;
-  background: rgba($steel-primary, 0.6);
-  transition: width 0.1s linear;
-}
-
-.frase-progress-cursor {
-  position: absolute;
-  top: -2px;
-  width: 6px;
-  height: 6px;
-  background: $steel-primary;
-  transform: translateX(-50%) rotate(45deg);
-}
-
-// Ondas de audio
-.frase-waveform {
+/* ─── Transmission Tag ─── */
+.frase-tag {
   display: flex;
   align-items: center;
-  gap: 3px;
-  height: 16px;
+  gap: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 2px;
+  color: $cyan-scan;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed rgba($cyan-scan, 0.3);
 
-  span {
-    display: block;
-    width: 2px;
-    height: 100%;
-    background: rgba($steel-primary, 0.2);
-    border-radius: 1px;
-    transition: transform 0.2s ease;
-    transform-origin: bottom;
-
-    &:nth-child(1) {
-      height: 40%;
-    }
-
-    &:nth-child(2) {
-      height: 80%;
-    }
-
-    &:nth-child(3) {
-      height: 60%;
-    }
-
-    &:nth-child(4) {
-      height: 100%;
-    }
-
-    &:nth-child(5) {
-      height: 50%;
-    }
-  }
-
-  &.frase-waveform-playing span {
-    background: rgba($cyan-ice, 0.8);
-    animation: wave-bounce 0.6s ease infinite alternate;
-
-    &:nth-child(1) {
-      animation-delay: 0.1s;
-    }
-
-    &:nth-child(2) {
-      animation-delay: 0.3s;
-    }
-
-    &:nth-child(3) {
-      animation-delay: 0.0s;
-    }
-
-    &:nth-child(4) {
-      animation-delay: 0.4s;
-    }
-
-    &:nth-child(5) {
-      animation-delay: 0.2s;
-    }
+  .frase-tag-dot {
+    width: 6px;
+    height: 6px;
+    background: $cyan-scan;
+    border-radius: 0;
+    box-shadow: 0 0 6px $cyan-scan;
+    animation: pulse-glow 1.2s steps(2) infinite;
   }
 }
 
-// Barra de señal
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* ─── Number + Horizontal Line ─── */
+.frase-number-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  margin-bottom: 20px;
+
+  .frase-number {
+    font-family: 'Major Mono Display', 'Courier New', monospace;
+    font-size: 3rem;
+    font-weight: 700;
+    color: $amber-warning;
+    text-shadow: 0 0 10px rgba($amber-warning, 0.5);
+    letter-spacing: 2px;
+  }
+
+  .frase-line-h {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, $accent-line, transparent);
+  }
+}
+
+/* ─── Quote Text ─── */
+.frase-quote {
+  font-family: 'Major Mono Display', monospace;
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  font-weight: 700;
+  color: $text-primary;
+  line-height: 1.2;
+  margin: 0 0 16px 0;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  text-shadow: 0 0 15px rgba($cyan-scan, 0.3);
+}
+
+/* ─── Subtitle ─── */
+.frase-subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: $text-dim;
+  letter-spacing: 1px;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ─── Bottom Signal Bar ─── */
 .frase-bottom-bar {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.65rem;
-  color: rgba($steel-primary, 0.3);
-  letter-spacing: 1px;
+  justify-content: space-between;
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid rgba($accent-line, 0.3);
+
+  .signal-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .frase-signal-icon {
+      color: $cyan-scan;
+      font-size: 0.8rem;
+      font-family: monospace;
+      animation: signal-flicker 2s steps(3) infinite;
+    }
+
+    .frase-signal-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: $cyan-scan;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+  }
 }
 
-@keyframes wave-bounce {
-  0% {
-    transform: scaleY(0.3);
+@keyframes signal-flicker {
+
+  0%,
+  100% {
+    opacity: 1;
   }
 
-  100% {
-    transform: scaleY(1.1);
+  50% {
+    opacity: 0.5;
   }
+}
+
+/* ─── Botón estilo consola/industrial ─── */
+.btn-medieval {
+  background: transparent;
+  border: 1px solid $accent-line;
+  padding: 8px 18px;
+  color: $cyan-scan;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  backdrop-filter: blur(4px);
+
+  svg {
+    stroke: $cyan-scan;
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover {
+    background: rgba($cyan-scan, 0.15);
+    border-color: $cyan-scan;
+    box-shadow: 0 0 12px rgba($cyan-scan, 0.3);
+    color: $text-primary;
+  }
+
+  &.active {
+    background: rgba($cyan-scan, 0.25);
+    border-color: $cyan-scan;
+    color: $text-primary;
+    box-shadow: inset 0 0 8px rgba($cyan-scan, 0.2);
+  }
+}
+
+/* ─── Audio Progress Bar (estilo terminal) ─── */
+.audio-progress-wrapper {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .audio-time {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: $text-dim;
+    min-width: 70px;
+  }
+
+  .progress-bar-bg {
+    flex: 1;
+    height: 3px;
+    background: rgba($accent-line, 0.4);
+    cursor: pointer;
+    position: relative;
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: $cyan-scan;
+      box-shadow: 0 0 4px $cyan-scan;
+      transition: width 0.1s linear;
+    }
+  }
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .frase-content {
+    padding: 1.5rem;
+  }
+
+  .frase-number-wrapper .frase-number {
+    font-size: 2.2rem;
+  }
+
+  .frase-quote {
+    font-size: 1.4rem;
+  }
+
+  .btn-medieval {
+    padding: 6px 12px;
+    font-size: 0.6rem;
+  }
+
+  .frase-bottom-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .frase-panel {
+    padding: 2rem 1rem;
+  }
+
+  .frase-content {
+    padding: 1rem;
+  }
+
+  .frase-tag {
+    font-size: 0.5rem;
+  }
+}
+
+/* ─── Background scan effect ─── */
+.frases-bg-noise {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(0deg,
+      rgba(0, 0, 0, 0.1) 0px,
+      rgba(0, 0, 0, 0.1) 1px,
+      transparent 1px,
+      transparent 2px);
+  z-index: 0;
+}
+
+.frases-scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom,
+      rgba($cyan-scan, 0.03) 0px,
+      rgba($cyan-scan, 0.03) 2px,
+      transparent 2px,
+      transparent 6px);
+  z-index: 1;
 }

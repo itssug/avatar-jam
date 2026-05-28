@@ -1,107 +1,62 @@
-<section #frasesSection class="frases-section">
+<section class="frases-section" #frasesSection>
+  <!-- Section Divider estilo consola -->
+  <div class="section-divider">
+    <div class="divider-line"></div>
+    <div class="divider-badge">
+      <span class="divider-dot"></span>
+      <span class="divider-text">CAPÍTULO II // LA VOZ DE LOS SIN VOZ</span>
+      <span class="divider-dot"></span>
+    </div>
+    <div class="divider-line"></div>
+  </div>
 
-  <!-- Ruido de fondo -->
+  <!-- Background effects -->
   <div class="frases-bg-noise"></div>
   <div class="frases-scanlines"></div>
 
-  <!-- Línea vertical de pulso -->
-  <div class="frase-pulse-line"></div>
-
-  <!-- Encabezado de sección -->
-  <div class="frases-header">
-    <span class="frases-header-tag">// ARCHIVOS SONOROS // TRANSMISIONES DEL COMPADRE</span>
-    <h2 class="frases-header-title">03 VOCES</h2>
-    <div class="frases-header-line"></div>
-  </div>
-
-  <!-- CONTENEDOR DE CAJAS -->
+  <!-- Sticky viewport container -->
   <div class="frases-sticky">
 
-    @for (frase of frases; track frase.id) {
-    <div class="scroll-fade-box">
-
-      <!-- TAG superior -->
-      <div class="frase-tag">
-        <span class="frase-tag-dot"></span>
-        {{ frase.tag }}
-      </div>
-
-      <!-- NÚMERO + LÍNEA HORIZONTAL -->
-      <div class="frase-number-wrapper">
-        <span class="frase-number">0{{ frase.id }}</span>
-        <div class="frase-line-h"></div>
-      </div>
-
-      <!-- Título principal -->
-      <h3 class="frase-quote">{{ frase.quote }}</h3>
-
-      <!-- Descripción -->
-      <p class="frase-subtitle">{{ frase.subtitle }}</p>
-
-      <!-- ─── REPRODUCTOR DE AUDIO ─── -->
-      <div class="frase-audio-player" [class.frase-audio-active]="activeAudioId === frase.id">
-
-        <!-- Barra de progreso -->
-        <div class="frase-progress-track">
-          <div class="frase-progress-fill" [style.width.%]="activeAudioId === frase.id ? audioProgress : 0">
-          </div>
-          <div class="frase-progress-cursor" [style.left.%]="activeAudioId === frase.id ? audioProgress : 0">
-          </div>
+    <!-- Quote panels - cada uno independiente -->
+    <div class="frase-panel" *ngFor="let frase of frases; let i = index">
+      <div class="frase-content">
+        <div class="frase-tag">
+          <span class="frase-tag-dot"></span>
+          {{ frase.tag }}
         </div>
 
-        <!-- Controles -->
-        <div class="frase-audio-controls">
+        <div class="frase-number-wrapper">
+          <span class="frase-number">{{ frase.id | number:'2.0' }}</span>
+          <div class="frase-line-h"></div>
+        </div>
 
-          <!-- Botón play/pause adaptado a "ESCUCHAR ARCHIVO" -->
-          <button class="frase-play-btn" (click)="toggleAudio(frase)"
-            [attr.aria-label]="activeAudioId === frase.id ? 'Pausar audio' : 'Reproducir audio'">
-            <span class="frase-play-icon">
-              @if (activeAudioId === frase.id) {
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="3" y="2" width="3.5" height="12" fill="currentColor" />
-                <rect x="9.5" y="2" width="3.5" height="12" fill="currentColor" />
-              </svg>
-              } @else {
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 3L13 8L5 13V3Z" fill="currentColor" />
-              </svg>
-              }
-            </span>
-            <span class="frase-play-text">
-              @if (activeAudioId === frase.id) { PAUSAR ARCHIVO } @else { ESCUCHAR ARCHIVO }
-            </span>
+        <h2 class="frase-quote">{{ frase.quote }}</h2>
+        <p class="frase-subtitle">{{ frase.subtitle }}</p>
+
+        <div class="frase-bottom-bar">
+          <div class="signal-area">
+            <span class="frase-signal-icon">◈</span>
+            <span class="frase-signal-text">SEÑAL ACTIVA</span>
+          </div>
+
+          <button class="btn-medieval" [class.active]="activeAudioId === frase.id" (click)="toggleAudio(frase)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            {{ activeAudioId === frase.id ? 'DETENER' : 'ESCUCHAR ARCHIVO' }}
           </button>
+        </div>
 
-          <!-- Etiqueta + tiempo -->
-          <div class="frase-audio-meta">
-            <span class="frase-audio-label">{{ frase.audioLabel }}</span>
-            <span class="frase-audio-time">
-              @if (activeAudioId === frase.id) {
-              {{ formatTime(audioCurrentTime) }} / {{ formatTime(audioDuration) }}
-              } @else {
-              — / —
-              }
-            </span>
+        <!-- Audio Progress (aparece solo cuando este audio está activo) -->
+        <div class="audio-progress-wrapper" *ngIf="activeAudioId === frase.id">
+          <span class="audio-time">{{ formatTime(audioCurrentTime) }}</span>
+          <div class="progress-bar-bg">
+            <div class="progress-fill" [style.width.%]="audioProgress"></div>
           </div>
-
-          <!-- Ondas sonoras -->
-          <div class="frase-waveform" [class.frase-waveform-playing]="activeAudioId === frase.id">
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
-
+          <span class="audio-time">{{ formatTime(audioDuration) }}</span>
         </div>
       </div>
-      <!-- ─── FIN REPRODUCTOR ─── -->
-
-      <!-- Barra inferior de señal -->
-      <div class="frase-bottom-bar">
-        <span class="frase-signal-icon">◈</span>
-        <span class="frase-signal-text">SEÑAL ACTIVA // ARCHIVO SONORO VERIFICADO</span>
-        <span class="frase-signal-icon">◈</span>
-      </div>
-
     </div>
-    }
 
   </div>
 </section>
