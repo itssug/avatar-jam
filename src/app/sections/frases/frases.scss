@@ -4,10 +4,16 @@ $steel-primary: #4A4F58;
 $cyan-ice: #88C0D0;
 $bronze: #C5A059;
 $warm-gold: #A67B5B;
-$snow: #2A2C31;
+$snow: #2A2C31; // solo para texto, NUNCA para fondos
 $steel-dark: #717580;
 $steel-mid: #5A5550;
 $energy: #4FE0C8;
+
+// color de fondo del reproductor — neutro cálido que armoniza con $bg-dark
+$player-bg: rgba(#8C8378, 0.08);
+$player-bg-active: rgba(#88C0D0, 0.07);
+$player-border: rgba(#8C8378, 0.22);
+$player-border-active: rgba(#88C0D0, 0.35);
 
 // ─── Section Wrapper ───
 .frases-section {
@@ -45,7 +51,6 @@ $energy: #4FE0C8;
   color: $snow;
   margin: 0.5rem 0;
   letter-spacing: 0.1em;
-  text-shadow: 0 0 15px rgba($cyan-ice, 0.25);
 }
 
 .frases-header-line {
@@ -106,7 +111,6 @@ $energy: #4FE0C8;
       transparent 100%);
   opacity: 0.7;
   z-index: 2;
-  box-shadow: 0 0 8px rgba($cyan-ice, 0.4), 0 0 20px rgba($cyan-ice, 0.15);
 
   &::before {
     content: '';
@@ -117,7 +121,6 @@ $energy: #4FE0C8;
     height: 8px;
     border-radius: 50%;
     background: $cyan-ice;
-    box-shadow: 0 0 12px $cyan-ice;
   }
 
   &::after {
@@ -129,12 +132,12 @@ $energy: #4FE0C8;
     height: 8px;
     border-radius: 50%;
     background: $cyan-ice;
-    box-shadow: 0 0 12px $cyan-ice;
   }
 }
 
 // ─── Scroll Fade Box ───
 .scroll-fade-box {
+  display: block; // garantiza que los hijos NO sean flex
   position: relative;
   padding: 48px 0 40px 80px;
   margin-bottom: 8vh;
@@ -144,13 +147,14 @@ $energy: #4FE0C8;
     margin-bottom: 0;
   }
 
-  // separador sutil entre cajas
   &:not(:last-child)::after {
     content: '';
     display: block;
     width: 100%;
     height: 1px;
-    background: linear-gradient(to right, rgba($steel-dark, 0.25) 0%, transparent 100%);
+    background: linear-gradient(to right,
+        rgba($steel-dark, 0.25) 0%,
+        transparent 100%);
     margin-top: 48px;
   }
 }
@@ -176,7 +180,6 @@ $energy: #4FE0C8;
   height: 6px;
   border-radius: 50%;
   background: $cyan-ice;
-  box-shadow: 0 0 8px $cyan-ice, 0 0 16px rgba($cyan-ice, 0.4);
   animation: frase-dot-blink 2s ease-in-out infinite;
   flex-shrink: 0;
 }
@@ -193,12 +196,14 @@ $energy: #4FE0C8;
   }
 }
 
-// ─── Number + Horizontal Line ───
+// ─── Número + línea horizontal ───
+// El número va a la IZQUIERDA, la línea llena el resto
 .frase-number-wrapper {
   display: flex;
   align-items: center;
   gap: 24px;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .frase-number {
@@ -210,7 +215,7 @@ $energy: #4FE0C8;
   line-height: 1;
   letter-spacing: 4px;
   user-select: none;
-  text-shadow: 0 0 40px rgba($bronze, 0.3);
+  flex-shrink: 0; // evita que el número se encoja
 }
 
 .frase-line-h {
@@ -220,11 +225,12 @@ $energy: #4FE0C8;
       $steel-dark 0%,
       rgba($steel-dark, 0.3) 60%,
       transparent 100%);
-  transform-origin: left center;
 }
 
 // ─── Quote Text ───
+// Va DEBAJO del número, ocupa su propia línea
 .frase-quote {
+  display: block; // bloque explícito
   font-family: 'Orbitron', sans-serif;
   font-size: clamp(1.5rem, 3.5vw, 2.8rem);
   font-weight: 700;
@@ -232,7 +238,6 @@ $energy: #4FE0C8;
   line-height: 1.3;
   letter-spacing: 2px;
   margin: 0 0 20px 0;
-  text-shadow: 0 0 20px rgba($cyan-ice, 0.4), 0 0 40px rgba($cyan-ice, 0.2);
   position: relative;
 
   &::after {
@@ -243,12 +248,12 @@ $energy: #4FE0C8;
     width: 60px;
     height: 2px;
     background: $cyan-ice;
-    box-shadow: 0 0 8px rgba($cyan-ice, 0.5);
   }
 }
 
 // ─── Subtitle ───
 .frase-subtitle {
+  display: block;
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: 400;
@@ -267,8 +272,11 @@ $energy: #4FE0C8;
 .frase-audio-player {
   margin-top: 36px;
   padding: 20px 24px;
-  border: 1px solid rgba($steel-dark, 0.2);
-  background: rgba($snow, 0.04);
+
+  // fondo cálido translúcido, coherente con $bg-dark
+  border: 1px solid $player-border;
+  background: $player-bg;
+
   position: relative;
   transition: border-color 0.3s ease, background 0.3s ease;
 
@@ -300,8 +308,8 @@ $energy: #4FE0C8;
 
   // Estado activo
   &.frase-audio-active {
-    border-color: rgba($cyan-ice, 0.4);
-    background: rgba($cyan-ice, 0.04);
+    border-color: $player-border-active;
+    background: $player-bg-active;
 
     &::before,
     &::after {
@@ -327,7 +335,6 @@ $energy: #4FE0C8;
   height: 100%;
   background: linear-gradient(to right, $bronze, $cyan-ice);
   transition: width 0.2s linear;
-  box-shadow: 0 0 6px rgba($cyan-ice, 0.4);
 }
 
 .frase-progress-cursor {
@@ -338,12 +345,12 @@ $energy: #4FE0C8;
   height: 10px;
   border-radius: 50%;
   background: $cyan-ice;
-  box-shadow: 0 0 8px $cyan-ice;
   transition: left 0.2s linear;
   z-index: 2;
 }
 
 // ─── Controles del reproductor ───
+// Play a la IZQUIERDA, meta en el centro, waveform a la derecha
 .frase-audio-controls {
   display: flex;
   align-items: center;
@@ -364,39 +371,22 @@ $energy: #4FE0C8;
   color: $bronze;
   transition: all 0.25s ease;
   flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba($bronze, 0.15) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.25s ease;
-  }
+  // IMPORTANTE: orden visual — el botón es el primer elemento del flex
+  order: 0;
 
   &:hover {
     border-color: $cyan-ice;
     color: $cyan-ice;
-    box-shadow: 0 0 14px rgba($cyan-ice, 0.35);
     transform: scale(1.05);
-
-    &::before {
-      opacity: 1;
-    }
   }
 
   &:active {
     transform: scale(0.97);
   }
 
-  // Anillo pulsante cuando está activo
   .frase-audio-active & {
     border-color: $cyan-ice;
     color: $cyan-ice;
-    box-shadow: 0 0 0 0 rgba($cyan-ice, 0.4);
     animation: frase-btn-pulse 2s ease-in-out infinite;
   }
 }
@@ -405,7 +395,6 @@ $energy: #4FE0C8;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1;
 }
 
 @keyframes frase-btn-pulse {
@@ -429,6 +418,7 @@ $energy: #4FE0C8;
   flex-direction: column;
   gap: 4px;
   min-width: 0;
+  order: 1;
 }
 
 .frase-audio-label {
@@ -453,7 +443,7 @@ $energy: #4FE0C8;
   font-size: 0.55rem;
   font-weight: 400;
   letter-spacing: 2px;
-  color: rgba($steel-mid, 0.6);
+  color: rgba($steel-mid, 0.7);
 }
 
 // ─── Ondas sonoras animadas ───
@@ -463,6 +453,7 @@ $energy: #4FE0C8;
   gap: 3px;
   height: 24px;
   flex-shrink: 0;
+  order: 2;
 
   span {
     display: block;

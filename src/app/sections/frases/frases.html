@@ -26,13 +26,18 @@
         {{ frase.tag }}
       </div>
 
-      <!-- Número + línea horizontal -->
+      <!--
+        ── NÚMERO + LÍNEA HORIZONTAL ──
+        frase-number va primero (izquierda), frase-line-h llena el resto.
+        El wrapper es display:flex → los hijos se alinean horizontalmente.
+        El quote viene DESPUÉS del wrapper, en su propia línea (display:block).
+      -->
       <div class="frase-number-wrapper">
         <span class="frase-number">0{{ frase.id }}</span>
         <div class="frase-line-h"></div>
       </div>
 
-      <!-- Título principal -->
+      <!-- Título principal — bloque separado, debajo del número -->
       <h3 class="frase-quote">{{ frase.quote }}</h3>
 
       <!-- Descripción -->
@@ -49,10 +54,15 @@
           </div>
         </div>
 
-        <!-- Controles -->
+        <!--
+          Controles: orden del flex →
+            [0] botón play   (izquierda, flex-shrink:0)
+            [1] meta label   (centro,    flex:1)
+            [2] waveform     (derecha,   flex-shrink:0)
+        -->
         <div class="frase-audio-controls">
 
-          <!-- Botón play/pause -->
+          <!-- [0] Botón play/pause — SIEMPRE a la izquierda via order:0 -->
           <button class="frase-play-btn" (click)="toggleAudio(frase)"
             [attr.aria-label]="activeAudioId === frase.id ? 'Pausar audio' : 'Reproducir audio'">
             <span class="frase-play-icon">
@@ -71,7 +81,7 @@
             </span>
           </button>
 
-          <!-- Etiqueta del audio -->
+          <!-- [1] Etiqueta + tiempo — centro -->
           <div class="frase-audio-meta">
             <span class="frase-audio-label">{{ frase.audioLabel }}</span>
             <span class="frase-audio-time">
@@ -83,7 +93,7 @@
             </span>
           </div>
 
-          <!-- Indicador de ondas sonoras -->
+          <!-- [2] Ondas sonoras — derecha -->
           <div class="frase-waveform" [class.frase-waveform-playing]="activeAudioId === frase.id">
             <span></span><span></span><span></span><span></span><span></span>
           </div>
