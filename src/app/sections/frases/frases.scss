@@ -13,18 +13,19 @@ $energy: #4FE0C8;
 .frases-section {
   position: relative;
   width: 100%;
-  height: 500vh;
+  height: auto;
+  min-height: 100vh;
   background: $bg-dark;
-  overflow: hidden;
+  overflow: visible;
+  padding: 5vh 0;
 }
 
 // ─── Sticky Container ───
 .frases-sticky {
-  position: sticky;
-  top: 0;
+  position: relative;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  height: auto;
+  overflow: visible;
 }
 
 // ─── Background Noise Texture ───

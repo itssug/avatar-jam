@@ -12,10 +12,16 @@ $energy:      #4FE0C8;
 // ─── Wrapper ─────────────────────────────────────────────────────────────────
 .transform-wrapper {
   position: relative;
+  height: auto;
+  min-height: 100vh;
+  background: $bg-dark;
+  overflow: visible;
+}
+
+.transmutation-scroll-container {
+  position: relative;
+  width: 100%;
   height: 400vh;
-  background: $bg-dark;
-  background: $bg-dark;
-  overflow: hidden;
 }
 
 // ─── Sticky Container ─────────────────────────────────────────────────────────
@@ -481,8 +487,8 @@ $energy:      #4FE0C8;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(85vw, 780px);
-  height: min(65vh, 480px);
+  width: min(88vw, 840px);
+  height: min(82vh, 600px);
   pointer-events: none;
   z-index: 2;
 
@@ -582,8 +588,6 @@ $energy:      #4FE0C8;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// MOBILE
-// ═══════════════════════════════════════════════════════════════════════════════
 
 @media (max-width: 768px) {
   .phase-title--man,
@@ -626,5 +630,132 @@ $energy:      #4FE0C8;
 
   .energy-particles {
     display: none;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// RECUADRO DE LORE PREMIUM (.lore-box)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+.lore-box-container {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  height: 220px;
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    height: 280px;
+  }
+}
+
+.lore-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(14, 16, 22, 0.65); // gris pizarra oscuro transparente
+  border: 1px solid rgba(197, 160, 89, 0.25); // borde latón/bronce sutil
+  border-radius: 4px;
+  padding: 1.2rem 1.6rem;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.25),
+    inset 0 0 15px rgba(197, 160, 89, 0.03);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: #C5A059; // bronce
+    box-shadow: 0 0 8px rgba(197, 160, 89, 0.4);
+  }
+
+  &.blue-box {
+    border-color: rgba(136, 192, 208, 0.25);
+    box-shadow: 
+      0 10px 30px rgba(0, 0, 0, 0.25),
+      inset 0 0 15px rgba(136, 192, 208, 0.03);
+    
+    &::before {
+      background: #88C0D0; // cyan andino
+      box-shadow: 0 0 8px rgba(136, 192, 208, 0.5);
+    }
+  }
+
+  .lore-box-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.6rem;
+  }
+
+  .lore-box-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #C5A059;
+    border-radius: 50%;
+  }
+
+  &.blue-box .lore-box-dot {
+    background-color: #88C0D0;
+    box-shadow: 0 0 6px #88C0D0;
+  }
+
+  .lore-box-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #C5A059;
+  }
+
+  &.blue-box .lore-box-title {
+    color: #88C0D0;
+  }
+
+  .lore-box-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #F5F3ED;
+    opacity: 0.85;
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+}
+
+@keyframes loreBoxFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Adaptación para dispositivos móviles de los recuadros
+@media (max-width: 768px) {
+  .lore-box {
+    max-width: 90%;
+    padding: 1rem 1.2rem;
+    margin-top: 1rem;
+    
+    .lore-box-desc {
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
   }
 }

@@ -473,6 +473,14 @@
     );
     background-size: 100% 4px;
     pointer-events: none;
+    z-index: 2;
+  }
+
+  .placeholder-title,
+  .placeholder-caption {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
   }
 
   .placeholder-title {

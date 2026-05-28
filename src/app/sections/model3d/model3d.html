@@ -60,13 +60,13 @@
 
     <!-- Pestañas de Navegación -->
     <div class="card-tabs">
-      <button class="tab-btn" [class.active]="activeTab === 'bio'" (click)="activeTab = 'bio'">
+      <button class="tab-btn" [class.active]="activeTab === 'bio'" (click)="selectTab('bio')">
         01 // FICHA DE AVATAR
       </button>
-      <button class="tab-btn" [class.active]="activeTab === 'tribuna'" (click)="activeTab = 'tribuna'">
+      <button class="tab-btn" [class.active]="activeTab === 'tribuna'" (click)="selectTab('tribuna')">
         02 // LA TORRE DE LAS VOCES
       </button>
-      <button class="tab-btn" [class.active]="activeTab === 'caminantes'" (click)="activeTab = 'caminantes'">
+      <button class="tab-btn" [class.active]="activeTab === 'caminantes'" (click)="selectTab('caminantes')">
         03 // LA LEYENDA DEL ILLIMANI
       </button>
     </div>
@@ -111,7 +111,7 @@
         </div>
 
         <!-- Contenedor vacío con el nombre exacto de la imagen como título -->
-        <div class="hud-image-placeholder">
+        <div class="hud-image-placeholder" id="placeholder-avatar">
           <span class="placeholder-scanline"></span>
           <span class="placeholder-title">palenque_avatar.jpg</span>
           <span class="placeholder-caption">Cuadro reservado para fotografía: Ficha de personaje ilustrada de Lord
@@ -161,7 +161,7 @@
         </div>
 
         <!-- Contenedor vacío con el nombre de la imagen como título -->
-        <div class="hud-image-placeholder blue">
+        <div class="hud-image-placeholder blue" id="placeholder-torre">
           <span class="placeholder-scanline"></span>
           <span class="placeholder-title">palenque_torre.jpg</span>
           <span class="placeholder-caption">Cuadro reservado para fotografía: Ilustración fantástica de La Torre de las
@@ -207,14 +207,14 @@
         </div>
 
         <!-- Contenedores vacíos para las imágenes solicitadas -->
-        <div class="hud-image-placeholder">
+        <div class="hud-image-placeholder" id="placeholder-leyenda">
           <span class="placeholder-scanline"></span>
           <span class="placeholder-title">palenque_leyenda.jpg</span>
           <span class="placeholder-caption">Cuadro reservado para fotografía: Lord Carlos invocando su último hechizo
             frente al viento del Illimani.</span>
         </div>
 
-        <div class="hud-image-placeholder blue" style="margin-top: 24px;">
+        <div class="hud-image-placeholder blue" id="placeholder-charango" style="margin-top: 24px;">
           <span class="placeholder-scanline"></span>
           <span class="placeholder-title">palenque_compadre_charango.jpg</span>
           <span class="placeholder-caption">Cuadro reservado para fotografía: El Bardo tocando su charango místico para
