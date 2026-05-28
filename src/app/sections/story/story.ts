@@ -1,4 +1,11 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  ElementRef,
+  ViewChild,
+  ChangeDetectionStrategy
+} from '@angular/core';
+
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -12,103 +19,139 @@ gsap.registerPlugin(ScrollTrigger);
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StoryComponent implements AfterViewInit {
+
   @ViewChild('storySection') storySection!: ElementRef;
   @ViewChild('bgYear') bgYear!: ElementRef;
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
 
-  const texts =
-    this.storySection.nativeElement.querySelectorAll(
-      '.story-text, .story-name'
-    );
-
-  const compadre =
-    this.storySection.nativeElement.querySelector('.compadre-title');
-
-  const divider =
-    this.storySection.nativeElement.querySelector('.story-divider');
-
-  const futureYear =
-    this.storySection.nativeElement.querySelector('.future-year');
-
-  // PARALLAX DEL AÑO GIGANTE
-  gsap.to(this.bgYear.nativeElement, {
-    scrollTrigger: {
-      trigger: this.storySection.nativeElement,
-      start: "top bottom",
-      end: "bottom top",
-      scrub: true
-    },
-    y: -200,
-    rotate: -8,
-    opacity: 0.4
-  });
-
-  // REVEAL DE TEXTOS
-  texts.forEach((text: HTMLElement, index: number) => {
-
-    gsap.to(text, {
+    const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: text,
-        start: "top 85%",
-        toggleActions: "play none none reverse",
-      },
-
-      opacity: 1,
-      y: 0,
-
-      duration: 1.4,
-      ease: "power3.out",
-
-      delay: index * 0.15
+        trigger: this.storySection.nativeElement,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 1
+      }
     });
 
-  });
+    /* =========================
+       PANEL 1
+    ========================= */
 
-  // DIVIDER
-  gsap.to(divider, {
-    scrollTrigger: {
-      trigger: divider,
-      start: "top 85%",
-      toggleActions: "play none none reverse",
-    },
+    tl.to('.panel-1', {
+      opacity: 1,
+      duration: 1
+    });
 
-    opacity: 1,
-    height: 120,
+    tl.to('.image-1', {
+      y: -80,
+      rotate: -12,
+      duration: 2
+    }, 0);
 
-    duration: 1.5,
-    ease: "power2.out"
-  });
+    tl.to('.panel-1', {
+      opacity: 0,
+      y: -100,
+      duration: 1
+    });
 
-  // EL COMPADRE
-  gsap.to(compadre, {
-    scrollTrigger: {
-      trigger: compadre,
-      start: "top 75%",
-      toggleActions: "play none none reverse",
-    },
+    /* =========================
+       PANEL 2
+    ========================= */
 
-    opacity: 1,
-    scale: 1,
+    tl.to('.panel-2', {
+      opacity: 1,
+      duration: 1
+    });
 
-    duration: 2,
-    ease: "expo.out"
-  });
+    tl.to('.giant-year', {
+      scale: 1.1,
+      duration: 1
+    }, "<");
 
-  // 2095
-  gsap.to(futureYear, {
-    scrollTrigger: {
-      trigger: futureYear,
-      start: "top 80%",
-      toggleActions: "play none none reverse",
-    },
+    tl.to('.image-2', {
+      y: 100,
+      rotate: 12,
+      duration: 2
+    }, "<");
 
-    opacity: 1,
-    scale: 1,
+    tl.to('.panel-2', {
+      opacity: 0,
+      scale: 1.1,
+      duration: 1
+    });
 
-    duration: 1.8,
-    ease: "power4.out"
-  });
+    /* =========================
+       PANEL 3
+    ========================= */
 
-}
+    tl.to('.panel-3', {
+      opacity: 1,
+      duration: 1
+    });
+
+    tl.fromTo('.compadre-title',
+      {
+        scale: 0.7,
+        opacity: 0
+      },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 1.5
+      },
+      "<"
+    );
+
+    tl.to('.image-3', {
+      y: -120,
+      duration: 2
+    }, "<");
+
+    tl.to('.image-4', {
+      y: 80,
+      rotate: -20,
+      duration: 2
+    }, "<");
+
+    tl.to('.panel-3', {
+      opacity: 0,
+      duration: 1
+    });
+
+    /* =========================
+       FUTURE
+    ========================= */
+
+    tl.to('.giant-year', {
+      opacity: 0.08,
+      scale: 1.3,
+      duration: 1
+    });
+
+    tl.to('.panel-4', {
+      opacity: 1,
+      duration: 1.5
+    });
+
+    /* =========================
+       GLOBAL PARALLAX
+    ========================= */
+
+    gsap.to(this.bgYear.nativeElement, {
+
+      y: -180,
+      rotate: -8,
+      scrollTrigger: {
+        trigger: this.storySection.nativeElement,
+        start: 'top top',
+        end: '+=4000',
+        scrub: 1,
+        pin: true,
+        anticipatePin: 1
+      }
+
+    });
+    ScrollTrigger.refresh();
+  }
 }
