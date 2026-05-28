@@ -20,12 +20,51 @@ $energy: #4FE0C8;
   padding: 5vh 0;
 }
 
+// ─── Section Header ───
+.frases-header {
+  text-align: center;
+  margin-bottom: 6rem;
+  position: relative;
+  z-index: 10;
+  padding-top: 5vh;
+}
+
+.frases-header-tag {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  color: $warm-gold;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.frases-header-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  color: $snow;
+  margin: 0.5rem 0;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 15px rgba($cyan-ice, 0.25);
+}
+
+.frases-header-line {
+  width: 60px;
+  height: 2px;
+  background: $cyan-ice;
+  margin: 0.5rem auto 0 auto;
+  opacity: 0.6;
+}
+
 // ─── Sticky Container ───
 .frases-sticky {
   position: relative;
   width: 100%;
   height: auto;
   overflow: visible;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 5vw 10vh;
 }
 
 // ─── Background Noise Texture ───
@@ -46,13 +85,11 @@ $energy: #4FE0C8;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 2px,
-    rgba($bronze, 0.05) 2px,
-    rgba($bronze, 0.05) 4px
-  );
+  background: repeating-linear-gradient(to bottom,
+      transparent 0px,
+      transparent 2px,
+      rgba($bronze, 0.05) 2px,
+      rgba($bronze, 0.05) 4px);
 }
 
 // ─── Pulsing Vertical Cyan Line ───
@@ -62,17 +99,14 @@ $energy: #4FE0C8;
   top: 10%;
   bottom: 10%;
   width: 2px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    $cyan-ice 20%,
-    $cyan-ice 80%,
-    transparent 100%
-  );
+  background: linear-gradient(to bottom,
+      transparent 0%,
+      $cyan-ice 20%,
+      $cyan-ice 80%,
+      transparent 100%);
   opacity: 0.7;
   z-index: 2;
-  box-shadow: 0 0 8px rgba($cyan-ice, 0.4),
-              0 0 20px rgba($cyan-ice, 0.15);
+  box-shadow: 0 0 8px rgba($cyan-ice, 0.4), 0 0 20px rgba($cyan-ice, 0.15);
 
   &::before {
     content: '';
@@ -99,23 +133,26 @@ $energy: #4FE0C8;
   }
 }
 
-// ─── Quote Panel ───
-.frase-panel {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  z-index: 3;
-}
-
-// ─── Panel Content ───
-.frase-content {
+// ─── Scroll Fade Box ───
+.scroll-fade-box {
   position: relative;
-  max-width: 900px;
-  width: 90%;
-  padding-left: 80px;
+  padding: 48px 0 40px 80px;
+  margin-bottom: 8vh;
+  z-index: 10;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  // separador sutil entre cajas
+  &:not(:last-child)::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, rgba($steel-dark, 0.25) 0%, transparent 100%);
+    margin-top: 48px;
+  }
 }
 
 // ─── Transmission Tag ───
@@ -141,11 +178,19 @@ $energy: #4FE0C8;
   background: $cyan-ice;
   box-shadow: 0 0 8px $cyan-ice, 0 0 16px rgba($cyan-ice, 0.4);
   animation: frase-dot-blink 2s ease-in-out infinite;
+  flex-shrink: 0;
 }
 
 @keyframes frase-dot-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
 }
 
 // ─── Number + Horizontal Line ───
@@ -171,12 +216,10 @@ $energy: #4FE0C8;
 .frase-line-h {
   flex: 1;
   height: 1px;
-  background: linear-gradient(
-    to right,
-    $steel-dark 0%,
-    rgba($steel-dark, 0.3) 60%,
-    transparent 100%
-  );
+  background: linear-gradient(to right,
+      $steel-dark 0%,
+      rgba($steel-dark, 0.3) 60%,
+      transparent 100%);
   transform-origin: left center;
 }
 
@@ -189,12 +232,9 @@ $energy: #4FE0C8;
   line-height: 1.3;
   letter-spacing: 2px;
   margin: 0 0 20px 0;
-  text-shadow:
-    0 0 20px rgba($cyan-ice, 0.4),
-    0 0 40px rgba($cyan-ice, 0.2);
+  text-shadow: 0 0 20px rgba($cyan-ice, 0.4), 0 0 40px rgba($cyan-ice, 0.2);
   position: relative;
 
-  // Glitch decoration line
   &::after {
     content: '';
     position: absolute;
@@ -213,19 +253,283 @@ $energy: #4FE0C8;
   font-size: 0.9rem;
   font-weight: 400;
   color: $steel-mid;
-  letter-spacing: 4px;
-  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  line-height: 1.7;
   margin: 28px 0 0 0;
   padding-left: 2px;
+  max-width: 680px;
 }
 
+// ═══════════════════════════════════════════════
+// ─── REPRODUCTOR DE AUDIO ───
+// ═══════════════════════════════════════════════
+
+.frase-audio-player {
+  margin-top: 36px;
+  padding: 20px 24px;
+  border: 1px solid rgba($steel-dark, 0.2);
+  background: rgba($snow, 0.04);
+  position: relative;
+  transition: border-color 0.3s ease, background 0.3s ease;
+
+  // Esquina decorativa superior izquierda
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 16px;
+    height: 16px;
+    border-top: 2px solid $bronze;
+    border-left: 2px solid $bronze;
+    transition: border-color 0.3s ease;
+  }
+
+  // Esquina decorativa inferior derecha
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 16px;
+    height: 16px;
+    border-bottom: 2px solid $bronze;
+    border-right: 2px solid $bronze;
+    transition: border-color 0.3s ease;
+  }
+
+  // Estado activo
+  &.frase-audio-active {
+    border-color: rgba($cyan-ice, 0.4);
+    background: rgba($cyan-ice, 0.04);
+
+    &::before,
+    &::after {
+      border-color: $cyan-ice;
+    }
+  }
+}
+
+// ─── Barra de Progreso ───
+.frase-progress-track {
+  position: relative;
+  width: 100%;
+  height: 3px;
+  background: rgba($steel-dark, 0.2);
+  margin-bottom: 16px;
+  overflow: visible;
+}
+
+.frase-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(to right, $bronze, $cyan-ice);
+  transition: width 0.2s linear;
+  box-shadow: 0 0 6px rgba($cyan-ice, 0.4);
+}
+
+.frase-progress-cursor {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: $cyan-ice;
+  box-shadow: 0 0 8px $cyan-ice;
+  transition: left 0.2s linear;
+  z-index: 2;
+}
+
+// ─── Controles del reproductor ───
+.frase-audio-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+// ─── Botón Play/Pause ───
+.frase-play-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid $bronze;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  color: $bronze;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba($bronze, 0.15) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  &:hover {
+    border-color: $cyan-ice;
+    color: $cyan-ice;
+    box-shadow: 0 0 14px rgba($cyan-ice, 0.35);
+    transform: scale(1.05);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  // Anillo pulsante cuando está activo
+  .frase-audio-active & {
+    border-color: $cyan-ice;
+    color: $cyan-ice;
+    box-shadow: 0 0 0 0 rgba($cyan-ice, 0.4);
+    animation: frase-btn-pulse 2s ease-in-out infinite;
+  }
+}
+
+.frase-play-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+@keyframes frase-btn-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba($cyan-ice, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba($cyan-ice, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba($cyan-ice, 0);
+  }
+}
+
+// ─── Metadata del audio ───
+.frase-audio-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.frase-audio-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: $steel-dark;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.3s ease;
+
+  .frase-audio-active & {
+    color: $cyan-ice;
+  }
+}
+
+.frase-audio-time {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 400;
+  letter-spacing: 2px;
+  color: rgba($steel-mid, 0.6);
+}
+
+// ─── Ondas sonoras animadas ───
+.frase-waveform {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 24px;
+  flex-shrink: 0;
+
+  span {
+    display: block;
+    width: 3px;
+    border-radius: 2px;
+    background: rgba($steel-dark, 0.3);
+    height: 6px;
+    transition: background 0.3s ease;
+  }
+}
+
+.frase-waveform-playing {
+  span {
+    background: $cyan-ice;
+    animation: frase-wave 1.2s ease-in-out infinite;
+
+    &:nth-child(1) {
+      animation-delay: 0s;
+      animation-duration: 1.0s;
+    }
+
+    &:nth-child(2) {
+      animation-delay: 0.1s;
+      animation-duration: 1.3s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.2s;
+      animation-duration: 0.9s;
+    }
+
+    &:nth-child(4) {
+      animation-delay: 0.15s;
+      animation-duration: 1.1s;
+    }
+
+    &:nth-child(5) {
+      animation-delay: 0.05s;
+      animation-duration: 1.4s;
+    }
+  }
+}
+
+@keyframes frase-wave {
+
+  0%,
+  100% {
+    height: 4px;
+    opacity: 0.6;
+  }
+
+  50% {
+    height: 20px;
+    opacity: 1;
+  }
+}
+
+// ═══════════════════════════════════════════════
 // ─── Bottom Signal Bar ───
+// ═══════════════════════════════════════════════
+
 .frase-bottom-bar {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 48px;
-  padding-top: 24px;
+  margin-top: 40px;
+  padding-top: 20px;
   border-top: 1px solid rgba($steel-dark, 0.2);
   justify-content: space-between;
 }
@@ -237,8 +541,17 @@ $energy: #4FE0C8;
 }
 
 @keyframes frase-signal-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.9); }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
 }
 
 .frase-signal-text {
@@ -250,13 +563,16 @@ $energy: #4FE0C8;
   text-transform: uppercase;
 }
 
+// ═══════════════════════════════════════════════
 // ─── Responsive ───
+// ═══════════════════════════════════════════════
+
 @media (max-width: 768px) {
   .frase-pulse-line {
     left: 20px;
   }
 
-  .frase-content {
+  .scroll-fade-box {
     padding-left: 40px;
   }
 
@@ -270,8 +586,17 @@ $energy: #4FE0C8;
   }
 
   .frase-subtitle {
-    letter-spacing: 2px;
-    font-size: 0.8rem;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+  }
+
+  .frase-audio-player {
+    padding: 16px;
+  }
+
+  .frase-play-btn {
+    width: 38px;
+    height: 38px;
   }
 }
 
@@ -280,8 +605,9 @@ $energy: #4FE0C8;
     left: 12px;
   }
 
-  .frase-content {
+  .scroll-fade-box {
     padding-left: 24px;
+    padding-right: 0;
   }
 
   .frase-quote {
@@ -290,5 +616,13 @@ $energy: #4FE0C8;
 
   .frase-number-wrapper {
     gap: 12px;
+  }
+
+  .frase-audio-label {
+    font-size: 0.5rem;
+  }
+
+  .frase-waveform {
+    display: none;
   }
 }
