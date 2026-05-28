@@ -1,95 +1,98 @@
-<section class="frases-section" #frasesSection>
+<section #storySection class="story-wrapper">
 
-  <!-- Sticky viewport container (now relative flow) -->
-  <div class="frases-sticky">
+  <!-- BACKGROUND -->
+  <div class="story-bg"></div>
+  <div class="story-noise"></div>
+  <div class="story-grid"></div>
 
-    <!-- Background effects -->
-    <div class="frases-bg-noise"></div>
-    <div class="frases-scanlines"></div>
+  <!-- AÑO HOLOGRÁFICO DE FONDO -->
+  <div #bgYear class="giant-year">1988</div>
 
-    <!-- TÍTULO DE LA SECCIÓN -->
-    <div class="section-header-hud" style="text-align: center; margin-bottom: 4rem; position: relative; z-index: 10; padding-top: 5vh;">
-      <span style="font-family: 'Orbitron'; font-size: 0.8rem; color: var(--color-accent); letter-spacing: 0.4em; text-transform: uppercase;">// MÓDULOS ACTIVOS</span>
-      <h2 style="font-family: 'Orbitron'; font-size: clamp(2.5rem, 5vw, 3.5rem); color: var(--text-light); margin: 0.5rem 0; letter-spacing: 0.1em; text-shadow: 0 0 15px rgba(136,192,208,0.25);">03 FASES</h2>
-      <div style="width: 60px; height: 2px; background: var(--color-accent); margin: 0.5rem auto 0 auto; opacity: 0.6;"></div>
+  <!-- TÍTULO DE LA SECCIÓN -->
+  <div class="section-header-hud"
+    style="text-align: center; margin-bottom: 4rem; position: relative; z-index: 10; padding-top: 5vh;">
+    <span
+      style="font-family: 'Orbitron'; font-size: 0.8rem; color: var(--color-accent); letter-spacing: 0.4em; text-transform: uppercase;">//
+      ARCHIVOS DEL REINO // MEMORIA DEL PUEBLO</span>
+    <h2
+      style="font-family: 'Orbitron'; font-size: clamp(2.5rem, 5vw, 3.5rem); color: var(--text-light); margin: 0.5rem 0; letter-spacing: 0.1em; text-shadow: 0 0 15px rgba(136,192,208,0.25);">
+      02 HISTORIA</h2>
+    <div style="width: 60px; height: 2px; background: var(--color-accent); margin: 0.5rem auto 0 auto; opacity: 0.6;">
+    </div>
+  </div>
+
+  <!-- CONTENEDOR DE CAJAS -->
+  <div class="scroll-boxes-container" style="position: relative; z-index: 10; padding-bottom: 10vh;">
+
+    <!-- Caja 1 -->
+    <div class="scroll-fade-box">
+      <div class="scroll-fade-text">
+        <span class="box-tag">// TORRE DE LAS VOCES // TRIBUNA LIBRE</span>
+        <h3 class="box-title">LA TORRE DEL COMPADRE</h3>
+        <p class="box-desc">
+          KJASHDAKSJHDe oro; su poder nacía de las calles, de los mercados y de los barrios olvidados del Reino de
+          Kollasuyo.
+        </p>
+      </div>
+      <div class="scroll-fade-image">
+        <img src="https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1200&auto=format&fit=crop"
+          alt="Torre de las Voces">
+      </div>
     </div>
 
-    <!-- CONTENEDOR DE CAJAS -->
-    <div class="scroll-boxes-container" style="position: relative; z-index: 10; padding-bottom: 10vh;">
-      
-      <!-- Caja 1 -->
-      <div class="scroll-fade-box">
-        <div class="scroll-fade-text">
-          <span class="box-tag">// SISTEMA DE TRANSMISIÓN // FASE 01</span>
-          <h3 class="box-title">MÓDULO TRIBUNA LIBRE</h3>
-          <p class="box-desc">
-            El protocolo principal del sistema. Permitía que cualquier ciudadano rompiera los bloqueos de información y denunciara las injusticias en transmisión abierta para todo el valle.
-          </p>
-          <div style="margin-top: 1rem;">
-            <button class="btn-medieval" (click)="toggleAudio(frases[0])" style="display: inline-flex; align-items: center; gap: 0.5rem;">
-              @if (activeAudioId === frases[0].id) {
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="6" y="4" width="4" height="16"></rect>
-                  <rect x="14" y="4" width="4" height="16"></rect>
-                </svg>
-                DETENER AUDIO
-              } @else {
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                </svg>
-                ESCUCHAR ARCHIVO
-              }
-            </button>
-          </div>
-        </div>
-        <div class="scroll-fade-image">
-          <img src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1200&auto=format&fit=crop" alt="Módulo Tribuna Libre">
-        </div>
+    <!-- Caja 2 -->
+    <div class="scroll-fade-box">
+      <div class="scroll-fade-text">
+        <span class="box-tag">// MICRÓFONO DE HIERRO // VOZ DEL PUEBLO</span>
+        <h3 class="box-title">EL BARDO DE LOS SIN VOZ</h3>
+        <p class="box-desc">
+          Cada noche abría las puertas de su torre para escuchar a campesinos, artesanos, mineros y comerciantes. Con su
+          legendario Micrófono de Hierro rompía los hechizos de silencio impuestos por los Barones del Estaño. Decían
+          que ningún noble soportaba su magia, porque cada palabra transmitida revelaba verdades que el reino intentaba
+          ocultar.
+        </p>
       </div>
-
-      <!-- Caja 2 -->
-      <div class="scroll-fade-box">
-        <div class="scroll-fade-text">
-          <span class="box-tag">// RESTAURACIÓN MORAL // FASE 02</span>
-          <h3 class="box-title">FRECUENCIA CAMINANTE</h3>
-          <p class="box-desc">
-            Un algoritmo de restauración moral. Sus palabras operaban como un parche del sistema para quienes sufrían el desgaste en los mercados y en las minas.
-          </p>
-        </div>
-        <div class="scroll-fade-image">
-          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop" alt="Frecuencia Caminante">
-        </div>
+      <div class="scroll-fade-image">
+        <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=1200&auto=format&fit=crop"
+          alt="Micrófono de Hierro">
       </div>
+    </div>
 
-      <!-- Caja 3 -->
-      <div class="scroll-fade-box">
-        <div class="scroll-fade-text">
-          <span class="box-tag">// EXPANSIÓN RTP // FASE 03</span>
-          <h3 class="box-title">ENSAMBLAJE DE GREMIOS</h3>
-          <p class="box-desc">
-            Expansión de la red "RTP". No solo conectaba voces, sino que forjó alianzas entre trabajadores y artesanos, creando un frente unificado contra las corporaciones corruptas.
-          </p>
-        </div>
-        <div class="scroll-fade-image">
-          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop" alt="Ensamblaje de Gremios">
-        </div>
+    <!-- Caja 3 -->
+    <div class="scroll-fade-box">
+      <div class="scroll-fade-text">
+        <span class="box-tag">// RTP // RED DE TALLERES DEL PUEBLO</span>
+        <h3 class="box-title">EL PALADÍN DEL PUEBLO</h3>
+        <p class="box-desc">
+          Pero El Compadre no solo transmitía mensajes. Fundó la RTP, la Red de Talleres del Pueblo: forjas, escuelas de
+          juglares, casas de sanación y centros de aprendizaje abiertos para cualquiera, sin importar su linaje.
+          Mientras los nobles acumulaban riquezas, él convertía cada moneda en oportunidades para su gente.
+        </p>
       </div>
-
-      <!-- Caja 4 -->
-      <div class="scroll-fade-box">
-        <div class="scroll-fade-text">
-          <span class="box-tag">// RESISTENCIA DE CORE // FASE 04</span>
-          <h3 class="box-title">ESCUDO INCORRUPTIBLE</h3>
-          <p class="box-desc">
-            Resistencia pasiva pero inquebrantable. A pesar de los ataques de las corporaciones corporativas del estaño y los bloqueos de señal, su núcleo nunca fue hackeado ni comprado.
-          </p>
-        </div>
-        <div class="scroll-fade-image">
-          <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1200&auto=format&fit=crop" alt="Escudo Incorruptible">
-        </div>
+      <div class="scroll-fade-image">
+        <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=1200&auto=format&fit=crop"
+          alt="Red de Talleres del Pueblo">
       </div>
+    </div>
 
+    <!-- Caja 4 -->
+    <div class="scroll-fade-box">
+      <div class="scroll-fade-text">
+        <span class="box-tag">// ÚLTIMA TRANSMISIÓN // LEGADO ETERNO</span>
+        <h3 class="box-title">LA VOZ QUE NUNCA MURIÓ</h3>
+        <p class="box-desc">
+          Los Barones intentaron comprarlo con oro, castillos y poder, pero El Compadre rechazó cada oferta. Finalmente
+          sitiaron la Torre de las Voces y Lord Carlos cayó defendiendo su señal. Antes de desaparecer, lanzó un último
+          hechizo: grabó su voz en los vientos del Illimani. Desde entonces, cuando la noche cubre La Paz y el viento
+          sopla entre las montañas, el pueblo asegura que todavía puede escuchar al Compadre llamándolos hermanos.
+        </p>
+      </div>
+      <div class="scroll-fade-image">
+        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop"
+          alt="Legado del Compadre">
+      </div>
     </div>
 
   </div>
+
 </section>
