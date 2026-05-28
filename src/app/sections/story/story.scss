@@ -1,0 +1,67 @@
+.story {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10vh 5vw;
+  background: #0A0A0A;
+  overflow: hidden;
+
+  &__year {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(5rem, 18vw, 16rem);
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(229, 193, 0, 0.15);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 700px;
+  }
+
+  &__line {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+    font-weight: 300;
+    color: var(--color-snow);
+    line-height: 1.6;
+    margin: 1.5rem 0;
+    opacity: 0;
+
+    &--accent {
+      color: var(--color-gold);
+      font-weight: 500;
+    }
+  }
+
+  &__signal {
+    position: absolute;
+    bottom: 4vh;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    color: var(--color-blue);
+    letter-spacing: 0.4em;
+    opacity: 0.5;
+    animation: pulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.8; }
+}

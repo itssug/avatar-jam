@@ -40,43 +40,53 @@ export class HeroComponent implements OnInit, OnDestroy {
   }
 
   private setupScene() {
-    this.scene.fog = new THREE.FogExp2(0x0A0A0A, 0.035);
-    this.scene.background = new THREE.Color(0x0A0A0A);
+    this.scene.fog = new THREE.FogExp2(0x050510, 0.025);
+    this.scene.background = new THREE.Color(0x050510);
 
-    this.scene.add(new THREE.AmbientLight(0x112244, 4));
+    this.scene.add(new THREE.AmbientLight(0x112244, 3));
 
-    const goldLight = new THREE.PointLight(0xE5C100, 8, 60);
-    goldLight.position.set(0, 10, 5);
-    this.scene.add(goldLight);
+    // Luz dorada desde arriba (sol andino)
+    const sunLight = new THREE.DirectionalLight(0xE5C100, 2);
+    sunLight.position.set(5, 20, 5);
+    this.scene.add(sunLight);
 
-    const blueLight = new THREE.PointLight(0x00BFFF, 5, 40);
-    blueLight.position.set(-10, 5, 0);
-    this.scene.add(blueLight);
+    // Luz azul fría de la ciudad
+    const cityLight = new THREE.PointLight(0x00BFFF, 4, 40);
+    cityLight.position.set(0, -2, 6);
+    this.scene.add(cityLight);
 
-    this.camera.position.set(0, 3, 18);
-    this.camera.lookAt(0, 4, 0);
+    // Luz naranja cálida lateral
+    const warmLight = new THREE.PointLight(0xFF8800, 3, 30);
+    warmLight.position.set(-8, 2, 3);
+    this.scene.add(warmLight);
+
+    this.camera.position.set(0, 4, 22);
+    this.camera.lookAt(0, 2, 0);
   }
 
   private createMountains() {
-    const configs = [
-      { x: 0, y: -4, z: 0, sx: 8, sy: 14, sz: 8, color: 0x1a1a2e, snow: true },
-      { x: -12, y: -4, z: -5, sx: 6, sy: 10, sz: 6, color: 0x16213e, snow: true },
-      { x: -7, y: -4, z: 2, sx: 5, sy: 8, sz: 5, color: 0x12122a, snow: false },
-      { x: 11, y: -4, z: -5, sx: 6, sy: 10, sz: 6, color: 0x16213e, snow: true },
-      { x: 7, y: -4, z: 2, sx: 5, sy: 7, sz: 5, color: 0x12122a, snow: false },
-      { x: -18, y: -4, z: -12, sx: 7, sy: 9, sz: 7, color: 0x0d0d1a, snow: false },
-      { x: 18, y: -4, z: -12, sx: 7, sy: 9, sz: 7, color: 0x0d0d1a, snow: false },
-      { x: 4, y: -4, z: -15, sx: 9, sy: 11, sz: 9, color: 0x0f0f1a, snow: false },
-      { x: -4, y: -4, z: -15, sx: 8, sy: 10, sz: 8, color: 0x0f0f1a, snow: false },
+    // ── ILLIMANI y cordillera de fondo ──────────────────────────
+    const cordillera = [
+      // Illimani central — el más alto e icónico
+      { x: 0, y: -2, z: -12, sx: 10, sy: 18, sz: 10, color: 0x1a1a2e, snow: true, snowSize: 0.3 },
+      // Picos secundarios del Illimani
+      { x: 2.5, y: -2, z: -12, sx: 6, sy: 14, sz: 6, color: 0x16213e, snow: true, snowSize: 0.22 },
+      { x: -2, y: -2, z: -12, sx: 5, sy: 12, sz: 5, color: 0x16213e, snow: true, snowSize: 0.18 },
+      // Cordillera izquierda lejana
+      { x: -10, y: -3, z: -14, sx: 7, sy: 11, sz: 7, color: 0x0f0f1a, snow: false, snowSize: 0 },
+      { x: -16, y: -3, z: -14, sx: 6, sy: 9, sz: 6, color: 0x0d0d18, snow: false, snowSize: 0 },
+      // Cordillera derecha lejana
+      { x: 10, y: -3, z: -14, sx: 7, sy: 10, sz: 7, color: 0x0f0f1a, snow: false, snowSize: 0 },
+      { x: 16, y: -3, z: -14, sx: 6, sy: 8, sz: 6, color: 0x0d0d18, snow: false, snowSize: 0 },
     ];
 
-    configs.forEach(cfg => {
-      const geo = new THREE.ConeGeometry(1, 1, 7);
+    cordillera.forEach(cfg => {
+      const geo = new THREE.ConeGeometry(1, 1, 7 + Math.floor(Math.random() * 3));
       const pos = geo.attributes['position'] as THREE.BufferAttribute;
       for (let i = 0; i < pos.count; i++) {
         if (pos.getY(i) < 0.45) {
-          pos.setX(i, pos.getX(i) + (Math.random() - 0.5) * 0.25);
-          pos.setZ(i, pos.getZ(i) + (Math.random() - 0.5) * 0.25);
+          pos.setX(i, pos.getX(i) + (Math.random() - 0.5) * 0.3);
+          pos.setZ(i, pos.getZ(i) + (Math.random() - 0.5) * 0.3);
         }
       }
       geo.computeVertexNormals();
@@ -89,8 +99,13 @@ export class HeroComponent implements OnInit, OnDestroy {
 
       if (cfg.snow) {
         const snow = new THREE.Mesh(
-          new THREE.ConeGeometry(0.22, 0.35, 5),
-          new THREE.MeshPhongMaterial({ color: 0xCCDDFF, flatShading: true, emissive: 0x334466, emissiveIntensity: 0.5 })
+          new THREE.ConeGeometry(cfg.snowSize, cfg.snowSize * 1.5, 5),
+          new THREE.MeshPhongMaterial({
+            color: 0xDDEEFF,
+            flatShading: true,
+            emissive: 0x334466,
+            emissiveIntensity: 0.6
+          })
         );
         snow.position.y = 0.52;
         mesh.add(snow);
@@ -98,7 +113,123 @@ export class HeroComponent implements OnInit, OnDestroy {
 
       this.scene.add(mesh);
     });
+
+    // ── CUENCO DE LA PAZ — laderas ───────────────────────────────
+    // La Paz está en un cañón/cuenco, las laderas bajan desde los bordes
+    this.createLadera(-9, 1, 2, Math.PI * 0.08);   // ladera izquierda
+    this.createLadera(9, 1, 2, -Math.PI * 0.08);   // ladera derecha
+    this.createLadera(-6, 0, 4, Math.PI * 0.05);
+    this.createLadera(6, 0, 4, -Math.PI * 0.05);
+
+    // ── PISO DEL CUENCO — ciudad abajo ───────────────────────────
+    this.createCityFloor();
   }
+
+  private createLadera(x: number, y: number, z: number, rotZ: number) {
+    // Ladera como plano inclinado con edificios encima
+    const geo = new THREE.PlaneGeometry(8, 12, 4, 6);
+    const pos = geo.attributes['position'] as THREE.BufferAttribute;
+
+    // Deformar para terreno irregular
+    for (let i = 0; i < pos.count; i++) {
+      pos.setZ(i, pos.getZ(i) + (Math.random() - 0.5) * 0.4);
+    }
+    geo.computeVertexNormals();
+
+    const mat = new THREE.MeshPhongMaterial({
+      color: 0x1a1005,
+      flatShading: true,
+      side: THREE.FrontSide
+    });
+
+    const ladera = new THREE.Mesh(geo, mat);
+    ladera.position.set(x, y, z);
+    ladera.rotation.x = -Math.PI * 0.3;
+    ladera.rotation.z = rotZ;
+    this.scene.add(ladera);
+
+    // Edificios en la ladera
+    this.createBuildingsOnLadera(x, y, z, rotZ);
+  }
+
+  private createBuildingsOnLadera(baseX: number, baseY: number, baseZ: number, rotZ: number) {
+    const count = 18;
+    const direction = rotZ > 0 ? -1 : 1;
+
+    for (let i = 0; i < count; i++) {
+      const col = i % 4;
+      const row = Math.floor(i / 4);
+      const h = 0.15 + Math.random() * 0.4;
+      const w = 0.12 + Math.random() * 0.15;
+
+      const geo = new THREE.BoxGeometry(w, h, w * 0.8);
+      const isLit = Math.random() > 0.4;
+
+      const mat = new THREE.MeshPhongMaterial({
+        color: isLit ? 0x2a1f0a : 0x151510,
+        emissive: isLit ? 0xFF8800 : 0x000000,
+        emissiveIntensity: isLit ? 0.15 + Math.random() * 0.2 : 0,
+        flatShading: true
+      });
+
+      const building = new THREE.Mesh(geo, mat);
+
+      // Posicionar en la ladera con perspectiva de cuenco
+      const spreadX = direction * (col * 0.9 + Math.random() * 0.4);
+      const spreadY = row * 0.8 + Math.random() * 0.3;
+
+      building.position.set(
+        baseX + spreadX * 0.8,
+        baseY - 1 + spreadY * 0.6,
+        baseZ + row * 0.5 - 1
+      );
+      building.rotation.z = rotZ * 0.5;
+
+      this.scene.add(building);
+    }
+  }
+
+  private createCityFloor() {
+    // Piso plano del centro de La Paz
+    const floorGeo = new THREE.PlaneGeometry(14, 8, 1, 1);
+    const floorMat = new THREE.MeshPhongMaterial({
+      color: 0x0a0a15,
+      flatShading: true
+    });
+    const floor = new THREE.Mesh(floorGeo, floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.set(0, -3.5, 3);
+    this.scene.add(floor);
+
+    // Edificios del centro — más altos
+    const centerBuildings = [
+      { x: -2, z: 1, h: 1.2, w: 0.5 },
+      { x: -1, z: 0, h: 1.8, w: 0.4 },
+      { x: 0, z: 0, h: 2.2, w: 0.6 },
+      { x: 1, z: 0, h: 1.6, w: 0.4 },
+      { x: 2, z: 1, h: 1.0, w: 0.45 },
+      { x: -1.5, z: 2, h: 0.8, w: 0.35 },
+      { x: 0.5, z: 2, h: 0.9, w: 0.38 },
+      { x: 2.5, z: 0, h: 1.3, w: 0.42 },
+      { x: -2.5, z: 0, h: 1.1, w: 0.4 },
+      { x: 1.5, z: 1.5, h: 0.7, w: 0.3 },
+    ];
+
+    centerBuildings.forEach(cfg => {
+      const geo = new THREE.BoxGeometry(cfg.w, cfg.h, cfg.w * 0.9);
+      const isLit = Math.random() > 0.3;
+      const mat = new THREE.MeshPhongMaterial({
+        color: 0x151520,
+        emissive: isLit ? 0x00BFFF : 0xFF8800,
+        emissiveIntensity: 0.08 + Math.random() * 0.15,
+        flatShading: true
+      });
+      const b = new THREE.Mesh(geo, mat);
+      b.position.set(cfg.x, -3.5 + cfg.h / 2, cfg.z);
+      this.scene.add(b);
+    });
+  }
+
 
   private createParticles() {
     const count = 3000;

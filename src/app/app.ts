@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { HeroComponent } from './sections/hero/hero';
+import { StoryComponent } from './sections/story/story';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [HeroComponent, StoryComponent],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
 })
-export class App {
-  title = 'el-compadre-3000';
+export class App implements OnInit {
+  ngOnInit() {}
 }
