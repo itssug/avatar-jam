@@ -1,0 +1,42 @@
+.experience-container {
+  position: relative;
+  width: 100%;
+  background-color: #0A0A0A;
+}
+
+/* El Hero ya no es fixed por CSS, vuelve a su posición relativa */
+app-hero {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+}
+
+/* La historia se superpone de forma absoluta desde el inicio para no empujarlo hacia abajo */
+app-story {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  pointer-events: none; /* Permite interactuar con el fondo si es necesario */
+}
+
+app-frases {
+  position: relative;
+  display: block;
+  width: 100%;
+  /* app-story is absolute with 500vh and starts at top:0.
+     app-hero takes 100vh in the flow. So we need 400vh more margin 
+     to push app-frases exactly below app-story. */
+  margin-top: 400vh; 
+  z-index: 3;
+}
+
+app-transformacion {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 4;
+}
