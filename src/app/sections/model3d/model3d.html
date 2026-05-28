@@ -1,15 +1,236 @@
 @if (isLoading) {
-  <div class="loading-badge" id="3d-loading-hud">
-    <span class="hud-scanner-dot"></span>
-    <span class="hud-scanner-text">SISTEMA CORE 3D: CARGANDO ARMADURA... {{ loadingProgress }}%</span>
-  </div>
+<div class="loading-badge" id="3d-loading-hud">
+  <span class="hud-scanner-dot"></span>
+  <span class="hud-scanner-text">SISTEMA CORE 3D: CARGANDO ARMADURA... {{ loadingProgress }}%</span>
+</div>
 }
 
 @if (isError) {
-  <div class="error-badge" id="3d-error-hud">
-    <span class="error-icon">⚠️</span>
-    <span class="error-text">ERROR CORE 3D: ARCHIVO INACCESIBLE</span>
+<div class="error-badge" id="3d-error-hud">
+  <span class="error-icon">⚠️</span>
+  <span class="error-text">ERROR CORE 3D: ARCHIVO INACCESIBLE</span>
+</div>
+}
+
+<!-- CABECERA FLOTANTE CYBERPUNK DE NAVEGACIÓN -->
+<header class="hud-cyber-header">
+  <div class="hud-logo">
+    <span class="hud-glow-text">EL COMPADRE <span class="accent">3000</span></span>
+    <span class="hud-sub-text">SISTEMA DE TRANSMISIÓN HISTÓRICA // ONLINE</span>
   </div>
+  <nav class="hud-nav-links">
+    <button class="nav-hud-btn" (click)="scrollTo('#inicio')">
+      <span class="btn-num">01</span>
+      <span class="btn-lbl">INICIO</span>
+    </button>
+    <button class="nav-hud-btn" (click)="scrollTo('#historia')">
+      <span class="btn-num">02</span>
+      <span class="btn-lbl">HISTORIA</span>
+    </button>
+    <button class="nav-hud-btn" (click)="scrollTo('#frases')">
+      <span class="btn-num">03</span>
+      <span class="btn-lbl">FRASES</span>
+    </button>
+    <button class="nav-hud-btn" (click)="scrollTo('#transformacion')">
+      <span class="btn-num">04</span>
+      <span class="btn-lbl">EVOLUCIÓN</span>
+    </button>
+    <button class="nav-hud-btn highlight" (click)="openHistoryModal('bio')">
+      <span class="btn-lbl"> EXPEDIENTE</span>
+    </button>
+  </nav>
+</header>
+
+<!-- EXPEDIENTE HISTÓRICO HOLOGRÁFICO (MODAL INTERACTIVO) -->
+@if (isHistoryOpen) {
+<div class="hud-history-overlay" (click)="closeHistoryModal()">
+  <div class="hud-history-card" (click)="$event.stopPropagation()">
+    <!-- Bordes brillantes y línea de barrido -->
+    <div class="card-glow-border"></div>
+    <div class="card-scan-line"></div>
+
+    <!-- Cabecera de la Tarjeta -->
+    <div class="card-header">
+      <div class="header-title-container">
+        <span class="header-subtitle">EXPEDIENTE FANTASÍA // LINAJE DIGITAL</span>
+        <h2 class="header-title">LORD CARLOS "EL COMPADRE" PALENQUE</h2>
+      </div>
+      <button class="btn-close-hud" (click)="closeHistoryModal()">✕</button>
+    </div>
+
+    <!-- Pestañas de Navegación -->
+    <div class="card-tabs">
+      <button class="tab-btn" [class.active]="activeTab === 'bio'" (click)="selectTab('bio')">
+        01 // FICHA DE AVATAR
+      </button>
+      <button class="tab-btn" [class.active]="activeTab === 'tribuna'" (click)="selectTab('tribuna')">
+        02 // LA TORRE DE LAS VOCES
+      </button>
+      <button class="tab-btn" [class.active]="activeTab === 'caminantes'" (click)="selectTab('caminantes')">
+        03 // LA LEYENDA DEL ILLIMANI
+      </button>
+    </div>
+
+    <!-- Cuerpo del Expediente (Scrollable interno) -->
+    <div class="card-body scrollable-hud-content">
+
+      <!-- PESTAÑA 01: FICHA DE AVATAR -->
+      @if (activeTab === 'bio') {
+      <div class="tab-content">
+        <h3 class="content-section-title">// ESPECIFICACIONES DEL AVATAR</h3>
+
+        <div class="hud-stats-grid">
+          <div class="hud-stat-box">
+            <span class="stat-label">AVATAR</span>
+            <span class="stat-value highlight-silver">Lord Carlos "El Compadre" Palenque</span>
+          </div>
+          <div class="hud-stat-box">
+            <span class="stat-label">TÍTULO</span>
+            <span class="stat-value">El Compadre de las Tierras del Illimani</span>
+          </div>
+          <div class="hud-stat-box">
+            <span class="stat-label">REINO</span>
+            <span class="stat-value">Valle de La Paz, Reino de Kollasuyo</span>
+          </div>
+          <div class="hud-stat-box">
+            <span class="stat-label">CLASE</span>
+            <span class="stat-value highlight-cyan">Bardo de los Sin Voz / Paladín del Pueblo</span>
+          </div>
+          <div class="hud-stat-box">
+            <span class="stat-label">ALINEAMIENTO</span>
+            <span class="stat-value">Caótico Bueno</span>
+          </div>
+          <div class="hud-stat-box">
+            <span class="stat-label">ARMA PRINCIPAL</span>
+            <span class="stat-value highlight-silver">Micrófono de Hierro (Cetro Amplificador)</span>
+          </div>
+          <div class="hud-stat-box">
+            <span class="stat-label">SÍMBOLO SAGRADO</span>
+            <span class="stat-value">Radio Alada con Grabado 732</span>
+          </div>
+        </div>
+
+        <!-- Contenedor vacío con el nombre exacto de la imagen como título -->
+        <div class="hud-image-placeholder" id="placeholder-avatar">
+          <span class="placeholder-scanline"></span>
+          <span class="placeholder-title">palenque_avatar.jpg</span>
+          <span class="placeholder-caption">Cuadro reservado para fotografía: Ficha de personaje ilustrada de Lord
+            Carlos Palenque.</span>
+        </div>
+      </div>
+      }
+
+      <!-- PESTAÑA 02: LA TORRE DE LAS VOCES (HISTORIA DE TRASFONDO) -->
+      @if (activeTab === 'tribuna') {
+      <div class="tab-content">
+        <h3 class="content-section-title">// REGISTRO DE HECHOS EN LA ERA DE LOS REINOS DIVIDIDOS</h3>
+        <p class="content-paragraph">
+          En la era de los reinos divididos, Lord Carlos gobernaba no desde un castillo, sino desde **"La Torre de las
+          Voces"**, una torre de radio hechizada en el corazón del Valle de La Paz. No era rey por sangre, era
+          *"Compadre"* por elección del pueblo.
+        </p>
+
+        <div class="hud-lore-list">
+          <div class="lore-log">
+            <span class="log-tag">// ACCIÓN DE CLASE: TRIBUNO DEL PUEBLO</span>
+            <p class="lore-text">Cada noche abría las puertas de su torre para que campesinos, artesanos y desposeídos
+              hablaran sin miedo. Su hechizo <strong>"Tribuna Libre del Pueblo"</strong> rompía las maldiciones de
+              silencio impuestas por los nobles corruptos.</p>
+          </div>
+
+          <div class="lore-log">
+            <span class="log-tag">// ACCIÓN DE CLASE: SANADOR DE ALMAS</span>
+            <p class="lore-text">Con su mística canción <strong>"Caminante de las Estrellas"</strong>, curaba la
+              desesperanza. Decían que su voz era un bálsamo milagroso para todos aquellos que sufrían en las minas más
+              profundas y los mercados concurridos.</p>
+          </div>
+
+          <div class="lore-log">
+            <span class="log-tag">// ACCIÓN DE CLASE: FUNDADOR DE GREMIOS</span>
+            <p class="lore-text">Creó <strong>"RTP" (Red de Talleres del Pueblo)</strong>, estructurando forjas de
+              conocimiento, escuelas de juglares y casas de sanación comunitaria abiertas para todos los habitantes sin
+              importar su linaje de sangre.</p>
+          </div>
+
+          <div class="lore-log">
+            <span class="log-tag">// ACCIÓN DE CLASE: GUERRERO POLÍTICO</span>
+            <p class="lore-text">Se enfrentó al Alto Consejo de los Barones del Estaño empuñando únicamente su
+              legendaria espada <strong>"La Verdad"</strong>. No usaba ejércitos ni mercenarios; su única arma era su
+              palabra. Y ganó batallas que ningún otro caballero se atrevía a pelear.</p>
+          </div>
+        </div>
+
+        <!-- Contenedor vacío con el nombre de la imagen como título -->
+        <div class="hud-image-placeholder blue" id="placeholder-torre">
+          <span class="placeholder-scanline"></span>
+          <span class="placeholder-title">.</span>
+          <span class="placeholder-caption">.</span>
+        </div>
+      </div>
+      }
+
+      <!-- PESTAÑA 03: LA LEYENDA DEL ILLIMANI (POR QUÉ EL PUEBLO LO AMABA Y SU FINAL) -->
+      @if (activeTab === 'caminantes') {
+      <div class="tab-content">
+        <h3 class="content-section-title">// ORÍGENES DEL AFECTO POPULAR & EL ÚLTIMO CONJURO</h3>
+
+        <div class="hud-power-grid">
+          <div class="power-item">
+            <h4 class="power-title"><span class="bullet">▶</span> HABLABA COMO ELLOS</h4>
+            <p class="power-desc">No empleaba la jerga de los nobles. Su dialecto era el de la chichería, el del
+              mercado. Cada campesino y obrero sentía que "El Compadre" era de su propia familia.</p>
+          </div>
+
+          <div class="power-item">
+            <h4 class="power-title"><span class="bullet">▶</span> LE DIO VOZ AL MUDO</h4>
+            <p class="power-desc">Antes de su llegada, solo los señores feudales tenían derecho a expresarse en el
+              reino. Él encantó los <em>"micrófonos de hierro"</em> para que cualquier súbdito pudiera denunciar
+              injusticias al aire.</p>
+          </div>
+
+          <div class="power-item">
+            <h4 class="power-title"><span class="bullet">▶</span> NUNCA SE VENDIÓ</h4>
+            <p class="power-desc">Los Barones le ofrecieron inmensas fortunas de oro, títulos nobiliarios y castillos
+              fortificados. Él rechazó todo y fundió el oro para forjar más micrófonos de hierro. Por eso lo llamaban
+              <strong>"El Incorruptible"</strong>.
+            </p>
+          </div>
+        </div>
+
+        <!-- El último hechizo con tipografía especial -->
+        <div class="legend-quote-box">
+          <h4 class="legend-title">// EL ÚLTIMO HECHIZO</h4>
+          <p class="legend-desc">
+            "Cayó defendiendo su torre cuando los Barones la sitiaron. Pero su último hechizo fue dejar su voz grabada
+            en el viento. Por eso en La Paz dicen que cuando sopla el Illimani, se escucha al Compadre."
+          </p>
+        </div>
+
+        <!-- Contenedores vacíos para las imágenes solicitadas -->
+        <div class="hud-image-placeholder" id="placeholder-leyenda">
+          <span class="placeholder-scanline"></span>
+          <span class="placeholder-title">palenque_leyenda.jpg</span>
+          <span class="placeholder-caption">Cuadro reservado para fotografía: Lord Carlos invocando su último hechizo
+            frente al viento del Illimani.</span>
+        </div>
+
+        <div class="hud-image-placeholder blue" id="placeholder-charango" style="margin-top: 24px;">
+          <span class="placeholder-scanline"></span>
+          <span class="placeholder-title">palenque_compadre_charango.jpg</span>
+          <span class="placeholder-caption">Cuadro reservado para fotografía: El Bardo tocando su charango místico para
+            sanar al pueblo paceño.</span>
+        </div>
+      </div>
+      }
+    </div>
+
+    <!-- Pie de Tarjeta -->
+    <div class="card-footer">
+      <span class="footer-system-status">DECRIPCIÓN EXPRÉS // CÓDIGO DE ACCESO SEGURO</span>
+      <button class="btn-footer-close" (click)="closeHistoryModal()">CERRAR EXPEDIENTE</button>
+    </div>
+  </div>
+</div>
 }
 
 <div class="model3d-fixed-background" id="fixed-model-container">

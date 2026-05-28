@@ -5,117 +5,90 @@
   <div class="story-noise"></div>
   <div class="story-grid"></div>
 
-  <!-- AÑO -->
+  <!-- AÑO HOLOGRÁFICO DE FONDO -->
   <div #bgYear class="giant-year">1988</div>
 
-  <!-- LINE -->
-  <div class="vertical-line"></div>
-
-  <!-- IMAGES -->
-  <div class="floating-image image-1">
-    <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=1200&auto=format&fit=crop" alt="">
+  <!-- TÍTULO DE LA SECCIÓN -->
+  <div class="section-header-hud"
+    style="text-align: center; margin-bottom: 4rem; position: relative; z-index: 10; padding-top: 5vh;">
+    <span
+      style="font-family: 'Orbitron'; font-size: 0.8rem; color: var(--color-accent); letter-spacing: 0.4em; text-transform: uppercase;">//
+      ARCHIVOS DEL REINO // MEMORIA DEL PUEBLO</span>
+    <h2
+      style="font-family: 'Orbitron'; font-size: clamp(2.5rem, 5vw, 3.5rem); color: var(--text-light); margin: 0.5rem 0; letter-spacing: 0.1em; text-shadow: 0 0 15px rgba(136,192,208,0.25);">
+      02 HISTORIA</h2>
+    <div style="width: 60px; height: 2px; background: var(--color-accent); margin: 0.5rem auto 0 auto; opacity: 0.6;">
+    </div>
   </div>
 
-  <div class="floating-image image-2">
-    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop" alt="">
-  </div>
+  <!-- CONTENEDOR DE CAJAS -->
+  <div class="scroll-boxes-container" style="position: relative; z-index: 10; padding-bottom: 10vh;">
 
-  <div class="floating-image image-3">
-    <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=1200&auto=format&fit=crop" alt="">
-  </div>
-
-  <div class="floating-image image-4">
-    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" alt="">
-  </div>
-
-  <!-- PANELS -->
-
-  <!-- PANEL 1 -->
-  <div class="panel panel-1">
-
-    <div class="panel-content left-layout">
-
-      <div class="panel-tag">
-        ARCHIVO RTP · 1988
+    <!-- Caja 1 -->
+    <div class="scroll-fade-box">
+      <div class="scroll-fade-text">
+        <span class="box-tag">// TORRE DE LAS VOCES // TRIBUNA LIBRE</span>
+        <h3 class="box-title">LA TORRE DEL COMPADRE</h3>
+        <p class="box-desc">
+          En el corazón del Valle de La Paz se alzaba la legendaria Torre de las Voces, una radio hechizada desde donde
+          Lord Carlos “El Compadre” Palenque hablaba directamente al pueblo. No gobernaba desde un trono ni llevaba
+          corona de oro; su poder nacía de las calles, de los mercados y de los barrios olvidados del Reino de
+          Kollasuyo.
+        </p>
       </div>
-
-      <h2 class="story-line">
-        EN UNA BOLIVIA<br>
-        DONDE MUCHOS<br>
-        NO TENÍAN VOZ
-      </h2>
-
-      <p class="story-description">
-        UNA TRANSMISIÓN CAMBIÓ LA HISTORIA
-        DEL PUEBLO BOLIVIANO.
-      </p>
-
+      <div class="scroll-fade-image">
+        <img src="assets/images/imagen1.jpg" width="300">
+      </div>
     </div>
 
-  </div>
-
-  <!-- PANEL 2 -->
-  <div class="panel panel-2">
-
-    <div class="center-layout">
-
-      <div class="panel-tag">
-        TRANSMISIÓN NACIONAL
+    <!-- Caja 2 -->
+    <div class="scroll-fade-box">
+      <div class="scroll-fade-text">
+        <span class="box-tag">// MICRÓFONO DE HIERRO // VOZ DEL PUEBLO</span>
+        <h3 class="box-title">EL BARDO DE LOS SIN VOZ</h3>
+        <p class="box-desc">
+          Cada noche abría las puertas de su torre para escuchar a campesinos, artesanos, mineros y comerciantes. Con su
+          legendario Micrófono de Hierro rompía los hechizos de silencio impuestos por los Barones del Estaño. Decían
+          que ningún noble soportaba su magia, porque cada palabra transmitida revelaba verdades que el reino intentaba
+          ocultar.
+        </p>
       </div>
-
-      <h2 class="palenque-name">
-        JUAN CARLOS<br>
-        PALENQUE
-      </h2>
-
-      <p class="quote">
-        “LA VOZ DE QUIENES NUNCA FUERON ESCUCHADOS”
-      </p>
-
+      <div class="scroll-fade-image">
+        <img src="assets/images/imagen2.jpg" alt="Micrófono de Hierro">
+      </div>
     </div>
 
-  </div>
-
-  <!-- PANEL 3 -->
-  <div class="panel panel-3">
-
-    <div class="center-layout">
-
-      <p class="small-text">
-        LO LLAMABAN
-      </p>
-
-      <h1 class="compadre-title">
-        EL<br>
-        COMPADRE
-      </h1>
-
-      <p class="voice-text">
-        LA VOZ DE LOS SIN VOZ
-      </p>
-
+    <!-- Caja 3 -->
+    <div class="scroll-fade-box">
+      <div class="scroll-fade-text">
+        <span class="box-tag">// RTP // RED DE TALLERES DEL PUEBLO</span>
+        <h3 class="box-title">EL PALADÍN DEL PUEBLO</h3>
+        <p class="box-desc">
+          Pero El Compadre no solo transmitía mensajes. Fundó la RTP, la Red de Talleres del Pueblo: forjas, escuelas de
+          juglares, casas de sanación y centros de aprendizaje abiertos para cualquiera, sin importar su linaje.
+          Mientras los nobles acumulaban riquezas, él convertía cada moneda en oportunidades para su gente.
+        </p>
+      </div>
+      <div class="scroll-fade-image">
+        <img src="assets/images/imagen3.png" alt="Red de Talleres del Pueblo">
+      </div>
     </div>
 
-  </div>
-
-  <!-- PANEL 4 -->
-  <div class="panel panel-4">
-
-    <div class="future-layout">
-
-      <div class="panel-tag blue">
-        FRECUENCIA DETECTADA
+    <!-- Caja 4 -->
+    <div class="scroll-fade-box">
+      <div class="scroll-fade-text">
+        <span class="box-tag">// ÚLTIMA TRANSMISIÓN // LEGADO ETERNO</span>
+        <h3 class="box-title">LA VOZ QUE NUNCA MURIÓ</h3>
+        <p class="box-desc">
+          Los Barones intentaron comprarlo con oro, castillos y poder, pero El Compadre rechazó cada oferta. Finalmente
+          sitiaron la Torre de las Voces y Lord Carlos cayó defendiendo su señal. Antes de desaparecer, lanzó un último
+          hechizo: grabó su voz en los vientos del Illimani. Desde entonces, cuando la noche cubre La Paz y el viento
+          sopla entre las montañas, el pueblo asegura que todavía puede escuchar al Compadre llamándolos hermanos.
+        </p>
       </div>
-
-      <h2 class="future-year">
-        2095
-      </h2>
-
-      <p class="future-text">
-        LA TRANSMISIÓN<br>
-        HA REGRESADO
-      </p>
-
+      <div class="scroll-fade-image">
+        <img src="/assets/images/imagen4.jpg" alt="Legado del Compadre">
+      </div>
     </div>
 
   </div>

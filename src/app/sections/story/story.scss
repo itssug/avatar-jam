@@ -1,8 +1,10 @@
 .story-wrapper {
   position: relative;
-  height: 500vh; // era 100vh — necesitas espacio para hacer scroll
+  height: auto;
+  min-height: 100vh;
   background: var(--bg-main);
-  overflow: hidden; // ← también puede bloquear el scroll del padre, considera quitar esto o moverlo
+  overflow: visible;
+  padding: 5vh 0;
 }
 
 /* =========================
@@ -369,4 +371,130 @@
   .vertical-line {
     left: 5vw;
   }
+}
+
+/* =========================
+   HUD HOLOGRAPHIC BUTTONS
+   ========================= */
+
+.hud-action-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.btn-hud-expediente {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  background: rgba(18, 20, 24, 0.82);
+  border: 1px solid var(--color-silver);
+  color: #F5F3ED;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.4),
+    inset 0 0 15px rgba(168, 178, 193, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 4px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(168, 178, 193, 0.35), transparent);
+    transition: left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hud-btn-glow {
+    position: absolute;
+    inset: -1px;
+    background: transparent;
+    border: 1px solid var(--color-silver);
+    opacity: 0.3;
+    transition: all 0.4s ease;
+    border-radius: 4px;
+  }
+
+  .hud-btn-scanner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-silver), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover {
+    color: #FFF;
+    border-color: #FFF;
+    transform: translateY(-2px);
+    box-shadow: 
+      0 8px 25px rgba(168, 178, 193, 0.35),
+      inset 0 0 20px rgba(168, 178, 193, 0.25);
+
+    &::before {
+      left: 100%;
+    }
+
+    .hud-btn-glow {
+      opacity: 1;
+      box-shadow: 0 0 15px rgba(168, 178, 193, 0.4);
+    }
+
+    .hud-btn-scanner {
+      opacity: 0.8;
+      animation: btnScan 1.5s infinite linear;
+    }
+  }
+
+  /* Variación celeste/azul */
+  &.blue {
+    border-color: rgba(136, 192, 208, 0.6);
+    box-shadow: 
+      0 4px 15px rgba(0, 0, 0, 0.4),
+      inset 0 0 15px rgba(136, 192, 208, 0.08);
+
+    &::before {
+      background: linear-gradient(90deg, transparent, rgba(136, 192, 208, 0.3), transparent);
+    }
+
+    .hud-btn-glow {
+      border-color: var(--color-accent);
+    }
+
+    .hud-btn-scanner {
+      background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+    }
+
+    &:hover {
+      border-color: #FFF;
+      box-shadow: 
+        0 8px 25px rgba(136, 192, 208, 0.3),
+        inset 0 0 20px rgba(136, 192, 208, 0.25);
+
+      .hud-btn-glow {
+        box-shadow: 0 0 15px rgba(136, 192, 208, 0.4);
+      }
+    }
+  }
+}
+
+@keyframes btnScan {
+  0% { top: 0%; }
+  50% { top: 100%; }
+  100% { top: 0%; }
 }
