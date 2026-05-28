@@ -1,10 +1,43 @@
 <section class="hero">
   <canvas #canvas></canvas>
-  <div class="hero__overlay">
-    <div class="hero__title-wrap">
-      <h1 class="hero__title" #title>EL COMPADRE 3000</h1>
-      <p class="hero__sub" #sub>EL FUTURO EN LOS ANDES</p>
-    </div>
-  </div>
+
+  <!-- Scanlines overlay -->
   <div class="hero__scanlines"></div>
+
+  <!-- Noise / static overlay -->
+  <div class="hero__noise"></div>
+
+  <!-- Canal 4 / RTP channel ID — flashes in during intro -->
+  <div class="hero__channel" #channel>
+    <span class="hero__channel-num">CANAL 4</span>
+    <span class="hero__channel-city">LA PAZ — BOLIVIA</span>
+  </div>
+
+  <!-- Main overlay content -->
+  <div class="hero__overlay">
+
+    <!-- Top-left: broadcast signal indicator -->
+    <div class="hero__broadcast">
+      <span class="hero__broadcast-dot"></span>
+      <span class="hero__broadcast-label">EN VIVO</span>
+      <span class="hero__broadcast-year">2095</span>
+    </div>
+
+    <!-- Bottom: title block -->
+    <div class="hero__title-wrap">
+      <p class="hero__eyebrow">SISTEMA RTP — TRANSMISIÓN ESPECIAL</p>
+      <h1 class="hero__title" #title>EL COMPADRE<br><span class="hero__title--num">3000</span></h1>
+      <p class="hero__sub" #sub>LA VOZ DE LOS SIN VOZ</p>
+    </div>
+
+    <!-- Bottom-right: signal / coords -->
+    <div class="hero__signal" #signal>
+      <span class="hero__signal-coords">16°30'S  68°09'O</span>
+      <span class="hero__signal-alt">ALT. 3625m — EL ALTO</span>
+    </div>
+
+  </div>
+
+  <!-- Vignette -->
+  <div class="hero__vignette"></div>
 </section>

@@ -1,7 +1,20 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, NgZone, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component, OnInit, OnDestroy,
+  ElementRef, ViewChild, NgZone,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import { ThreeService } from '../../services/three.service';
+
+// ─── COORDENADAS DEL MUNDO ───────────────────────────────────────────────────
+// La cámara está en el BORDE NORTE del cuenco (El Alto), mirando hacia el SUR.
+// Y = altura  |  X = este-oeste  |  Z = norte-sur (+ = norte/cerca, - = sur/lejos)
+//
+// El Alto:       y ≈ -2,  z ≈ +12  (plano, detrás de la cámara)
+// Borde cuenco:  y ≈ -2,  z ≈   0  (donde empiezan las laderas)
+// Fondo cuenco:  y ≈ -12, z ≈  -6  (el centro más hundido)
+// Illimani:      y enorme, z ≈ -45  (al sur, dominando el horizonte)
 
 @Component({
   selector: 'app-hero',
@@ -14,12 +27,18 @@ export class HeroComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('title', { static: true }) titleRef!: ElementRef;
   @ViewChild('sub', { static: true }) subRef!: ElementRef;
+  @ViewChild('signal', { static: true }) signalRef!: ElementRef;
+  @ViewChild('channel', { static: true }) channelRef!: ElementRef;
 
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
-  private particles!: THREE.Points;
   private mouse = { x: 0, y: 0 };
+  private clock = new THREE.Clock();
+  private gondolas: { mesh: THREE.Mesh; t: number; speed: number; curve: THREE.QuadraticBezierCurve3 }[] = [];
+  private cityLights!: THREE.Points;
+  private antennaMat!: THREE.MeshBasicMaterial;
+  private glitchInterval!: ReturnType<typeof setInterval>;
 
   constructor(private threeService: ThreeService, private ngZone: NgZone) { }
 
@@ -30,282 +49,555 @@ export class HeroComponent implements OnInit, OnDestroy {
     this.renderer = renderer;
 
     this.setupScene();
-    this.createMountains();
-    this.createParticles();
-    this.createRobot();
+    this.buildIllimani();
+    this.buildBowlTerrain();
+    this.buildCityLights();
+    this.buildElAlto();
+    this.buildTeleferico();
+    this.buildStars();
+    this.buildAtmosphere();
     this.setupMouseParallax();
     this.playIntro();
+    this.startGlitch();
+    this.startAntennaFlicker();
 
     this.threeService.startLoop(this.ngZone, () => this.render());
   }
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SCENE SETUP
+  // ═══════════════════════════════════════════════════════════════════════════
+
   private setupScene() {
-    this.scene.fog = new THREE.FogExp2(0x050510, 0.025);
-    this.scene.background = new THREE.Color(0x050510);
+    this.scene.background = new THREE.Color(0x02050d);
+    this.scene.fog = new THREE.FogExp2(0x050a18, 0.013);
 
-    this.scene.add(new THREE.AmbientLight(0x112244, 3));
+    this.scene.add(new THREE.AmbientLight(0x060d25, 8));
 
-    // Luz dorada desde arriba (sol andino)
-    const sunLight = new THREE.DirectionalLight(0xE5C100, 2);
-    sunLight.position.set(5, 20, 5);
-    this.scene.add(sunLight);
+    // Luna fria desde el sur iluminando el Illimani
+    const moonLight = new THREE.DirectionalLight(0x8ab0d0, 2.5);
+    moonLight.position.set(2, 20, -50);
+    this.scene.add(moonLight);
 
-    // Luz azul fría de la ciudad
-    const cityLight = new THREE.PointLight(0x00BFFF, 4, 40);
-    cityLight.position.set(0, -2, 6);
-    this.scene.add(cityLight);
+    // Resplandor calido que asciende desde el cuenco
+    const cityGlow1 = new THREE.PointLight(0xFF9933, 3, 70);
+    cityGlow1.position.set(0, -5, -2);
+    this.scene.add(cityGlow1);
 
-    // Luz naranja cálida lateral
-    const warmLight = new THREE.PointLight(0xFF8800, 3, 30);
-    warmLight.position.set(-8, 2, 3);
-    this.scene.add(warmLight);
+    const cityGlow2 = new THREE.PointLight(0xFFCC55, 2, 45);
+    cityGlow2.position.set(6, -7, 3);
+    this.scene.add(cityGlow2);
 
-    this.camera.position.set(0, 4, 22);
-    this.camera.lookAt(0, 2, 0);
+    // Luz dorada RTP desde El Alto
+    const light = new THREE.PointLight(0xE5C100, 2, 35);
+
+    light.position.set(-6, 3, -2);
+
+    this.scene.add(light);
+
+    // Camara: parada en el borde norte del cuenco (El Alto), mirando abajo y al sur
+    this.camera.position.set(0, 14, 22);
+    this.camera.lookAt(0, -6, -8);
   }
 
-  private createMountains() {
-    // ── ILLIMANI y cordillera de fondo ──────────────────────────
-    const cordillera = [
-      // Illimani central — el más alto e icónico
-      { x: 0, y: -2, z: -12, sx: 10, sy: 18, sz: 10, color: 0x1a1a2e, snow: true, snowSize: 0.3 },
-      // Picos secundarios del Illimani
-      { x: 2.5, y: -2, z: -12, sx: 6, sy: 14, sz: 6, color: 0x16213e, snow: true, snowSize: 0.22 },
-      { x: -2, y: -2, z: -12, sx: 5, sy: 12, sz: 5, color: 0x16213e, snow: true, snowSize: 0.18 },
-      // Cordillera izquierda lejana
-      { x: -10, y: -3, z: -14, sx: 7, sy: 11, sz: 7, color: 0x0f0f1a, snow: false, snowSize: 0 },
-      { x: -16, y: -3, z: -14, sx: 6, sy: 9, sz: 6, color: 0x0d0d18, snow: false, snowSize: 0 },
-      // Cordillera derecha lejana
-      { x: 10, y: -3, z: -14, sx: 7, sy: 10, sz: 7, color: 0x0f0f1a, snow: false, snowSize: 0 },
-      { x: 16, y: -3, z: -14, sx: 6, sy: 8, sz: 6, color: 0x0d0d18, snow: false, snowSize: 0 },
-    ];
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ILLIMANI — montaña protagonista, enorme al fondo sur
+  // ═══════════════════════════════════════════════════════════════════════════
 
-    cordillera.forEach(cfg => {
-      const geo = new THREE.ConeGeometry(1, 1, 7 + Math.floor(Math.random() * 3));
-      const pos = geo.attributes['position'] as THREE.BufferAttribute;
-      for (let i = 0; i < pos.count; i++) {
-        if (pos.getY(i) < 0.45) {
-          pos.setX(i, pos.getX(i) + (Math.random() - 0.5) * 0.3);
-          pos.setZ(i, pos.getZ(i) + (Math.random() - 0.5) * 0.3);
-        }
-      }
-      geo.computeVertexNormals();
+  private buildIllimani() {
 
-      const mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({
-        color: cfg.color, flatShading: true
-      }));
-      mesh.position.set(cfg.x, cfg.y, cfg.z);
-      mesh.scale.set(cfg.sx, cfg.sy, cfg.sz);
+    // Construye una cumbre con: cuerpo principal + faldas + capa de nieve + glaciares
+    const buildCumbre = (
+      cx: number, cz: number,
+      baseR: number, height: number,
+      bodyColor: number, snowFraction: number // fraccion desde la cima donde empieza la nieve
+    ) => {
+      const root = new THREE.Group();
+      // cy: base en el suelo del cuenco-ladera
+      root.position.set(cx, -2, cz);
 
-      if (cfg.snow) {
-        const snow = new THREE.Mesh(
-          new THREE.ConeGeometry(cfg.snowSize, cfg.snowSize * 1.5, 5),
-          new THREE.MeshPhongMaterial({
-            color: 0xDDEEFF,
-            flatShading: true,
-            emissive: 0x334466,
-            emissiveIntensity: 0.6
-          })
+      // ── Cuerpo principal ──────────────────────────────────────────────────
+      const bodyGeo = new THREE.ConeGeometry(baseR, height, 11);
+      this.jitterGeo(bodyGeo, baseR * 0.20, 0.55);
+      root.add(new THREE.Mesh(bodyGeo, new THREE.MeshPhongMaterial({
+        color: bodyColor, flatShading: true, shininess: 5
+      })));
+
+      // ── Faldas/contrafuertes: 5 protuberancias en la base ─────────────────
+      for (let i = 0; i < 6; i++) {
+        const ang = (i / 6) * Math.PI * 2;
+        const sGeo = new THREE.ConeGeometry(baseR * 0.5, height * 0.48, 7);
+        this.jitterGeo(sGeo, baseR * 0.16, 0.5);
+        const sMesh = new THREE.Mesh(sGeo, new THREE.MeshPhongMaterial({
+          color: new THREE.Color(bodyColor).multiplyScalar(0.72).getHex(),
+          flatShading: true
+        }));
+        sMesh.position.set(
+          Math.cos(ang) * baseR * 0.68,
+          -height * 0.24,
+          Math.sin(ang) * baseR * 0.68
         );
-        snow.position.y = 0.52;
-        mesh.add(snow);
+        root.add(sMesh);
       }
 
+      // ── Capa de nieve (cono blanco-azulado) ───────────────────────────────
+      const snowH = height * (1 - snowFraction);
+      const snowR = baseR * (1 - snowFraction) * 1.15;
+      const snowGeo = new THREE.ConeGeometry(snowR, snowH, 9);
+      this.jitterGeo(snowGeo, snowR * 0.12, 0.3);
+      const snowMesh = new THREE.Mesh(snowGeo, new THREE.MeshPhongMaterial({
+        color: 0xd8e8f8, flatShading: true,
+        emissive: 0x1a3d77, emissiveIntensity: 0.3,
+        shininess: 80
+      }));
+      // Posicionar la nieve en la punta
+      snowMesh.position.y = height * 0.5 - snowH * 0.5;
+      root.add(snowMesh);
+
+      // ── Glaciares: lenguas de hielo que bajan por las laderas ─────────────
+      for (let g = 0; g < 4; g++) {
+        const gAng = (g / 4) * Math.PI * 2 + 0.5;
+        const gGeo = new THREE.ConeGeometry(snowR * 0.14, snowH * 0.65, 4);
+        this.jitterGeo(gGeo, snowR * 0.05, 0.4);
+        const gMesh = new THREE.Mesh(gGeo, new THREE.MeshPhongMaterial({
+          color: 0x9fc4dd, flatShading: true
+        }));
+        gMesh.position.set(
+          Math.cos(gAng) * snowR * 0.4,
+          -snowH * 0.2,
+          Math.sin(gAng) * snowR * 0.4
+        );
+        gMesh.rotation.z = Math.cos(gAng) * 0.35;
+        gMesh.rotation.x = Math.sin(gAng) * 0.2;
+        snowMesh.add(gMesh);
+      }
+
+      this.scene.add(root);
+      return root;
+    };
+
+    // ── Las 4 cumbres del Illimani ────────────────────────────────────────────
+    // Vistas desde el norte, el Pico Sur es el mas alto y esta ligeramente a la derecha
+    buildCumbre(2, -48, 7, 28, 0x0c1a32, 0.56); // Pico Sur — el mas alto
+    buildCumbre(-1, -46, 6, 24, 0x091528, 0.54); // Pico Central
+    buildCumbre(-5, -44, 5, 20, 0x08121f, 0.52); // Pico Norte
+    buildCumbre(6, -45, 5, 18, 0x0a1826, 0.50); // Cumbre secundaria
+
+    // ── Cordillera de fondo: masa montanosa que enmarca el Illimani ───────────
+    [
+      { x: -18, z: -38, r: 10, h: 17 }, { x: 18, z: -38, r: 10, h: 16 },
+      { x: -30, z: -30, r: 9, h: 14 }, { x: 30, z: -30, r: 9, h: 14 },
+      { x: -11, z: -36, r: 8, h: 15 }, { x: 11, z: -36, r: 8, h: 15 },
+      { x: 0, z: -54, r: 11, h: 13 }, { x: -24, z: -46, r: 8, h: 11 }, { x: 24, z: -46, r: 8, h: 11 },
+    ].forEach(d => {
+      const geo = new THREE.ConeGeometry(d.r, d.h, 8);
+      this.jitterGeo(geo, d.r * 0.14, 0.5);
+      const mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({
+        color: 0x060e1c, flatShading: true
+      }));
+      mesh.position.set(d.x, -2, d.z);
       this.scene.add(mesh);
     });
 
-    // ── CUENCO DE LA PAZ — laderas ───────────────────────────────
-    // La Paz está en un cañón/cuenco, las laderas bajan desde los bordes
-    this.createLadera(-9, 1, 2, Math.PI * 0.08);   // ladera izquierda
-    this.createLadera(9, 1, 2, -Math.PI * 0.08);   // ladera derecha
-    this.createLadera(-6, 0, 4, Math.PI * 0.05);
-    this.createLadera(6, 0, 4, -Math.PI * 0.05);
-
-    // ── PISO DEL CUENCO — ciudad abajo ───────────────────────────
-    this.createCityFloor();
+    // ── Ladera que conecta la cordillera con el cuenco ────────────────────────
+    const slopeGeo = new THREE.PlaneGeometry(80, 28, 32, 14);
+    const slopePos = slopeGeo.attributes['position'] as THREE.BufferAttribute;
+    for (let i = 0; i < slopePos.count; i++) {
+      const py = slopePos.getY(i); // depth antes de rotar
+      const t = (py + 14) / 28;  // 0 = borde lejano (z bajo), 1 = borde cercano (z alto)
+      slopePos.setZ(i, 7 - t * 14 + (Math.random() - 0.5) * 1.2);
+    }
+    slopeGeo.computeVertexNormals();
+    const slopeMesh = new THREE.Mesh(slopeGeo, new THREE.MeshPhongMaterial({
+      color: 0x07101d, flatShading: true, side: THREE.DoubleSide
+    }));
+    slopeMesh.rotation.x = -Math.PI / 2;
+    slopeMesh.position.set(0, -2, -22);
+    this.scene.add(slopeMesh);
   }
 
-  private createLadera(x: number, y: number, z: number, rotZ: number) {
-    // Ladera como plano inclinado con edificios encima
-    const geo = new THREE.PlaneGeometry(8, 12, 4, 6);
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BOWL TERRAIN — la olla de La Paz
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  private buildBowlTerrain() {
+    // Geometria del cuenco: el terreno se hunde en el centro y sube hacia los bordes.
+    // Desde la camara (y=14, z=22 mirando a z=-8, y=-6):
+    //   - Los bordes del cuenco (x=±18, z=0) aparecen ALTOS -> y cerca de -2
+    //   - El fondo del cuenco (x=0, z=-6) esta MUY ABAJO -> y cerca de -12
+
+    const SEGS = 55;
+    const geo = new THREE.PlaneGeometry(56, 42, SEGS, SEGS);
     const pos = geo.attributes['position'] as THREE.BufferAttribute;
 
-    // Deformar para terreno irregular
+    // Radio del cuenco (semi-ejes de la elipse paceña: mas ancho E-O que N-S)
+    const RX = 20;
+    const RZ = 16;
+    const DEPTH = 10; // profundidad maxima del cuenco en Y
+
     for (let i = 0; i < pos.count; i++) {
-      pos.setZ(i, pos.getZ(i) + (Math.random() - 0.5) * 0.4);
+      const px = pos.getX(i);
+      const py = pos.getY(i); // esto es Z del mundo antes de rotar el plano
+
+      // Distancia normalizada al centro (0=centro, 1=borde del cuenco)
+      const nx = px / RX;
+      const nz = py / RZ;
+      const r2 = Math.min(nx * nx + nz * nz, 1.4); // clamp para no crear picos
+
+      // LA OLLA: el centro esta HUNDIDO, los bordes estan ALTOS.
+      // borde (r2>=1) -> profundidad 0 -> y = -2 (nivel de El Alto)
+      // centro (r2=0) -> profundidad maxima -> y = -2 - DEPTH = -12
+      const depth = DEPTH * Math.max(0, 1 - r2);
+
+      // Ruido de terreno: quebradas, calles en pendiente
+      const noise =
+        Math.sin(px * 0.7 + 0.3) * 0.35 +
+        Math.sin(py * 1.0 + px * 0.4) * 0.28 +
+        (Math.random() - 0.5) * 0.7;
+
+      // Z en el plano horizontal = desplazamiento vertical del terreno
+      // Borde: depth=0 -> z=0+noise (luego con position.y=-2 queda en y≈-2)
+      // Centro: depth=DEPTH -> z=-DEPTH+noise (queda en y≈-12)
+      pos.setZ(i, -depth + noise);
     }
     geo.computeVertexNormals();
 
-    const mat = new THREE.MeshPhongMaterial({
-      color: 0x1a1005,
-      flatShading: true,
-      side: THREE.FrontSide
-    });
-
-    const ladera = new THREE.Mesh(geo, mat);
-    ladera.position.set(x, y, z);
-    ladera.rotation.x = -Math.PI * 0.3;
-    ladera.rotation.z = rotZ;
-    this.scene.add(ladera);
-
-    // Edificios en la ladera
-    this.createBuildingsOnLadera(x, y, z, rotZ);
+    const mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({
+      color: 0x070c18, flatShading: true, side: THREE.DoubleSide
+    }));
+    mesh.rotation.x = -Math.PI / 2;
+    // y=-2: el borde del cuenco esta al mismo nivel que El Alto
+    mesh.position.set(0, -2, -5);
+    this.scene.add(mesh);
   }
 
-  private createBuildingsOnLadera(baseX: number, baseY: number, baseZ: number, rotZ: number) {
-    const count = 18;
-    const direction = rotZ > 0 ? -1 : 1;
+  // ═══════════════════════════════════════════════════════════════════════════
+  // LUCES DE CIUDAD — la olla encendida de noche
+  // ═══════════════════════════════════════════════════════════════════════════
 
-    for (let i = 0; i < count; i++) {
-      const col = i % 4;
-      const row = Math.floor(i / 4);
-      const h = 0.15 + Math.random() * 0.4;
-      const w = 0.12 + Math.random() * 0.15;
+  private buildCityLights() {
+    const COUNT = 12000;
+    const pos = new Float32Array(COUNT * 3);
+    const col = new Float32Array(COUNT * 3);
 
-      const geo = new THREE.BoxGeometry(w, h, w * 0.8);
-      const isLit = Math.random() > 0.4;
+    // Mismos parametros que el terrain
+    const RX = 19;
+    const RZ = 15;
+    const DEPTH = 10;
+    // Centro del cuenco en el mundo
+    const CENTER_Z = -5;
 
-      const mat = new THREE.MeshPhongMaterial({
-        color: isLit ? 0x2a1f0a : 0x151510,
-        emissive: isLit ? 0xFF8800 : 0x000000,
-        emissiveIntensity: isLit ? 0.15 + Math.random() * 0.2 : 0,
-        flatShading: true
-      });
+    for (let i = 0; i < COUNT; i++) {
+      // Posicion angular aleatoria dentro del cuenco
+      const angle = Math.random() * Math.PI * 2;
+      // Distribucion: mas luces en las LADERAS que en el fondo absoluto
+      const u = Math.random();
+      // Radio 0-1: u^0.6 da mas densidad en la parte media (laderas)
+      const normR = Math.pow(u, 0.55);
 
-      const building = new THREE.Mesh(geo, mat);
+      const nx = Math.cos(angle) * normR;
+      const nz = Math.sin(angle) * normR;
 
-      // Posicionar en la ladera con perspectiva de cuenco
-      const spreadX = direction * (col * 0.9 + Math.random() * 0.4);
-      const spreadY = row * 0.8 + Math.random() * 0.3;
+      const px = nx * RX;
+      const pz = nz * RZ + CENTER_Z;
 
-      building.position.set(
-        baseX + spreadX * 0.8,
-        baseY - 1 + spreadY * 0.6,
-        baseZ + row * 0.5 - 1
-      );
-      building.rotation.z = rotZ * 0.5;
+      // Altura: OLLA — el centro esta abajo, los bordes arriba
+      const r2 = Math.min(nx * nx + nz * nz, 1.0);
+      const depth = DEPTH * Math.max(0, 1 - r2);
+      // y = borde(-2) - profundidad = mas abajo en el centro
+      const py = -2 - depth + (Math.random() - 0.5) * 2.0;
 
-      this.scene.add(building);
+      pos[i * 3] = px;
+      pos[i * 3 + 1] = py;
+      pos[i * 3 + 2] = pz;
+
+      // ── Paleta de colores por zona ────────────────────────────────────────
+      const dist = Math.sqrt(r2);
+      const rnd = Math.random();
+
+      if (dist < 0.22) {
+        // Fondo del cuenco: centro comercial, Sopocachi, El Prado
+        // Mezcla de blanco-LED y amarillo
+        if (rnd < 0.45) {
+          col[i * 3] = 0.78 + Math.random() * 0.22; col[i * 3 + 1] = 0.88 + Math.random() * 0.12; col[i * 3 + 2] = 1.0;
+        } else {
+          col[i * 3] = 1.0; col[i * 3 + 1] = 0.92 + Math.random() * 0.08; col[i * 3 + 2] = 0.45 + Math.random() * 0.2;
+        }
+      } else if (dist < 0.6) {
+        // Laderas medias — barrios residenciales, el color tipico de La Paz
+        if (rnd < 0.55) {
+          // SODIO NARANJA — el color mas iconico visto desde El Alto
+          col[i * 3] = 1.0; col[i * 3 + 1] = 0.52 + Math.random() * 0.22; col[i * 3 + 2] = 0.04 + Math.random() * 0.08;
+        } else if (rnd < 0.82) {
+          // Amarillo calido residencial
+          col[i * 3] = 1.0; col[i * 3 + 1] = 0.76 + Math.random() * 0.16; col[i * 3 + 2] = 0.22 + Math.random() * 0.18;
+        } else {
+          // LED azul-blanco moderno (edificios nuevos)
+          col[i * 3] = 0.55; col[i * 3 + 1] = 0.75; col[i * 3 + 2] = 1.0;
+        }
+      } else {
+        // Borde del cuenco / periferias / Villa Fatima / Max Paredes
+        if (rnd < 0.65) {
+          col[i * 3] = 1.0; col[i * 3 + 1] = 0.48 + Math.random() * 0.18; col[i * 3 + 2] = 0.04;
+        } else {
+          // Dorado: antenas, senales, torres RTP
+          col[i * 3] = 0.9; col[i * 3 + 1] = 0.76; col[i * 3 + 2] = 0.02;
+        }
+      }
     }
-  }
 
-  private createCityFloor() {
-    // Piso plano del centro de La Paz
-    const floorGeo = new THREE.PlaneGeometry(14, 8, 1, 1);
-    const floorMat = new THREE.MeshPhongMaterial({
-      color: 0x0a0a15,
-      flatShading: true
-    });
-    const floor = new THREE.Mesh(floorGeo, floorMat);
-    floor.rotation.x = -Math.PI / 2;
-    floor.position.set(0, -3.5, 3);
-    this.scene.add(floor);
-
-    // Edificios del centro — más altos
-    const centerBuildings = [
-      { x: -2, z: 1, h: 1.2, w: 0.5 },
-      { x: -1, z: 0, h: 1.8, w: 0.4 },
-      { x: 0, z: 0, h: 2.2, w: 0.6 },
-      { x: 1, z: 0, h: 1.6, w: 0.4 },
-      { x: 2, z: 1, h: 1.0, w: 0.45 },
-      { x: -1.5, z: 2, h: 0.8, w: 0.35 },
-      { x: 0.5, z: 2, h: 0.9, w: 0.38 },
-      { x: 2.5, z: 0, h: 1.3, w: 0.42 },
-      { x: -2.5, z: 0, h: 1.1, w: 0.4 },
-      { x: 1.5, z: 1.5, h: 0.7, w: 0.3 },
-    ];
-
-    centerBuildings.forEach(cfg => {
-      const geo = new THREE.BoxGeometry(cfg.w, cfg.h, cfg.w * 0.9);
-      const isLit = Math.random() > 0.3;
-      const mat = new THREE.MeshPhongMaterial({
-        color: 0x151520,
-        emissive: isLit ? 0x00BFFF : 0xFF8800,
-        emissiveIntensity: 0.08 + Math.random() * 0.15,
-        flatShading: true
-      });
-      const b = new THREE.Mesh(geo, mat);
-      b.position.set(cfg.x, -3.5 + cfg.h / 2, cfg.z);
-      this.scene.add(b);
-    });
-  }
-
-
-  private createParticles() {
-    const count = 3000;
     const geo = new THREE.BufferGeometry();
-    const pos = new Float32Array(count * 3);
-    const col = new Float32Array(count * 3);
-
-    for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 80;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 40;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 60;
-      const gold = Math.random() > 0.5;
-      col[i * 3] = gold ? 0.9 : 0.0;
-      col[i * 3 + 1] = gold ? 0.75 : 0.75;
-      col[i * 3 + 2] = gold ? 0.0 : 1.0;
-    }
-
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
 
-    this.particles = new THREE.Points(geo, new THREE.PointsMaterial({
-      size: 0.08, vertexColors: true, transparent: true, opacity: 0.5
+    this.cityLights = new THREE.Points(geo, new THREE.PointsMaterial({
+      size: 0.1, vertexColors: true, transparent: true,
+      opacity: 0.92, sizeAttenuation: true
     }));
-    this.scene.add(this.particles);
+    this.scene.add(this.cityLights);
   }
 
-  private playIntro() {
-    const titleWrap = this.titleRef.nativeElement.parentElement;
+  // ═══════════════════════════════════════════════════════════════════════════
+  // EL ALTO — la meseta plana al norte (detras/debajo de la camara)
+  // ═══════════════════════════════════════════════════════════════════════════
 
-    // Cámara empieza lejos y se acerca
-    const camStart = { z: 40, y: 8 };
-    this.camera.position.z = camStart.z;
-    this.camera.position.y = camStart.y;
+  private buildElAlto() {
+    const geo = new THREE.PlaneGeometry(95, 38, 28, 14);
+    const pos = geo.attributes['position'] as THREE.BufferAttribute;
+    for (let i = 0; i < pos.count; i++) {
+      pos.setZ(i, (Math.random() - 0.5) * 0.35);
+    }
+    geo.computeVertexNormals();
 
-    const tl = gsap.timeline({ delay: 0.5 });
+    const mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({
+      color: 0x050a13, flatShading: true, side: THREE.DoubleSide
+    }));
+    mesh.rotation.x = -Math.PI / 2;
+    mesh.position.set(0, -2.1, 11);
+    this.scene.add(mesh);
 
-    // 1. Cámara se acerca lentamente
-    tl.to(this.camera.position, {
-      z: 18, y: 3,
-      duration: 3.5,
-      ease: 'power2.inOut'
+    // Luces de El Alto — sodio anaranjado-rojizo, mas disperso que el cuenco
+    const N = 3000;
+    const lPos = new Float32Array(N * 3);
+    const lCol = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      lPos[i * 3] = (Math.random() - 0.5) * 90;
+      lPos[i * 3 + 1] = -1.85 + Math.random() * 0.35;
+      lPos[i * 3 + 2] = 8 + (Math.random() - 0.5) * 35;
+
+      // El Alto: sodio naranja-rojo dominante
+      lCol[i * 3] = 1.0;
+      lCol[i * 3 + 1] = 0.42 + Math.random() * 0.18;
+      lCol[i * 3 + 2] = 0.02 + Math.random() * 0.05;
+    }
+    const lGeo = new THREE.BufferGeometry();
+    lGeo.setAttribute('position', new THREE.BufferAttribute(lPos, 3));
+    lGeo.setAttribute('color', new THREE.BufferAttribute(lCol, 3));
+    this.scene.add(new THREE.Points(lGeo, new THREE.PointsMaterial({
+      size: 0.065, vertexColors: true, transparent: true, opacity: 0.55
+    })));
+
+    // Antena RTP
+    this.buildRTPAntenna();
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TELEFERICO
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  private buildTeleferico() {
+    // Los cables bajan desde el borde de El Alto (y=-2, z=+8)
+    // hasta el fondo del cuenco (y=-9, z=-6) siguiendo la pendiente
+    const lines = [
+      {
+        start: new THREE.Vector3(-15, -2, 9),
+        ctrl: new THREE.Vector3(-11, -5, -1),
+        end: new THREE.Vector3(-7, -9, -7),
+        color: 0xDD2211, n: 5
+      },
+      {
+        start: new THREE.Vector3(0, -2, 11),
+        ctrl: new THREE.Vector3(1, -5, 1),
+        end: new THREE.Vector3(3, -9, -5),
+        color: 0xFFCC00, n: 4
+      },
+      {
+        start: new THREE.Vector3(15, -2, 9),
+        ctrl: new THREE.Vector3(11, -5, -1),
+        end: new THREE.Vector3(8, -9, -7),
+        color: 0x1155CC, n: 5
+      },
+    ];
+
+    lines.forEach(l => {
+      const curve = new THREE.QuadraticBezierCurve3(l.start, l.ctrl, l.end);
+      const pts = curve.getPoints(40);
+      const cGeo = new THREE.BufferGeometry().setFromPoints(pts);
+      this.scene.add(new THREE.Line(cGeo, new THREE.LineBasicMaterial({
+        color: 0x2a3a55, opacity: 0.65, transparent: true
+      })));
+
+      for (let g = 0; g < l.n; g++) {
+        const gondola = new THREE.Mesh(
+          new THREE.BoxGeometry(0.32, 0.25, 0.52),
+          new THREE.MeshPhongMaterial({ color: l.color, emissive: l.color, emissiveIntensity: 0.4 })
+        );
+        gondola.position.copy(curve.getPoint(g / l.n));
+        this.scene.add(gondola);
+        this.gondolas.push({ mesh: gondola, t: g / l.n, speed: 0.0006 + Math.random() * 0.0003, curve });
+      }
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ANTENA RTP
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  private buildRTPAntenna() {
+    const g = new THREE.Group();
+    g.position.set(-7, -2, 7); // en el borde de El Alto
+
+    g.add(Object.assign(new THREE.Mesh(
+      new THREE.CylinderGeometry(0.03, 0.055, 5.5, 5),
+      new THREE.MeshPhongMaterial({ color: 0x223344 })
+    )));
+
+    [-2, -0.5, 1, 2.2].forEach(yo => {
+      const arm = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.018, 0.018, 1.6, 4),
+        new THREE.MeshPhongMaterial({ color: 0x223344 })
+      );
+      arm.rotation.z = Math.PI / 2;
+      arm.position.y = yo;
+      g.add(arm);
     });
 
-    // 2. Título aparece con fade + slide
-    tl.to(titleWrap, {
-      opacity: 1,
-      duration: 1.2,
-      ease: 'power2.out'
-    }, '-=1');
+    this.antennaMat = new THREE.MeshBasicMaterial({ color: 0xFF2200 });
+    const tip = new THREE.Mesh(new THREE.SphereGeometry(0.1, 6, 6), this.antennaMat);
+    tip.position.y = 2.85;
+    g.add(tip);
 
-    tl.from(this.titleRef.nativeElement, {
-      y: 30,
-      duration: 1.2,
-      ease: 'power3.out'
-    }, '<');
-
-    tl.from(this.subRef.nativeElement, {
-      y: 15,
-      opacity: 0,
-      duration: 1,
-      ease: 'power2.out'
-    }, '-=0.6');
-
-    // 3. Robot desciende del cielo
-    tl.to(this.robotGroup.position, {
-      y: 0.5,
-      duration: 2.5,
-      ease: 'power3.inOut'
-    }, '-=0.5');
-
-    tl.to(this.robotGroup.rotation, {
-      y: Math.PI * 0.15,
-      duration: 2.5,
-      ease: 'power2.out'
-    }, '<');
+    this.scene.add(g);
   }
+
+  private startAntennaFlicker() {
+    let on = true;
+    setInterval(() => {
+      on = !on;
+      if (this.antennaMat) this.antennaMat.color.set(on ? 0xFF2200 : 0x3a0000);
+    }, 900);
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ESTRELLAS del altiplano
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  private buildStars() {
+    const N = 5500;
+    const pos = new Float32Array(N * 3);
+    const col = new Float32Array(N * 3);
+
+    for (let i = 0; i < N; i++) {
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.random() * Math.PI * 0.46;
+      const r = 190;
+      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      pos[i * 3 + 1] = r * Math.cos(phi) + 10;
+      pos[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+
+      const warm = Math.random() < 0.12;
+      col[i * 3] = warm ? 1.0 : 0.85 + Math.random() * 0.15;
+      col[i * 3 + 1] = warm ? 0.8 : 0.9 + Math.random() * 0.1;
+      col[i * 3 + 2] = warm ? 0.4 : 1.0;
+    }
+
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    this.scene.add(new THREE.Points(geo, new THREE.PointsMaterial({
+      size: 0.13, vertexColors: true, transparent: true,
+      opacity: 0.92, sizeAttenuation: false
+    })));
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ATMOSFERA
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  private buildAtmosphere() {
+    // Glow naranja-ambar que sube del cuenco — efecto real de La Paz de noche
+    const glowGeo = new THREE.SphereGeometry(22, 16, 8, 0, Math.PI * 2, 0, Math.PI * 0.42);
+    const glowMat = new THREE.MeshBasicMaterial({
+      color: 0xFF5500, transparent: true, opacity: 0.022, side: THREE.BackSide
+    });
+    const glow = new THREE.Mesh(glowGeo, glowMat);
+    glow.position.set(0, -7, -5);
+    this.scene.add(glow);
+
+    // Linea de horizonte tenue
+    const hGeo = new THREE.PlaneGeometry(200, 2);
+    const hMat = new THREE.MeshBasicMaterial({
+      color: 0xFF7733, transparent: true, opacity: 0.015, side: THREE.DoubleSide
+    });
+    const h = new THREE.Mesh(hGeo, hMat);
+    h.position.set(0, 3, -32);
+    this.scene.add(h);
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // INTRO
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  private playIntro() {
+    this.camera.position.set(0, 30, 52);
+    this.camera.lookAt(0, -6, -8);
+
+    const titleWrap = this.titleRef.nativeElement.closest('.hero__title-wrap') as HTMLElement;
+    const subEl = this.subRef.nativeElement as HTMLElement;
+    const signalEl = this.signalRef.nativeElement as HTMLElement;
+    const channelEl = this.channelRef.nativeElement as HTMLElement;
+
+    gsap.set([titleWrap, signalEl, channelEl], { opacity: 0 });
+    gsap.set(subEl, { opacity: 0, y: 20 });
+
+    const tl = gsap.timeline({ delay: 0.3 });
+
+    // Descenso de camara: como bajar en el teleferico desde El Alto
+    tl.to(this.camera.position, { x: 0, y: 14, z: 22, duration: 5, ease: 'power2.inOut' });
+
+    // Flash Canal 4
+    tl.to(channelEl, { opacity: 1, duration: 0.08 }, 1.0);
+    tl.to(channelEl, { opacity: 0, duration: 0.08 }, 1.7);
+    tl.to(channelEl, { opacity: 1, duration: 0.08 }, 1.9);
+    tl.to(channelEl, { opacity: 0, duration: 0.3 }, 2.5);
+
+    // Titulo
+    tl.to(titleWrap, { opacity: 1, duration: 0.06 }, 2.8);
+    tl.from(this.titleRef.nativeElement, { y: 25, duration: 1.1, ease: 'power3.out' }, 2.8);
+
+    // Subtitulo
+    tl.to(subEl, { opacity: 0.8, y: 0, duration: 1, ease: 'power2.out' }, 3.6);
+
+    // Signal
+    tl.to(signalEl, { opacity: 1, duration: 0.8 }, 4.1);
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // GLITCH
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  private startGlitch() {
+    const el = this.titleRef.nativeElement as HTMLElement;
+    this.glitchInterval = setInterval(() => {
+      if (Math.random() > 0.65) return;
+      el.classList.add('glitch-active');
+      setTimeout(() => el.classList.remove('glitch-active'), 60 + Math.random() * 110);
+    }, 2500 + Math.random() * 5000);
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MOUSE PARALLAX
+  // ═══════════════════════════════════════════════════════════════════════════
 
   private setupMouseParallax() {
     window.addEventListener('mousemove', (e) => {
@@ -314,109 +606,47 @@ export class HeroComponent implements OnInit, OnDestroy {
     });
   }
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // RENDER LOOP
+  // ═══════════════════════════════════════════════════════════════════════════
+
   private render() {
-    this.particles.rotation.y += 0.0002;
-    this.camera.position.x += (this.mouse.x * 1.5 - this.camera.position.x) * 0.02;
-    // parallax Y solo después del intro
-    this.camera.lookAt(0, 2, 0);
-    this.renderer.render(this.scene, this.camera);
-    if (this.robotGroup) {
-      this.robotGroup.position.y = 0.5 + Math.sin(Date.now() * 0.001) * 0.15;
+    // Gondolas se mueven por los cables
+    this.gondolas.forEach(g => {
+      g.t = (g.t + g.speed) % 1;
+      g.mesh.position.copy(g.curve.getPoint(g.t));
+    });
+
+    // Parpadeo sutil de luces de ciudad (efecto de tension electrica)
+    if (this.cityLights && Math.random() > 0.985) {
+      (this.cityLights.material as THREE.PointsMaterial).opacity = 0.82 + Math.random() * 0.14;
     }
+
+    // Parallax suave de camara
+    this.camera.position.x += (this.mouse.x * 1.1 - this.camera.position.x) * 0.011;
+    this.camera.position.y += (-this.mouse.y * 0.4 + 14 - this.camera.position.y) * 0.011;
+    this.camera.lookAt(0, -6, -8);
+
+    this.renderer.render(this.scene, this.camera);
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // UTILS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  private jitterGeo(geo: THREE.BufferGeometry, amount: number, threshold = 0.45) {
+    const pos = geo.attributes['position'] as THREE.BufferAttribute;
+    for (let i = 0; i < pos.count; i++) {
+      if (pos.getY(i) < threshold) {
+        pos.setX(i, pos.getX(i) + (Math.random() - 0.5) * amount);
+        pos.setZ(i, pos.getZ(i) + (Math.random() - 0.5) * amount);
+      }
+    }
+    geo.computeVertexNormals();
   }
 
   ngOnDestroy() {
+    clearInterval(this.glitchInterval);
     this.threeService.destroy();
-  }
-
-
-  private robotGroup!: THREE.Group;
-
-  private createRobot() {
-    this.robotGroup = new THREE.Group();
-
-    const metalMat = new THREE.MeshPhongMaterial({
-      color: 0x223344, flatShading: true, shininess: 80
-    });
-    const goldMat = new THREE.MeshPhongMaterial({
-      color: 0xE5C100, flatShading: true,
-      emissive: 0xE5C100, emissiveIntensity: 0.3
-    });
-    const reactorMat = new THREE.MeshPhongMaterial({
-      color: 0x00BFFF,
-      emissive: 0x00BFFF,
-      emissiveIntensity: 1.5,
-      transparent: true,
-      opacity: 0.9
-    });
-
-    // Cuerpo
-    const body = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.5, 0.7), metalMat);
-    this.robotGroup.add(body);
-
-    // Pecho reactor
-    const reactor = new THREE.Mesh(new THREE.SphereGeometry(0.25, 8, 8), reactorMat);
-    reactor.position.set(0, 0.1, 0.36);
-    this.robotGroup.add(reactor);
-
-    // Hombros
-    [-0.85, 0.85].forEach(x => {
-      const shoulder = new THREE.Mesh(new THREE.SphereGeometry(0.28, 6, 6), metalMat);
-      shoulder.position.set(x, 0.6, 0);
-      this.robotGroup.add(shoulder);
-
-      // Brazos
-      const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.12, 1.0, 6), metalMat);
-      arm.position.set(x, -0.1, 0);
-      this.robotGroup.add(arm);
-
-      // Detalles dorados en hombros
-      const detail = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.08, 0.35), goldMat);
-      detail.position.set(x, 0.6, 0);
-      this.robotGroup.add(detail);
-    });
-
-    // Cabeza
-    const head = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.7, 0.65), metalMat);
-    head.position.y = 1.2;
-    this.robotGroup.add(head);
-
-    // Visera
-    const visor = new THREE.Mesh(
-      new THREE.BoxGeometry(0.55, 0.18, 0.1),
-      new THREE.MeshPhongMaterial({ color: 0x00BFFF, emissive: 0x00BFFF, emissiveIntensity: 2 })
-    );
-    visor.position.set(0, 1.22, 0.33);
-    this.robotGroup.add(visor);
-
-    // Antena
-    const antenna = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.5, 4), goldMat);
-    antenna.position.set(0.2, 1.75, 0);
-    this.robotGroup.add(antenna);
-
-    const antennaTip = new THREE.Mesh(new THREE.SphereGeometry(0.06, 6, 6), reactorMat);
-    antennaTip.position.set(0.2, 2.02, 0);
-    this.robotGroup.add(antennaTip);
-
-    // Piernas
-    [-0.3, 0.3].forEach(x => {
-      const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.14, 1.1, 6), metalMat);
-      leg.position.set(x, -1.3, 0);
-      this.robotGroup.add(leg);
-
-      const foot = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.18, 0.5), metalMat);
-      foot.position.set(x, -1.92, 0.08);
-      this.robotGroup.add(foot);
-    });
-
-    // Luz del reactor
-    const reactorLight = new THREE.PointLight(0x00BFFF, 3, 4);
-    reactorLight.position.set(0, 0.1, 1);
-    this.robotGroup.add(reactorLight);
-
-    // Posición inicial: arriba del cielo
-    this.robotGroup.position.set(0, 25, 2);
-    this.robotGroup.scale.setScalar(0.8);
-    this.scene.add(this.robotGroup);
   }
 }
