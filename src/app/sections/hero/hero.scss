@@ -1,0 +1,264 @@
+// ─── Variables (new character-based palette) ─────────────────────────────────
+$steel:    #4A4F58;  // Acero forjado
+$cyan:     #88C0D0;  // Celeste andino
+$bronze:   #C5A059;  // Latón / Bronce
+$warm:     #A67B5B;  // Madera
+$snow:     #F5F3ED;  // Texto claro
+$dark:     #5A5550;  // Gris cálido/Cuero
+$bg-main:  #E5E0D8;  // Pergamino/Piedra clara
+$steel-dk: #2A2C31;  // Texto oscuro
+$steel-md: #717580;  // Texto secundario
+$energy:   #4FE0C8;  // Turquesa energía
+
+// ─── Hero container ───────────────────────────────────────────────────────────
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: $bg-main;
+
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// ─── Scanlines (CRT / old TV effect — homage to Canal 4) ─────────────────────
+.hero__scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.06) 3px,
+    rgba(0, 0, 0, 0.06) 4px
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+// ─── Noise / static ───────────────────────────────────────────────────────────
+.hero__noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 3;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  animation: noiseAnim 0.15s steps(1) infinite;
+}
+
+@keyframes noiseAnim {
+  0%  { transform: translate(0,    0   ); }
+  20% { transform: translate(-3px,  2px); }
+  40% { transform: translate( 2px, -3px); }
+  60% { transform: translate(-1px,  4px); }
+  80% { transform: translate( 3px, -1px); }
+  100%{ transform: translate(0,    0   ); }
+}
+
+// ─── Channel ID (Canal 4 flashcard) ──────────────────────────────────────────
+.hero__channel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0; // controlled by GSAP
+
+  &-num {
+    display: block;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 8vw, 7rem);
+    font-weight: 900;
+    color: $bronze;
+    letter-spacing: 0.3em;
+    text-shadow: 0 0 60px rgba($bronze, 0.8);
+  }
+
+  &-city {
+    display: block;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(0.5rem, 1.5vw, 0.9rem);
+    color: $steel-dk;
+    letter-spacing: 0.5em;
+    opacity: 0.6;
+    margin-top: 0.5rem;
+  }
+}
+
+// ─── Main overlay ─────────────────────────────────────────────────────────────
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr 1fr;
+  padding: 4vh 4vw;
+  pointer-events: none;
+  z-index: 5;
+}
+
+// ─── Broadcast indicator (top-left) ──────────────────────────────────────────
+.hero__broadcast {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  grid-column: 1;
+  grid-row: 1;
+
+  &-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #FF2200;
+    box-shadow: 0 0 8px #FF2200;
+    animation: blink 1.2s ease-in-out infinite;
+  }
+
+  &-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #FF2200;
+    letter-spacing: 0.25em;
+  }
+
+  &-year {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.55rem;
+    color: rgba($snow, 0.3);
+    letter-spacing: 0.3em;
+    margin-left: 0.5rem;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.15; }
+}
+
+// ─── Title block (bottom, centered) ─────────────────────────────────────────
+.hero__title-wrap {
+  grid-column: 1 / 3;
+  grid-row: 3;
+  text-align: center;
+  opacity: 0; // GSAP controlled
+  padding-bottom: 6vh;
+}
+
+.hero__eyebrow {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(0.4rem, 0.9vw, 0.65rem);
+  letter-spacing: 0.45em;
+  color: rgba($cyan, 0.6);
+  margin-bottom: 1.2rem;
+}
+
+.hero__title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2rem, 6vw, 5.5rem);
+  font-weight: 900;
+  color: $steel-dk;
+  line-height: 1.05;
+  letter-spacing: 0.12em;
+  text-shadow:
+    0 0 30px rgba($snow, 0.8),
+    0 0 80px rgba($cyan, 0.5);
+  position: relative;
+
+  &--num {
+    // The "3000" gets the glitch treatment
+    display: inline-block;
+    color: $cyan;
+    text-shadow:
+      0 0 20px rgba($cyan, 0.5),
+      0 0 60px rgba($energy, 0.2);
+  }
+}
+
+// ─── Glitch effect ────────────────────────────────────────────────────────────
+.hero__title.glitch-active {
+  animation: glitch 0.12s steps(2) forwards;
+
+  &::before,
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+  }
+
+  &::before {
+    color: $cyan;
+    clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+    transform: translateX(-3px);
+    opacity: 0.8;
+  }
+
+  &::after {
+    color: $energy;
+    clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
+    transform: translateX(3px);
+    opacity: 0.8;
+  }
+}
+
+@keyframes glitch {
+  0%  { transform: translate(0);       filter: none; }
+  25% { transform: translate(-3px, 1px); filter: hue-rotate(90deg) saturate(2); }
+  50% { transform: translate(2px, -1px); filter: hue-rotate(-90deg); }
+  75% { transform: translate(-1px, 2px); filter: none; }
+  100%{ transform: translate(0);       filter: none; }
+}
+
+// ─── Subtitle ─────────────────────────────────────────────────────────────────
+.hero__sub {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(0.65rem, 1.3vw, 1rem);
+  font-weight: 300;
+  color: $steel-dk;
+  letter-spacing: 0.55em;
+  margin-top: 1rem;
+  opacity: 0; // GSAP controlled
+  text-transform: uppercase;
+}
+
+// ─── Signal / coords (bottom-right) ──────────────────────────────────────────
+.hero__signal {
+  grid-column: 2;
+  grid-row: 3;
+  text-align: right;
+  align-self: end;
+  opacity: 0; // GSAP controlled
+  padding-bottom: 6vh;
+
+  &-coords,
+  &-alt {
+    display: block;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.25em;
+    color: rgba($cyan, 0.45);
+    line-height: 2;
+  }
+}
+
+// ─── Vignette ─────────────────────────────────────────────────────────────────
+.hero__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(90, 85, 80, 0.4) 100%
+  );
+  pointer-events: none;
+  z-index: 4;
+}
