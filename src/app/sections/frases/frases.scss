@@ -1,0 +1,293 @@
+// ─── Color Palette ───
+$bg-dark: #E5E0D8;
+$steel-primary: #4A4F58;
+$cyan-ice: #88C0D0;
+$bronze: #C5A059;
+$warm-gold: #A67B5B;
+$snow: #2A2C31;
+$steel-dark: #717580;
+$steel-mid: #5A5550;
+$energy: #4FE0C8;
+
+// ─── Section Wrapper ───
+.frases-section {
+  position: relative;
+  width: 100%;
+  height: 500vh;
+  background: $bg-dark;
+  overflow: hidden;
+}
+
+// ─── Sticky Container ───
+.frases-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// ─── Background Noise Texture ───
+.frases-bg-noise {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.04;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+// ─── Scan Lines ───
+.frases-scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba($bronze, 0.05) 2px,
+    rgba($bronze, 0.05) 4px
+  );
+}
+
+// ─── Pulsing Vertical Cyan Line ───
+.frase-pulse-line {
+  position: absolute;
+  left: 60px;
+  top: 10%;
+  bottom: 10%;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    $cyan-ice 20%,
+    $cyan-ice 80%,
+    transparent 100%
+  );
+  opacity: 0.7;
+  z-index: 2;
+  box-shadow: 0 0 8px rgba($cyan-ice, 0.4),
+              0 0 20px rgba($cyan-ice, 0.15);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $cyan-ice;
+    box-shadow: 0 0 12px $cyan-ice;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $cyan-ice;
+    box-shadow: 0 0 12px $cyan-ice;
+  }
+}
+
+// ─── Quote Panel ───
+.frase-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  z-index: 3;
+}
+
+// ─── Panel Content ───
+.frase-content {
+  position: relative;
+  max-width: 900px;
+  width: 90%;
+  padding-left: 80px;
+}
+
+// ─── Transmission Tag ───
+.frase-tag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 3px;
+  color: $steel-mid;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  padding-left: 4px;
+}
+
+.frase-tag-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: $cyan-ice;
+  box-shadow: 0 0 8px $cyan-ice, 0 0 16px rgba($cyan-ice, 0.4);
+  animation: frase-dot-blink 2s ease-in-out infinite;
+}
+
+@keyframes frase-dot-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+// ─── Number + Horizontal Line ───
+.frase-number-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.frase-number {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(4rem, 8vw, 7rem);
+  font-weight: 900;
+  color: transparent;
+  -webkit-text-stroke: 1.5px $bronze;
+  line-height: 1;
+  letter-spacing: 4px;
+  user-select: none;
+  text-shadow: 0 0 40px rgba($bronze, 0.3);
+}
+
+.frase-line-h {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    $steel-dark 0%,
+    rgba($steel-dark, 0.3) 60%,
+    transparent 100%
+  );
+  transform-origin: left center;
+}
+
+// ─── Quote Text ───
+.frase-quote {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.5rem, 3.5vw, 2.8rem);
+  font-weight: 700;
+  color: $snow;
+  line-height: 1.3;
+  letter-spacing: 2px;
+  margin: 0 0 20px 0;
+  text-shadow:
+    0 0 20px rgba($cyan-ice, 0.4),
+    0 0 40px rgba($cyan-ice, 0.2);
+  position: relative;
+
+  // Glitch decoration line
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: $cyan-ice;
+    box-shadow: 0 0 8px rgba($cyan-ice, 0.5);
+  }
+}
+
+// ─── Subtitle ───
+.frase-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: $steel-mid;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin: 28px 0 0 0;
+  padding-left: 2px;
+}
+
+// ─── Bottom Signal Bar ───
+.frase-bottom-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid rgba($steel-dark, 0.2);
+  justify-content: space-between;
+}
+
+.frase-signal-icon {
+  color: $energy;
+  font-size: 0.75rem;
+  animation: frase-signal-pulse 3s ease-in-out infinite;
+}
+
+@keyframes frase-signal-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.9); }
+}
+
+.frase-signal-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 400;
+  letter-spacing: 4px;
+  color: rgba($steel-mid, 0.5);
+  text-transform: uppercase;
+}
+
+// ─── Responsive ───
+@media (max-width: 768px) {
+  .frase-pulse-line {
+    left: 20px;
+  }
+
+  .frase-content {
+    padding-left: 40px;
+  }
+
+  .frase-number {
+    font-size: clamp(3rem, 12vw, 5rem);
+  }
+
+  .frase-tag {
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+  }
+
+  .frase-subtitle {
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .frase-pulse-line {
+    left: 12px;
+  }
+
+  .frase-content {
+    padding-left: 24px;
+  }
+
+  .frase-quote {
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
+  }
+
+  .frase-number-wrapper {
+    gap: 12px;
+  }
+}

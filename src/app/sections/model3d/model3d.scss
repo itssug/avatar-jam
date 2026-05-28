@@ -1,0 +1,137 @@
+:host {
+  display: block;
+}
+
+.model3d-fixed-background {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important;
+  z-index: 2 !important; // en medio: encima de los fondos de secciones, debajo de los paneles de texto
+  opacity: 0; // controlado por GSAP ScrollTrigger
+}
+
+.renderer-container {
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+}
+
+.renderer-container canvas {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+}
+
+// ── HACER TRANSPARENTES LOS FONDOS DE LAS SECCIONES ──────────────────────────
+::ng-deep {
+  .story-wrapper, 
+  .frases-section, 
+  .transform-wrapper {
+    background: transparent !important;
+  }
+}
+
+// ── BADGE DE CARGA HUD (SUTIL Y MODERNO) ──────────────────────────────────────
+.loading-badge {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(18, 20, 24, 0.9);
+  border: 1px solid #c5a059;
+  border-radius: 4px;
+  padding: 0.8rem 1.4rem;
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 
+    0 10px 35px rgba(0, 0, 0, 0.6),
+    inset 0 0 10px rgba(136, 192, 208, 0.05);
+  pointer-events: none;
+  animation: badgeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hud-scanner-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #88c0d0;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #88c0d0;
+  animation: hudPulse 1.2s infinite ease-in-out;
+}
+
+.hud-scanner-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #f5f3ed;
+}
+
+// Error Badge
+.error-badge {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(40, 10, 10, 0.95);
+  border: 1px solid #ff5555;
+  border-radius: 4px;
+  padding: 0.8rem 1.4rem;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+.error-icon {
+  font-size: 1.1rem;
+}
+
+.error-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ff5555;
+}
+
+// ── ANIMACIONES ──────────────────────────────────────────────────────────────
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinReverse {
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes hudPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(136, 192, 208, 0);
+  }
+  50% {
+    transform: scale(1.25);
+    box-shadow: 0 0 10px #88c0d0;
+  }
+}
+
+@keyframes badgeSlideIn {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

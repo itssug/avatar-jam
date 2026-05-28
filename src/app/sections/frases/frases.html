@@ -1,0 +1,58 @@
+<section class="frases-section" #frasesSection>
+
+  <!-- Sticky viewport container -->
+  <div class="frases-sticky">
+
+    <!-- Background effects -->
+    <div class="frases-bg-noise"></div>
+    <div class="frases-scanlines"></div>
+
+    <!-- Pulsing vertical cyan line -->
+    <div class="frase-pulse-line"></div>
+
+    <!-- Quote panels -->
+    @for (frase of frases; track frase.id) {
+      <div class="frase-panel frase-panel-{{ frase.id }}">
+
+        <div class="frase-content">
+
+          <!-- Top-left transmission tag -->
+          <div class="frase-tag">
+            <span class="frase-tag-dot"></span>
+            {{ frase.tag }}
+          </div>
+
+          <!-- Large outline number -->
+          <div class="frase-number-wrapper">
+            <span class="frase-number">{{ frase.id | number: '2.0-0' }}</span>
+            <!-- Horizontal decorative line -->
+            <div class="frase-line-h"></div>
+          </div>
+
+          <!-- Quote text -->
+          <h2 class="frase-quote">{{ frase.quote }}</h2>
+
+          <!-- Subtitle -->
+          <p class="frase-subtitle">— {{ frase.subtitle }}</p>
+
+          <!-- Bottom decorative bar with button -->
+          <div class="frase-bottom-bar">
+            <div>
+              <span class="frase-signal-icon">◈</span>
+              <span class="frase-signal-text">SEÑAL ACTIVA</span>
+            </div>
+            <button class="btn-medieval">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              ESCUCHAR ARCHIVO
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    }
+
+  </div>
+</section>
