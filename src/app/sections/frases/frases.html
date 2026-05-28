@@ -26,18 +26,13 @@
         {{ frase.tag }}
       </div>
 
-      <!--
-        ── NÚMERO + LÍNEA HORIZONTAL ──
-        frase-number va primero (izquierda), frase-line-h llena el resto.
-        El wrapper es display:flex → los hijos se alinean horizontalmente.
-        El quote viene DESPUÉS del wrapper, en su propia línea (display:block).
-      -->
+      <!-- NÚMERO + LÍNEA HORIZONTAL -->
       <div class="frase-number-wrapper">
         <span class="frase-number">0{{ frase.id }}</span>
         <div class="frase-line-h"></div>
       </div>
 
-      <!-- Título principal — bloque separado, debajo del número -->
+      <!-- Título principal -->
       <h3 class="frase-quote">{{ frase.quote }}</h3>
 
       <!-- Descripción -->
@@ -54,34 +49,30 @@
           </div>
         </div>
 
-        <!--
-          Controles: orden del flex →
-            [0] botón play   (izquierda, flex-shrink:0)
-            [1] meta label   (centro,    flex:1)
-            [2] waveform     (derecha,   flex-shrink:0)
-        -->
+        <!-- Controles -->
         <div class="frase-audio-controls">
 
-          <!-- [0] Botón play/pause — SIEMPRE a la izquierda via order:0 -->
+          <!-- Botón play/pause adaptado a "ESCUCHAR ARCHIVO" -->
           <button class="frase-play-btn" (click)="toggleAudio(frase)"
             [attr.aria-label]="activeAudioId === frase.id ? 'Pausar audio' : 'Reproducir audio'">
             <span class="frase-play-icon">
               @if (activeAudioId === frase.id) {
-              <!-- Icono Pausa -->
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="3" y="2" width="3.5" height="12" rx="1" fill="currentColor" />
-                <rect x="9.5" y="2" width="3.5" height="12" rx="1" fill="currentColor" />
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="2" width="3.5" height="12" fill="currentColor" />
+                <rect x="9.5" y="2" width="3.5" height="12" fill="currentColor" />
               </svg>
               } @else {
-              <!-- Icono Play -->
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 2.5L13 8L4 13.5V2.5Z" fill="currentColor" />
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 3L13 8L5 13V3Z" fill="currentColor" />
               </svg>
               }
             </span>
+            <span class="frase-play-text">
+              @if (activeAudioId === frase.id) { PAUSAR ARCHIVO } @else { ESCUCHAR ARCHIVO }
+            </span>
           </button>
 
-          <!-- [1] Etiqueta + tiempo — centro -->
+          <!-- Etiqueta + tiempo -->
           <div class="frase-audio-meta">
             <span class="frase-audio-label">{{ frase.audioLabel }}</span>
             <span class="frase-audio-time">
@@ -93,7 +84,7 @@
             </span>
           </div>
 
-          <!-- [2] Ondas sonoras — derecha -->
+          <!-- Ondas sonoras -->
           <div class="frase-waveform" [class.frase-waveform-playing]="activeAudioId === frase.id">
             <span></span><span></span><span></span><span></span><span></span>
           </div>
@@ -113,5 +104,4 @@
     }
 
   </div>
-
 </section>
