@@ -24,15 +24,16 @@ export class TransformacionComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     const section = this.transformSection.nativeElement;
-    const transmutationContainer = section.querySelector('.transmutation-scroll-container');
+    const phasesContainer = section.querySelector('.phases-pin-container');
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: transmutationContainer,
+        trigger: phasesContainer,
         start: 'top top',
-        end: 'bottom bottom',
+        end: () => '+=' + (window.innerHeight * 4),
         scrub: 1,
-        pin: false
+        pin: true,
+        anticipatePin: 1,
       }
     });
 
@@ -45,21 +46,21 @@ export class TransformacionComponent implements AfterViewInit {
     // RECUADRO 1 (Primero)
     // Cae desde arriba (-150px) hasta el centro (0px)
     tl.fromTo('.phase-1 .box-1', { y: -150, opacity: 0, pointerEvents: 'none' }, { y: 0, opacity: 1, pointerEvents: 'auto', duration: 2, ease: 'power2.out' }, '<0.3');
-    tl.to(section, { duration: 3.5 }); // hold Box 1
+    tl.to({}, { duration: 3.5 }); // hold Box 1
     // Box 1 continúa bajando hacia la salida (+100px) y se desvanece
     tl.to('.phase-1 .box-1', { y: 100, opacity: 0, pointerEvents: 'none', duration: 1.5 });
 
     // RECUADRO 2 (Segundo)
     // Cae desde arriba (-150px) hasta el centro (0px)
     tl.fromTo('.phase-1 .box-2', { y: -150, opacity: 0, pointerEvents: 'none' }, { y: 0, opacity: 1, pointerEvents: 'auto', duration: 2, ease: 'power2.out' }, '<0.2');
-    tl.to(section, { duration: 3.5 }); // hold Box 2
+    tl.to({}, { duration: 3.5 }); // hold Box 2
     // Box 2 continúa bajando hacia la salida (+100px) y se desvanece
     tl.to('.phase-1 .box-2', { y: 100, opacity: 0, pointerEvents: 'none', duration: 1.5 });
 
     // RECUADRO 3 (Tercero)
     // Cae desde arriba (-150px) hasta el centro (0px)
     tl.fromTo('.phase-1 .box-3', { y: -150, opacity: 0, pointerEvents: 'none' }, { y: 0, opacity: 1, pointerEvents: 'auto', duration: 2, ease: 'power2.out' }, '<0.2');
-    tl.to(section, { duration: 3.5 }); // hold Box 3
+    tl.to({}, { duration: 3.5 }); // hold Box 3
     
     // --- PARTE 2: LA GRAN TRANSMUTACIÓN CYBERPUNK ---
     // Todo lo de la Fase 1 desaparece (incluyendo el título y Box 3)
@@ -69,14 +70,14 @@ export class TransformacionComponent implements AfterViewInit {
     tl.fromTo('.phase-2', { opacity: 0 }, { opacity: 1, duration: 1.5 }, '<0.2');
     tl.fromTo('.hud-ring', { scale: 0.5 }, { scale: 1, duration: 1.5 }, '<');
     tl.fromTo('.hud-ring-inner', { scale: 0.5 }, { scale: 1, duration: 1.5 }, '<');
-    tl.to(section, { duration: 3.5 }); // hold transmutación
+    tl.to({}, { duration: 3.5 }); // hold transmutación
     tl.to('.phase-2', { opacity: 0, duration: 1.5 });
 
     // --- PARTE 3: EL HÉROE REVELADO (EL COMPADRE 3000) ---
     // Fase 3 entra (El Compadre 3000)
     tl.fromTo('.phase-3', { opacity: 0 }, { opacity: 1, duration: 1.5 });
     tl.fromTo('.phase-3 .phase-title--hero', { scale: 0.8 }, { scale: 1, duration: 1.5 }, '<');
-    tl.to(section, { duration: 5 }); // queda fijo y espectacular al final
+    tl.to({}, { duration: 5 }); // queda fijo y espectacular al final
 
     // --- PARTE 4: CONTENEDORES SCROLL-FADE-BOX EN EVOLUCIÓN ---
     gsap.utils.toArray('.transform-wrapper .scroll-fade-box').forEach((box: any) => {
