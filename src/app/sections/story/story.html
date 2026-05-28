@@ -5,182 +5,73 @@
   <div class="story-noise"></div>
   <div class="story-grid"></div>
 
-  <!-- AÑO -->
+  <!-- AÑO HOLOGRÁFICO DE FONDO -->
   <div #bgYear class="giant-year">1988</div>
 
-  <!-- LINE -->
-  <div class="vertical-line"></div>
-
-  <!-- IMAGES -->
-  <div class="floating-image image-1">
-    <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=1200&auto=format&fit=crop" alt="">
+  <!-- TÍTULO DE LA SECCIÓN -->
+  <div class="section-header-hud" style="text-align: center; margin-bottom: 4rem; position: relative; z-index: 10; padding-top: 5vh;">
+    <span style="font-family: 'Orbitron'; font-size: 0.8rem; color: var(--color-accent); letter-spacing: 0.4em; text-transform: uppercase;">// SISTEMA OPERATIVO</span>
+    <h2 style="font-family: 'Orbitron'; font-size: clamp(2.5rem, 5vw, 3.5rem); color: var(--text-light); margin: 0.5rem 0; letter-spacing: 0.1em; text-shadow: 0 0 15px rgba(136,192,208,0.25);">02 HISTORIA</h2>
+    <div style="width: 60px; height: 2px; background: var(--color-accent); margin: 0.5rem auto 0 auto; opacity: 0.6;"></div>
   </div>
 
-  <div class="floating-image image-2">
-    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop" alt="">
-  </div>
-
-  <div class="floating-image image-3">
-    <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=1200&auto=format&fit=crop" alt="">
-  </div>
-
-  <div class="floating-image image-4">
-    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" alt="">
-  </div>
-
-  <!-- PANELS -->
-
-  <!-- PANEL 1: FICHA DE PERSONAJE -->
-  <div class="panel panel-1">
-
-    <div class="panel-content left-layout">
-
-      <div class="panel-tag">
-        FICHA DE AVATAR // COLLASUYO
-      </div>
-
-      <h2 class="story-line" style="font-size: clamp(2rem, 4.5vw, 4.2rem);">
-        LORD CARLOS<br>
-        "EL COMPADRE"
-      </h2>
-
-      <!-- RPG Stats Sheet inside Panel 1 -->
-      <div class="main-stats-display" style="margin: 1.5rem 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; background: rgba(18, 20, 24, 0.6); padding: 1.2rem; border: 1px solid rgba(168, 178, 193, 0.25); border-radius: 4px; backdrop-filter: blur(10px); pointer-events: auto;">
-        <div style="display:flex; flex-direction:column; gap:2px;">
-          <span style="font-family:'Orbitron'; font-size:0.6rem; color:#88C0D0; letter-spacing:0.1em;">TÍTULO</span>
-          <span style="font-family:'Inter'; font-size:0.85rem; color:#FFF;">El Compadre del Illimani</span>
-        </div>
-        <div style="display:flex; flex-direction:column; gap:2px;">
-          <span style="font-family:'Orbitron'; font-size:0.6rem; color:#88C0D0; letter-spacing:0.1em;">REINO</span>
-          <span style="font-family:'Inter'; font-size:0.85rem; color:#FFF;">Valle de La Paz</span>
-        </div>
-        <div style="display:flex; flex-direction:column; gap:2px;">
-          <span style="font-family:'Orbitron'; font-size:0.6rem; color:#88C0D0; letter-spacing:0.1em;">CLASE</span>
-          <span style="font-family:'Inter'; font-size:0.85rem; color:#A8B2C1;">Bardo / Paladín del Pueblo</span>
-        </div>
-        <div style="display:flex; flex-direction:column; gap:2px;">
-          <span style="font-family:'Orbitron'; font-size:0.6rem; color:#88C0D0; letter-spacing:0.1em;">SÍMBOLO SAGRADO</span>
-          <span style="font-family:'Inter'; font-size:0.85rem; color:#A8B2C1;">Radio Alada 732</span>
-        </div>
-      </div>
-
-      <p class="story-description" style="max-width: 580px; line-height: 1.7; font-size: 0.95rem;">
-        Lord Carlos no era rey por sangre, sino <strong>"Compadre" por elección sagrada del pueblo</strong>. Portaba el legendario <strong>Micrófono de Hierro</strong>, un cetro místico que amplificaba su voz a todos los confines del reino para romper el silencio del desposeído.
-      </p>
-
-    </div>
-
-  </div>
-
-  <!-- PANEL 2: LA TORRE Y SUS HAZAÑAS -->
-  <div class="panel panel-2">
-
-    <div class="center-layout" style="max-width: 900px; margin: 0 auto; pointer-events: auto;">
-
-      <div class="panel-tag">
-        HISTORIA DE TRASFONDO
-      </div>
-
-      <h2 class="palenque-name" style="font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.1; margin-bottom: 1rem;">
-        LA TORRE DE LAS VOCES
-      </h2>
-
-      <p class="quote" style="max-width: 750px; margin: 0 auto 2rem auto; font-size: 0.95rem; line-height: 1.7; color: #A8B2C1;">
-        En la era de los reinos divididos, Lord Carlos gobernaba no desde un castillo, sino desde una torre de radio hechizada en el corazón del Valle de La Paz, desatando conjuros y hazañas memorables:
-      </p>
-
-      <!-- Scrollable or grid list of deeds -->
-      <div class="deeds-showcase" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; text-align: left; background: rgba(14, 16, 22, 0.7); padding: 1.5rem; border: 1px solid rgba(168, 178, 193, 0.2); border-radius: 6px; backdrop-filter: blur(10px);">
-        <div>
-          <h4 style="font-family:'Orbitron'; font-size:0.8rem; color:#88C0D0; margin-bottom:4px;">// TRIBUNO DEL PUEBLO</h4>
-          <p style="font-size:0.8rem; line-height:1.5; color:#A8B2C1; margin:0;">Cada noche abría las puertas de su torre. Su hechizo <em>"Tribuna Libre"</em> rompía maldiciones de silencio de nobles corruptos.</p>
-        </div>
-        <div>
-          <h4 style="font-family:'Orbitron'; font-size:0.8rem; color:#88C0D0; margin-bottom:4px;">// SANADOR DE ALMAS</h4>
-          <p style="font-size:0.8rem; line-height:1.5; color:#A8B2C1; margin:0;">Con su canción <em>"Caminante de las Estrellas"</em>, curaba la desesperanza de los que sufrían en las minas y mercados.</p>
-        </div>
-        <div>
-          <h4 style="font-family:'Orbitron'; font-size:0.8rem; color:#88C0D0; margin-bottom:4px;">// FUNDADOR DE GREMIOS</h4>
-          <p style="font-size:0.8rem; line-height:1.5; color:#A8B2C1; margin:0;">Creó la <em>Red de Talleres del Pueblo (RTP)</em>: forjas, escuelas de juglares y casas de sanación abiertas para todos.</p>
-        </div>
-        <div>
-          <h4 style="font-family:'Orbitron'; font-size:0.8rem; color:#88C0D0; margin-bottom:4px;">// GUERRERO POLÍTICO</h4>
-          <p style="font-size:0.8rem; line-height:1.5; color:#A8B2C1; margin:0;">Se enfrentó al Consejo de los Barones del Estaño con su espada <em>"La Verdad"</em>, ganando batallas con su palabra.</p>
-        </div>
-      </div>
-
-      <div class="hud-action-container" style="margin-top: 1.5rem;">
-        <button class="btn-hud-expediente" (click)="openHistory('bio')">
-          <span class="hud-btn-glow"></span>
-          <span class="hud-btn-scanner"></span>
-          <span class="hud-btn-text">ABRIR BIOGRAFÍA HOLOGRÁFICA</span>
-        </button>
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- PANEL 3: EL AMOR DEL PUEBLO -->
-  <div class="panel panel-3">
-
-    <div class="center-layout" style="max-width: 900px; margin: 0 auto; pointer-events: auto;">
-
-      <p class="small-text">
-        POR QUÉ EL PUEBLO LO AMABA
-      </p>
-
-      <h1 class="compadre-title" style="font-size: clamp(3rem, 7vw, 6.5rem); line-height: 0.9; margin-bottom: 1.5rem;">
-        AMOR ETERNO
-      </h1>
-
-      <!-- Detailed bullet logs directly on screen -->
-      <div class="love-reasons-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: left; background: rgba(14, 16, 22, 0.7); padding: 1.5rem; border: 1px solid rgba(168, 178, 193, 0.2); border-radius: 6px; backdrop-filter: blur(10px); margin-bottom: 1.5rem;">
-        <div>
-          <h4 style="font-family:'Orbitron'; font-size:0.85rem; color:#FFF; margin-bottom:6px;"><span style="color:#88C0D0;">▶</span> HABLABA COMO ELLOS</h4>
-          <p style="font-size:0.8rem; line-height:1.5; color:#A8B2C1; margin:0;">Su dialecto era el del mercado y la chichería. Cada campesino sentía que El Compadre era su propia familia.</p>
-        </div>
-        <div>
-          <h4 style="font-family:'Orbitron'; font-size:0.85rem; color:#FFF; margin-bottom:6px;"><span style="color:#88C0D0;">▶</span> VOZ AL MUDO</h4>
-          <p style="font-size:0.8rem; line-height:1.5; color:#A8B2C1; margin:0;">Encantó los micrófonos de hierro para que cualquier súbdito del reino pudiera denunciar las injusticias al aire.</p>
-        </div>
-        <div>
-          <h4 style="font-family:'Orbitron'; font-size:0.85rem; color:#FFF; margin-bottom:6px;"><span style="color:#88C0D0;">▶</span> INCORRUPTIBLE</h4>
-          <p style="font-size:0.8rem; line-height:1.5; color:#A8B2C1; margin:0;">Rechazó castillos y títulos de los Barones; fundió el oro ofrecido para forjar más micrófonos de hierro.</p>
-        </div>
-      </div>
-
-      <div class="hud-action-container">
-        <button class="btn-hud-expediente blue" (click)="openHistory('tribuna')">
-          <span class="hud-btn-glow"></span>
-          <span class="hud-btn-scanner"></span>
-          <span class="hud-btn-text">ACCEDER A EXPEDIENTE: RTPA</span>
-        </button>
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- PANEL 4: LEYENDA DEL ILLIMANI -->
-  <div class="panel panel-4">
-
-    <div class="future-layout" style="max-width: 750px; pointer-events: auto;">
-
-      <div class="panel-tag blue">
-        HECHIZO EN EL VIENTO
-      </div>
-
-      <h2 class="future-year" style="font-size: clamp(4rem, 10vw, 8.5rem); line-height: 0.9; margin-bottom: 1rem;">
-        LA LEYENDA
-      </h2>
-
-      <div class="main-legend-box" style="background: rgba(136, 192, 208, 0.04); border-left: 3px solid #88C0D0; padding: 1.5rem; border-radius: 0 4px 4px 0; text-align: right; margin-bottom: 1.5rem; backdrop-filter: blur(10px); box-shadow: 0 0 20px rgba(136, 192, 208, 0.05);">
-        <p style="font-family:'Orbitron'; font-size: 1.05rem; font-style: italic; line-height: 1.8; color: #F5F3ED; margin: 0; letter-spacing: 0.05em; text-shadow: 0 0 10px rgba(245, 243, 237, 0.15);">
-          "Cayó defendiendo su torre cuando los Barones la sitiaron. Pero su último hechizo fue dejar su voz grabada en el viento. Por eso en La Paz dicen que cuando sopla el Illimani, se escucha al Compadre."
+  <!-- CONTENEDOR DE CAJAS -->
+  <div class="scroll-boxes-container" style="position: relative; z-index: 10; padding-bottom: 10vh;">
+    
+    <!-- Caja 1 -->
+    <div class="scroll-fade-box">
+      <div class="scroll-fade-text">
+        <span class="box-tag">// SISTEMA DE TRANSMISIÓN // ANTENA CENTRAL</span>
+        <h3 class="box-title">ANTENA DE COMUNICACIÓN</h3>
+        <p class="box-desc">
+          Desde la gran antena de comunicación en el corazón de La Paz, Carlos Palenque estableció una red directa con el pueblo. Su micrófono tecnológico se convirtió en el nodo central para que trabajadores y familias transmitieran sus necesidades sin censura.
         </p>
       </div>
+      <div class="scroll-fade-image">
+        <img src="https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1200&auto=format&fit=crop" alt="Antena Central">
+      </div>
+    </div>
 
+    <!-- Caja 2 -->
+    <div class="scroll-fade-box">
+      <div class="scroll-fade-text">
+        <span class="box-tag">// FRECUENCIAS DEL PUEBLO // NODO DE SOLIDARIDAD</span>
+        <h3 class="box-title">FRECUENCIAS DE SOLIDARIDAD</h3>
+        <p class="box-desc">
+          Cada noche, el sistema emitía frecuencias de solidaridad. Con su voz y sus programas, lograba restaurar el ánimo en los sectores más vulnerables de la ciudad, descodificando los problemas reales de las calles.
+        </p>
+      </div>
+      <div class="scroll-fade-image">
+        <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=1200&auto=format&fit=crop" alt="Frecuencia Solidaria">
+      </div>
+    </div>
+
+    <!-- Caja 3 -->
+    <div class="scroll-fade-box">
+      <div class="scroll-fade-text">
+        <span class="box-tag">// INFRAESTRUCTURA SOCIAL // DESARROLLO ABIERTO</span>
+        <h3 class="box-title">HARDWARE SOCIAL</h3>
+        <p class="box-desc">
+          No solo transmitía, también construyó hardware social. Impulsó la Red de Talleres, centros de capacitación y espacios de desarrollo abiertos, generando una infraestructura de oportunidades para miles de personas.
+        </p>
+      </div>
+      <div class="scroll-fade-image">
+        <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=1200&auto=format&fit=crop" alt="Hardware Social">
+      </div>
+    </div>
+
+    <!-- Caja 4 -->
+    <div class="scroll-fade-box">
+      <div class="scroll-fade-text">
+        <span class="box-tag">// RESISTENCIA DE TRANSMISIÓN // LEGADO INDESTRUCTIBLE</span>
+        <h3 class="box-title">SEÑAL LIBRE</h3>
+        <p class="box-desc">
+          Enfrentó a los grandes monopolios mediáticos que intentaban apagar su señal. Rechazó los sobornos corporativos y mantuvo su plataforma libre. Hoy, su legado sigue resonando como un eco imborrable bajo la sombra del Illimani.
+        </p>
+      </div>
+      <div class="scroll-fade-image">
+        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop" alt="Señal Libre">
+      </div>
     </div>
 
   </div>
