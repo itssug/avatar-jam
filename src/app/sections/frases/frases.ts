@@ -17,6 +17,7 @@ interface Frase {
   quote: string;
   subtitle: string;
   tag: string;
+  audioUrl: string;
 }
 
 @Component({
@@ -36,33 +37,65 @@ export class FrasesComponent implements AfterViewInit {
       id: 1,
       quote: '¡JALLALLA!',
       subtitle: 'El grito de guerra del pueblo',
-      tag: 'TRANSMISIÓN INTERCEPTADA · 2095'
+      tag: 'TRANSMISIÓN INTERCEPTADA · 2095',
+      audioUrl: 'assets/audio/frase1.mp3'
     },
     {
       id: 2,
       quote: 'LA VOZ DE LOS SIN VOZ',
       subtitle: 'Su misión, su legado',
-      tag: 'TRANSMISIÓN INTERCEPTADA · 2095'
+      tag: 'TRANSMISIÓN INTERCEPTADA · 2095',
+      audioUrl: 'assets/audio/frase2.mp3'
     },
     {
       id: 3,
       quote: 'EL PUEBLO UNIDO JAMÁS SERÁ VENCIDO',
       subtitle: 'El clamor de las calles',
-      tag: 'TRANSMISIÓN INTERCEPTADA · 2095'
+      tag: 'TRANSMISIÓN INTERCEPTADA · 2095',
+      audioUrl: 'assets/audio/frase3.mp3'
     },
     {
       id: 4,
       quote: 'AQUÍ ESTAMOS, NO NOS VAMOS',
       subtitle: 'La resistencia del compadre',
-      tag: 'TRANSMISIÓN INTERCEPTADA · 2095'
+      tag: 'TRANSMISIÓN INTERCEPTADA · 2095',
+      audioUrl: 'assets/audio/frase4.mp3'
     },
-    {
-      id: 5,
-      quote: 'ESTA TRANSMISIÓN ES PARA TI, COMPAÑERO',
-      subtitle: 'Cada palabra, un acto de justicia',
-      tag: 'TRANSMISIÓN INTERCEPTADA · 2095'
-    }
+    // Additional phrases can be added below
+    // {
+    //   id: 5,
+    //   quote: 'ESTA TRANSMISIÓN ES PARA TI, COMPAÑERO',
+    //   subtitle: 'Cada palabra, un acto de justicia',
+    //   tag: 'TRANSMISIÓN INTERCEPTADA · 2095',
+    //   audioUrl: 'assets/audio/frase5.mp3'
+    // },
+    // {
+    //   id: 6,
+    //   quote: 'NUEVA FRASE SEIS',
+    //   subtitle: 'Subtítulo seis',
+    //   tag: 'TRANSMISIÓN INTERCEPTADA · 2095',
+    //   audioUrl: 'assets/audio/frase6.mp3'
+    // },
+    // {
+    //   id: 7,
+    //   quote: 'NUEVA FRASE SIETE',
+    //   subtitle: 'Subtítulo siete',
+    //   tag: 'TRANSMISIÓN INTERCEPTADA · 2095',
+    //   audioUrl: 'assets/audio/frase7.mp3'
+    // },
+    // {
+    //   id: 8,
+    //   quote: 'NUEVA FRASE OCHO',
+    //   subtitle: 'Subtítulo ocho',
+    //   tag: 'TRANSMISIÓN INTERCEPTADA · 2095',
+    //   audioUrl: 'assets/audio/frase8.mp3'
+    // }
   ];
+
+  // TrackBy function for *ngFor to improve performance
+  trackById(index: number, frase: Frase): number {
+    return frase.id;
+  }
 
   ngAfterViewInit(): void {
     const section = this.frasesSection.nativeElement;
@@ -173,29 +206,8 @@ export class FrasesComponent implements AfterViewInit {
     tl.to(section, { duration: 2.0 });
     tl.to('.frase-panel-4', { opacity: 0, duration: 0.5 });
 
-    // Panel 5 — last panel, fade in and hold
-    tl.fromTo('.frase-panel-5',
-      { opacity: 0 },
-      { opacity: 1, duration: 0.5 }
-    );
-    tl.fromTo('.frase-panel-5 .frase-quote',
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.5 }, '<'
-    );
-    tl.fromTo('.frase-panel-5 .frase-number',
-      { scale: 0.6, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.5 }, '<'
-    );
-    tl.fromTo('.frase-panel-5 .frase-tag',
-      { x: -20, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.4 }, '<0.2'
-    );
-    tl.fromTo('.frase-panel-5 .frase-line-h',
-      { scaleX: 0 },
-      { scaleX: 1, duration: 0.4, transformOrigin: 'left center' }, '<'
-    );
-    tl.to(section, { duration: 2.0 });
-    tl.to('.frase-panel-5', { opacity: 0, duration: 0.5 });
+    // Panel 5 removed – no fifth phrase defined
+    // (If you add a fifth phrase later, re‑enable this block)
 
     // Pulsing cyan line animation (continuous)
     gsap.to('.frase-pulse-line', {
@@ -207,5 +219,13 @@ export class FrasesComponent implements AfterViewInit {
     });
 
     ScrollTrigger.refresh();
+  }
+
+  // Play audio for a given phrase
+  // Play audio for a given phrase or direct URL
+  playAudio(source: string | Frase): void {
+    const url = typeof source === 'string' ? source : source.audioUrl;
+    const audio = new Audio(url);
+    audio.play().catch(err => console.error('Audio playback error:', err));
   }
 }
