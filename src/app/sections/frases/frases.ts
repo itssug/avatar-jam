@@ -20,7 +20,8 @@ interface Frase {
   quote: string;
   subtitle: string;
   tag: string;
-  audioPath?: string;
+  audioLabel: string;
+  audioPath: string;
 }
 
 @Component({
@@ -36,93 +37,132 @@ export class FrasesComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('frasesSection') frasesSection!: ElementRef;
 
   public activeAudioId: number | null = null;
+  public audioProgress: number = 0;
+  public audioDuration: number = 0;
+  public audioCurrentTime: number = 0;
   private currentAudio?: HTMLAudioElement;
+  private progressInterval?: ReturnType<typeof setInterval>;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef) { }
 
-  ngOnInit(): void {
-    // Inicialización vacía para carga bajo demanda dinámica
-  }
+  ngOnInit(): void { }
 
   ngOnDestroy(): void {
+    this.stopProgressTracking();
     if (this.currentAudio) {
       this.currentAudio.pause();
       this.currentAudio = undefined;
     }
   }
 
-  public toggleAudio(frase: Frase) {
-    if (!frase.audioPath) return;
+  private stopProgressTracking(): void {
+    if (this.progressInterval) {
+      clearInterval(this.progressInterval);
+      this.progressInterval = undefined;
+    }
+  }
 
+  private startProgressTracking(): void {
+    this.stopProgressTracking();
+    this.progressInterval = setInterval(() => {
+      if (this.currentAudio) {
+        this.audioCurrentTime = this.currentAudio.currentTime;
+        this.audioDuration = this.currentAudio.duration || 0;
+        this.audioProgress = this.audioDuration
+          ? (this.audioCurrentTime / this.audioDuration) * 100
+          : 0;
+        this.cdr.detectChanges();
+      }
+    }, 200);
+  }
+
+  public toggleAudio(frase: Frase): void {
     if (this.activeAudioId === frase.id) {
       if (this.currentAudio) {
         this.currentAudio.pause();
+        this.stopProgressTracking();
         this.activeAudioId = null;
+        this.audioProgress = 0;
+        this.audioCurrentTime = 0;
       }
     } else {
       if (this.currentAudio) {
         this.currentAudio.pause();
+        this.stopProgressTracking();
       }
 
       this.currentAudio = new Audio(frase.audioPath);
       this.activeAudioId = frase.id;
+      this.audioProgress = 0;
+      this.audioCurrentTime = 0;
 
       this.currentAudio.addEventListener('ended', () => {
+        this.stopProgressTracking();
         this.activeAudioId = null;
+        this.audioProgress = 0;
+        this.audioCurrentTime = 0;
         this.cdr.detectChanges();
-      });
-
-      this.currentAudio.addEventListener('pause', () => {
-        if (this.activeAudioId === frase.id) {
-          this.activeAudioId = null;
-          this.cdr.detectChanges();
-        }
       });
 
       this.currentAudio.addEventListener('play', () => {
         this.activeAudioId = frase.id;
+        this.startProgressTracking();
         this.cdr.detectChanges();
       });
 
       this.currentAudio.play().catch(err => {
         console.error('Error al reproducir audio:', err);
         this.activeAudioId = null;
+        this.stopProgressTracking();
         this.cdr.detectChanges();
       });
     }
     this.cdr.detectChanges();
   }
 
+  public formatTime(seconds: number): string {
+    if (!seconds || isNaN(seconds)) return '0:00';
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  }
+
   frases: Frase[] = [
     {
       id: 1,
-      quote: 'MÓDULO TRIBUNA LIBRE',
-      subtitle: 'El protocolo principal del sistema. Permitía que cualquier ciudadano rompiera los bloqueos de información y denunciara las injusticias en transmisión abierta para todo el valle.',
+      quote: 'ALGUNA VEZ HAN AMADO',
+      subtitle: 'En esta entrevista, Palanque habla desde el corazón sobre el amor como fuerza política y humana. Una voz que no teme la vulnerabilidad frente a su pueblo.',
       tag: 'PROTOCOLO // S-03 // CAJA 01',
-      audioPath: '/videoplayback.m4a'
+      audioLabel: 'ENTREVISTA — PALANQUE',
+      audioPath: 'assets/audios/amado.mp3'
     },
     {
       id: 2,
-      quote: 'FRECUENCIA CAMINANTE',
-      subtitle: 'Un algoritmo de restauración moral. Sus palabras operaban como un parche del sistema para quienes sufrían el desgaste en los mercados y en las minas.',
-      tag: 'PROTOCOLO // S-03 // CAJA 02'
+      quote: 'LA VIOLENCIA EN BOLIVIA',
+      subtitle: 'Palanque denuncia sin filtros la espiral de violencia que azotaba el país. Su voz se convirtió en escudo para quienes no tenían con qué defenderse.',
+      tag: 'PROTOCOLO // S-03 // CAJA 02',
+      audioLabel: 'DENUNCIA — VIOLENCIA',
+      audioPath: 'assets/audios/situaciones_violencia.mp3'
     },
     {
       id: 3,
-      quote: 'ENSAMBLAJE DE GREMIOS',
-      subtitle: 'Expansión de la red "RTP". No solo conectaba voces, sino que forjó alianzas entre trabajadores y artesanos, creando un frente unificado contra las corporaciones corruptas.',
-      tag: 'PROTOCOLO // S-03 // CAJA 03'
+      quote: 'PALANQUE EN LA RTP',
+      subtitle: 'Desde los micrófonos de la Red de Talleres del Pueblo, su señal cruzó valles y montañas. Un protocolo de comunicación que ningún poder pudo interrumpir.',
+      tag: 'PROTOCOLO // S-03 // CAJA 03',
+      audioLabel: 'TRANSMISIÓN — RTP',
+      audioPath: 'assets/audios/RTP_juan.mp3'
     },
     {
       id: 4,
-      quote: 'ESCUDO INCORRUPTIBLE',
-      subtitle: 'Resistencia pasiva pero inquebrantable. A pesar de los ataques de las corporaciones corporativas del estaño y los bloqueos de señal, su núcleo nunca fue hackeado ni comprado.',
-      tag: 'PROTOCOLO // S-03 // CAJA 04'
+      quote: 'CARTA A COMADRE',
+      subtitle: 'Una carta íntima y profunda. Palanque le habla a su pueblo con la ternura de quien conoce cada calle, cada historia y cada dolor del reino de Kollasuyo.',
+      tag: 'PROTOCOLO // S-03 // CAJA 04',
+      audioLabel: 'MENSAJE — CARTA PERSONAL',
+      audioPath: 'assets/audios/carta_comadre.mp3'
     }
   ];
 
   ngAfterViewInit(): void {
-    // Animación de los contenedores intercalados .scroll-fade-box
     gsap.utils.toArray('.frases-section .scroll-fade-box').forEach((box: any) => {
       gsap.timeline({
         scrollTrigger: {
@@ -132,21 +172,8 @@ export class FrasesComponent implements AfterViewInit, OnInit, OnDestroy {
           scrub: true
         }
       })
-      .fromTo(box, {
-        opacity: 0.2,
-        y: 50
-      }, {
-        opacity: 1,
-        y: 0,
-        ease: 'none',
-        duration: 1
-      })
-      .to(box, {
-        opacity: 0,
-        y: -50,
-        ease: 'none',
-        duration: 1
-      });
+        .fromTo(box, { opacity: 0.2, y: 50 }, { opacity: 1, y: 0, ease: 'none', duration: 1 })
+        .to(box, { opacity: 0, y: -50, ease: 'none', duration: 1 });
     });
 
     ScrollTrigger.refresh();
